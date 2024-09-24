@@ -1,12 +1,12 @@
 import { useState } from "react";
 import SidebarMenu from "./components/SidebarMenu.jsx";
+import Graph from "./components/Graph.jsx";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
       <SidebarMenu />
+      <Graph />
     </>
   );
 }
