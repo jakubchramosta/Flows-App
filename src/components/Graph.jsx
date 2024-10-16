@@ -5,11 +5,11 @@ const Graph = () => {
   const cyRef = useRef(null);
 
   useEffect(() => {
-    // Inicializace Cytoscape
+    //Cytoscape Initialization
     const cy = cytoscape({
-      container: cyRef.current, // HTML element pro graf
+      container: cyRef.current, // HTML element for graph
       elements: [
-        // Definice uzlů a hran
+        // Definition of nodes and edges
         { data: { id: "a" } },
         { data: { id: "b" } },
         { data: { id: "c" } },
@@ -17,7 +17,7 @@ const Graph = () => {
         { data: { source: "b", target: "c" } },
       ],
       style: [
-        // Definice stylů uzlů a hran
+        // Definition of the style of nodes and edges
         {
           selector: "node",
           style: {
@@ -36,17 +36,18 @@ const Graph = () => {
         },
       ],
       layout: {
-        // Layout grafu
         name: "grid",
         rows: 1,
+        fit: true,
+        padding: 50,
       },
     });
 
-    // Vyčištění instance cytoscape při odpojení komponenty
+    //Clearing of instance cytospace if component is detached
     return () => cy.destroy();
   }, []);
 
-  return <div ref={cyRef} style={{ width: "600px", height: "400px" }} />;
+  return <div ref={cyRef} style={{ width: "100%", height: "100%" }} />;
 };
 
 export default Graph;

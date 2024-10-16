@@ -5,8 +5,12 @@ import Graph from "./components/Graph.jsx";
 function App() {
   return (
     <>
-      <SidebarMenu />
-      <Graph />
+      <div className="flex">
+        <SidebarMenu />
+        <div style={{ width: "100vw", height: "100vh", display: "flex" }}>
+          <Graph />
+        </div>
+      </div>
     </>
   );
 }
