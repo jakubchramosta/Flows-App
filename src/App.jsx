@@ -7,7 +7,14 @@ function App() {
     <>
       <div className="flex">
         <SidebarMenu />
-        <div style={{ width: "100vw", height: "100vh", display: "flex" }}>
+        <div
+          style={{
+            width: "50vw",
+            height: "50vh",
+            display: "flex",
+            border: "1px solid black",
+          }}
+        >
           <Graph />
         </div>
       </div>
