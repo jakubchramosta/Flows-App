@@ -1,6 +1,5 @@
-import { useState } from "react";
-import SidebarMenu from "./components/SidebarMenu.jsx";
-import Graph from "./components/Graph.jsx";
+import SidebarMenu from "./components/SidebarMenu.js";
+import GraphComponent from "./components/GraphComponent.js";
 
 function App() {
   return (
@@ -15,7 +14,7 @@ function App() {
             border: "1px solid black",
           }}
         >
-          <Graph />
+          <GraphComponent />
         </div>
       </div>
     </>
