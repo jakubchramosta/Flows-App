@@ -1,6 +1,8 @@
 import GraphContext from "../context/GraphContext";
 import { useEffect, useRef, useContext } from "react";
 import Sigma from "sigma";
+import { SigmaStageEventPayload } from "sigma/sigma";
+//import ForceSupervisor from "graphology-layout-force/worker";
 
 const GraphComponent = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -11,21 +13,32 @@ const GraphComponent = () => {
 
     addNode("a", { label: "A", x: 0, y: 0, size: 10 });
     addNode("b", { label: "B", x: 1, y: 1, size: 10 });
-    addNode("c", { label: "C", x: 2, y: 2, size: 10 });
-    addNode("d", { label: "D", x: 2, y: 2, size: 10 });
-    addEdge("a", "b");
-    addEdge("b", "c");
+    addNode("c", { label: "C", x: 1, y: -1, size: 10 });
+    addNode("d", { label: "D", x: -1, y: -1, size: 10 });
+    addNode("f", { label: "F", x: -1, y: 1, size: 10 });
+
+    // const layout = new ForceSupervisor(graph, {
+    //   isNodeFixed: (_, attr) => attr.highlighted,
+    // });
+    // layout.start();
 
     const renderer = new Sigma(graph, containerRef.current);
 
     //TODO: make it that the coords of the node coresponds with coords of the click
-    const handleRightClick = (event: MouseEvent) => {
-      const pos = renderer.viewportToGraph(event);
-      event.preventDefault();
+    const handleRightClick = (event: SigmaStageEventPayload) => {
+      //const pos = renderer.viewportToGraph(event);
+
+      console.log("evet:" + event.event.x + " " + event.event.y);
+
+      event.preventSigmaDefault();
       const coordForGraph = renderer.viewportToGraph({
-        x: event.x,
-        y: event.y,
+        x: event.event.x,
+        y: event.event.y,
       });
+
+      console.log(
+        "renderer.viewportToGraph:" + coordForGraph.x + " " + coordForGraph.y,
+      );
 
       const node = {
         ...coordForGraph,
@@ -35,19 +48,21 @@ const GraphComponent = () => {
       addNode(id, node);
     };
 
-    containerRef.current.addEventListener("contextmenu", handleRightClick);
+    renderer.on("rightClickStage", handleRightClick);
 
     return () => {
       clearGraph();
       renderer.kill();
-      containerRef.current!.removeEventListener(
-        "contextmenu",
-        handleRightClick,
-      );
     };
   }, [graph, addNode, addEdge, clearGraph]);
 
-  return <div ref={containerRef} style={{ width: "100%", height: "100%" }} />;
+  return (
+    <div
+      ref={containerRef}
+      style={{ width: "100%", height: "100%" }}
+      onContextMenu={(e) => e.preventDefault()}
+    />
+  );
 };
 
 export default GraphComponent;
