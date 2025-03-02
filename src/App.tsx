@@ -1,5 +1,6 @@
 import SidebarMenu from "./components/SidebarMenu.js";
 import GraphComponent from "./components/GraphComponent.js";
+import { GraphProvider } from "./context/GraphContext.js";
 
 function App() {
   return (
@@ -14,7 +15,9 @@ function App() {
             border: "1px solid black",
           }}
         >
-          <GraphComponent />
+          <GraphProvider>
+            <GraphComponent />
+          </GraphProvider>
         </div>
       </div>
     </>
