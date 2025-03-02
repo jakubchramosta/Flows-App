@@ -16,6 +16,7 @@
     "esm": "^3.2.25",
     "graphology": "^0.24.0",
     "graphology-layout": "^0.6.1",
+    "graphology-layout-force": "^0.2.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "sigma": "^2.3.0"
