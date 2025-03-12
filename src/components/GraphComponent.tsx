@@ -25,10 +25,12 @@ const GraphComponent = () => {
 
     const sigma = new Sigma(graph, containerRef.current);
 
+    // Custom event to handle right click on canvas
     sigma.on("rightClickStage", (e: SigmaStageEventPayload) => {
       handleRightClick(e, sigma, graph);
     });
 
+    // Custom event to handle dragging
     sigma.on("downNode", (e) => {
       setIsDragging(true);
       setDraggedNode(e.node);
@@ -63,8 +65,6 @@ const GraphComponent = () => {
     sigma.getMouseCaptor().on("mouseup", handleUp);
 
     return () => {
-      // if uncommented -> breaks the app
-      // clearGraph();
       sigma.kill();
     };
   }, [

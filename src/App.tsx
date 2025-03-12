@@ -7,14 +7,7 @@ function App() {
     <>
       <div className="flex">
         <SidebarMenu />
-        <div
-          style={{
-            width: "50vw",
-            height: "50vh",
-            display: "flex",
-            border: "1px solid black",
-          }}
-        >
+        <div className="flex h-[50vh] w-[50vw] border border-black">
           <GraphProvider>
             <GraphComponent />
           </GraphProvider>
