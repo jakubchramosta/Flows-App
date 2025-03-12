@@ -1,60 +1,81 @@
 import GraphContext from "../context/GraphContext";
-import { useEffect, useRef, useContext } from "react";
+import { useEffect, useRef, useContext, useState } from "react";
 import Sigma from "sigma";
 import { SigmaStageEventPayload } from "sigma/sigma";
-//import ForceSupervisor from "graphology-layout-force/worker";
+import { useDrawDefaultGraph } from "../hooks/useDrawDefaultGraph";
+import { handleRightClick } from "../hooks/hadleRightClick";
 
 const GraphComponent = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { graph, addNode, addEdge, clearGraph } = useContext(GraphContext);
+  const [isDragging, setIsDragging] = useState(false);
+  const [draggedNode, setDraggedNode] = useState<string | null>(null);
+  const [firstRender, setFirstRender] = useState(true);
+
+  if (firstRender) {
+    clearGraph();
+    console.log("draw default graph");
+    useDrawDefaultGraph(graph);
+  }
 
   useEffect(() => {
     if (!containerRef.current) return;
 
-    addNode("a", { label: "A", x: 0, y: 0, size: 10 });
-    addNode("b", { label: "B", x: 1, y: 1, size: 10 });
-    addNode("c", { label: "C", x: 1, y: -1, size: 10 });
-    addNode("d", { label: "D", x: -1, y: -1, size: 10 });
-    addNode("f", { label: "F", x: -1, y: 1, size: 10 });
+    setFirstRender(false);
 
-    // const layout = new ForceSupervisor(graph, {
-    //   isNodeFixed: (_, attr) => attr.highlighted,
-    // });
-    // layout.start();
+    const sigma = new Sigma(graph, containerRef.current);
 
-    const renderer = new Sigma(graph, containerRef.current);
+    sigma.on("rightClickStage", (e: SigmaStageEventPayload) => {
+      handleRightClick(e, sigma, graph);
+    });
 
-    //TODO: make it that the coords of the node coresponds with coords of the click
-    const handleRightClick = (event: SigmaStageEventPayload) => {
-      //const pos = renderer.viewportToGraph(event);
+    sigma.on("downNode", (e) => {
+      setIsDragging(true);
+      setDraggedNode(e.node);
+      graph.setNodeAttribute(e.node, "highlighted", true);
+      if (!sigma.getCustomBBox()) sigma.setCustomBBox(sigma.getBBox());
+    });
 
-      console.log("evet:" + event.event.x + " " + event.event.y);
+    sigma.getMouseCaptor().on("mousemovebody", (event) => {
+      if (!isDragging || !draggedNode) return;
 
+      // Get new position of node
+      const pos = sigma.viewportToGraph({ x: event.x, y: event.y });
+
+      graph.setNodeAttribute(draggedNode, "x", pos.x);
+      graph.setNodeAttribute(draggedNode, "y", pos.y);
+
+      // Prevent sigma to move camera:
       event.preventSigmaDefault();
-      const coordForGraph = renderer.viewportToGraph({
-        x: event.event.x,
-        y: event.event.y,
-      });
+      event.original.preventDefault();
+      event.original.stopPropagation();
+    });
 
-      console.log(
-        "renderer.viewportToGraph:" + coordForGraph.x + " " + coordForGraph.y,
-      );
-
-      const node = {
-        ...coordForGraph,
-        size: 10,
-      };
-      const id = `node-${Date.now()}`;
-      addNode(id, node);
+    const handleUp = () => {
+      console.log("up", draggedNode);
+      if (draggedNode) {
+        graph.setNodeAttribute(draggedNode, "highlighted", false);
+      }
+      setIsDragging(false);
+      setDraggedNode(null);
     };
 
-    renderer.on("rightClickStage", handleRightClick);
+    sigma.getMouseCaptor().on("mouseup", handleUp);
 
     return () => {
-      clearGraph();
-      renderer.kill();
+      // if uncommented -> breaks the app
+      // clearGraph();
+      sigma.kill();
     };
-  }, [graph, addNode, addEdge, clearGraph]);
+  }, [
+    graph,
+    addNode,
+    addEdge,
+    clearGraph,
+    isDragging,
+    draggedNode,
+    firstRender,
+  ]);
 
   return (
     <div
