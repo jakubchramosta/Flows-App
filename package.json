@@ -13,16 +13,24 @@
     "preview": "pnpm vite preview"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.1.2",
+    "@radix-ui/react-tabs": "^1.1.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "esm": "^3.2.25",
     "graphology": "^0.24.0",
     "graphology-layout": "^0.6.1",
     "graphology-layout-force": "^0.2.4",
+    "lucide-react": "^0.485.0",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "sigma": "^2.3.0"
+    "sigma": "^2.3.0",
+    "tailwind-merge": "^3.0.2",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.16",
     "@types/node": "^22.13.8",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
