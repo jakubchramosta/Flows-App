@@ -80,7 +80,7 @@ const GraphComponent = () => {
   return (
     <div
       ref={containerRef}
-      className="w-screen h-screen"
+      className="h-screen w-screen"
       onContextMenu={(e) => e.preventDefault()}
     />
   );

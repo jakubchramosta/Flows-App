@@ -1,8 +1,8 @@
-import BottomToolBar from "./components/BottomToolBar.js";
-import GraphComponent from "./components/GraphComponent.js";
-import { Button } from "./components/ui/button.js";
+import GraphComponent from "./components/graphComponent.js";
+import BottomToolBar from "./components/bottomToolBar.js";
+import GraphTabs from "./components/graphTabs.js";
+import TopRightMenu from "./components/topRightMenu.js";
 import { GraphProvider } from "./context/GraphContext.js";
-import { PlusIcon } from "lucide-react";
 
 function App() {
   return (
@@ -10,11 +10,8 @@ function App() {
       <GraphProvider>
         <GraphComponent />
       </GraphProvider>
-      <div className="absolute left-6 top-6 flex">
-        <Button variant={"outline"} size={"icon"}>
-          <PlusIcon />
-        </Button>
-      </div>
+      <GraphTabs />
+      <TopRightMenu />
       <BottomToolBar />
     </>
   );

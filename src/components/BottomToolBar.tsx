@@ -1,4 +1,4 @@
-import { Button } from "../components/ui/button.js";
+import { Button } from "./ui/button.js";
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
