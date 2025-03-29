@@ -1,10 +1,11 @@
+import AlgProgressRow from "./AlgProgressRow";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../components/ui/select";
+} from "./ui/select";
 
 const TopRightMenu = () => {
   return (
@@ -24,7 +25,12 @@ const TopRightMenu = () => {
         <p className="my-1 text-center font-bold">11</p>
       </div>
       <div className="rounded-md border border-input bg-background p-2.5 shadow-sm">
-        Algorithm progress
+        <h1 className="pb-2">Algorithm progress</h1>
+        <div className="flex flex-col gap-1">
+          <AlgProgressRow />
+          <AlgProgressRow />
+          <AlgProgressRow />
+        </div>
       </div>
     </div>
   );
