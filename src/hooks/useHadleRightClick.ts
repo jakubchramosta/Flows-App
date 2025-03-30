@@ -1,7 +1,7 @@
 import Graph from "graphology";
 import Sigma, { SigmaStageEventPayload } from "sigma/sigma";
 
-export const handleRightClick = (
+export const useHandleRightClick = (
   e: SigmaStageEventPayload,
   sigma: Sigma,
   graph: Graph,
@@ -15,7 +15,7 @@ export const handleRightClick = (
   const node = {
     label: `${Date.now()}`,
     ...coordForGraph,
-    size: 10,
+    size: 20,
   };
   const id = `node-${Date.now()}`;
   graph.addNode(id, node);

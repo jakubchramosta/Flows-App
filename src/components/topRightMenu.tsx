@@ -11,7 +11,7 @@ const TopRightMenu = () => {
   return (
     <div className="absolute right-5 top-5 flex flex-col gap-4">
       <Select>
-        <SelectTrigger className="w-40">
+        <SelectTrigger className="w-full bg-background">
           <SelectValue placeholder="Select algorithm" />
         </SelectTrigger>
         <SelectContent>

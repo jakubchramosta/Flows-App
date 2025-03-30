@@ -3,7 +3,7 @@ import { useEffect, useRef, useContext, useState } from "react";
 import Sigma from "sigma";
 import { SigmaStageEventPayload } from "sigma/sigma";
 import { useDrawDefaultGraph } from "../hooks/useDrawDefaultGraph";
-import { handleRightClick } from "../hooks/hadleRightClick";
+import { useHandleRightClick } from "../hooks/useHadleRightClick";
 
 const GraphComponent = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -25,9 +25,15 @@ const GraphComponent = () => {
 
     const sigma = new Sigma(graph, containerRef.current);
 
+    if (sigma) {
+      sigma.getCamera().setState({ ratio: 1.25 });
+      sigma.getCamera().x = 0.5;
+      sigma.getCamera().y = 0.5;
+    }
+
     // Custom event to handle right click on canvas
     sigma.on("rightClickStage", (e: SigmaStageEventPayload) => {
-      handleRightClick(e, sigma, graph);
+      useHandleRightClick(e, sigma, graph);
     });
 
     // Custom event to handle dragging

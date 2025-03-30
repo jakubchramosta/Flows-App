@@ -12,18 +12,25 @@ import {
   Trash2Icon,
 } from "lucide-react";
 
-const BottomToolBar = () => {
+interface BottomToolBarProps {
+  handleInfoClick: (e: any) => void;
+}
+
+const BottomToolBar = ({ handleInfoClick }: BottomToolBarProps) => {
   const { graph, clearGraph } = useContext(GraphContext);
   return (
     <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between rounded-md border border-input bg-background p-2.5 shadow-sm">
       <div className="flex items-center gap-4">
-        <Button variant={"outline"} size={"icon"}>
+        <Button variant={"outline"} size={"icon"} onClick={handleInfoClick}>
           <InfoIcon />
         </Button>
         <Button
           variant={"outline"}
           size={"icon"}
-          onClick={() => useDrawDefaultGraph(graph)}
+          onClick={() => {
+            clearGraph();
+            useDrawDefaultGraph(graph);
+          }}
         >
           <NetworkIcon />
         </Button>
