@@ -25,7 +25,7 @@ const TopRightMenu = () => {
         <p className="my-1 text-center font-bold">11</p>
       </div>
       <div className="rounded-md border border-input bg-background p-2.5 shadow-sm">
-        <h1 className="pb-2">Algorithm progress</h1>
+        <h1 className="pb-2">Postup algoritmu</h1>
         <div className="flex flex-col gap-1">
           <AlgProgressRow />
           <AlgProgressRow />

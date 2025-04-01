@@ -1,7 +1,7 @@
-import GraphComponent from "./components/graphComponent";
-import BottomToolBar from "./components/bottomToolBar";
-import GraphTabs from "./components/graphTabs";
-import TopRightMenu from "./components/topRightMenu";
+import GraphComponent from "./components/GraphComponent";
+import BottomToolBar from "./components/BottomToolBar";
+import GraphTabs from "./components/GraphTabs";
+import TopRightMenu from "./components/TopRightMenu";
 import { GraphProvider } from "./context/GraphContext.js";
 import { useState } from "react";
 import InfoTab from "./components/InfoTab";

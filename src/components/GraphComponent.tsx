@@ -11,6 +11,7 @@ const GraphComponent = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [draggedNode, setDraggedNode] = useState<string | null>(null);
   const [firstRender, setFirstRender] = useState(true);
+  const { rigthClick } = useHandleRightClick();
 
   if (firstRender) {
     clearGraph();
@@ -23,7 +24,16 @@ const GraphComponent = () => {
 
     setFirstRender(false);
 
-    const sigma = new Sigma(graph, containerRef.current);
+    const sigma = new Sigma(graph, containerRef.current, {
+      maxCameraRatio: 3,
+      minCameraRatio: 0.5,
+      defaultEdgeType: "arrow",
+      renderEdgeLabels: true,
+      defaultEdgeColor: "#808080",
+      labelSize: 20,
+      edgeLabelSize: 20,
+      edgeLabelColor: { color: "#000" },
+    });
 
     if (sigma) {
       sigma.getCamera().setState({ ratio: 1.25 });
@@ -33,7 +43,7 @@ const GraphComponent = () => {
 
     // Custom event to handle right click on canvas
     sigma.on("rightClickStage", (e: SigmaStageEventPayload) => {
-      useHandleRightClick(e, sigma, graph);
+      rigthClick(e, sigma, graph);
     });
 
     // Custom event to handle dragging
@@ -46,6 +56,8 @@ const GraphComponent = () => {
 
     sigma.getMouseCaptor().on("mousemovebody", (event) => {
       if (!isDragging || !draggedNode) return;
+
+      sigma.getCamera().disable();
 
       // Get new position of node
       const pos = sigma.viewportToGraph({ x: event.x, y: event.y });
@@ -66,6 +78,7 @@ const GraphComponent = () => {
       }
       setIsDragging(false);
       setDraggedNode(null);
+      sigma.getCamera().enable();
     };
 
     sigma.getMouseCaptor().on("mouseup", handleUp);

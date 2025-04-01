@@ -23,8 +23,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
   const [activeGraph, setActiveGraph] = useState<number>(0);
 
   const graph = graphs[activeGraph];
-  console.log("activeGraph", activeGraph);
-  console.log("graph", graph);
+  console.log(graph.nodes());
 
   const addGraph = () => {
     const newGraph = new Graph();
