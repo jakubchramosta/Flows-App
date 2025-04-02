@@ -30,8 +30,8 @@ importers:
         specifier: ^3.2.25
         version: 3.2.25
       graphology:
-        specifier: ^0.24.0
-        version: 0.24.1(graphology-types@0.24.8)
+        specifier: ^0.26.0
+        version: 0.26.0(graphology-types@0.24.8)
       graphology-layout:
         specifier: ^0.6.1
         version: 0.6.1(graphology-types@0.24.8)
@@ -51,8 +51,8 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       sigma:
-        specifier: ^2.3.0
-        version: 2.4.0(graphology-types@0.24.8)
+        specifier: ^3.0.1
+        version: 3.0.1(graphology-types@0.24.8)
       tailwind-merge:
         specifier: ^3.0.2
         version: 3.0.2
@@ -863,9 +863,6 @@ packages:
     peerDependencies:
       vite: ^4.2.0 || ^5.0.0 || ^6.0.0
 
-  '@yomguithereal/helpers@1.1.1':
-    resolution: {integrity: sha512-UYvAq/XCA7xoh1juWDYsq3W0WywOB+pz8cgVnE1b45ZfdMhBvHDrgmSFG3jXeZSr2tMTYLGHFHON+ekG05Jebg==}
-
   acorn-jsx@5.3.2:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
     peerDependencies:
@@ -1350,8 +1347,8 @@ packages:
     peerDependencies:
       graphology-types: '>=0.23.0'
 
-  graphology@0.24.1:
-    resolution: {integrity: sha512-6lNz1PNTAe9Q6ioHKrXu0Lp047sgvOoHa4qmP/8mnJWCGv2iIZPQkuHPUb2/OWDWCqHpw2hKgJLJ55X/66xmHg==}
+  graphology@0.26.0:
+    resolution: {integrity: sha512-8SSImzgUUYC89Z042s+0r/vMibY7GX/Emz4LDO5e7jYXhuoWfHISPFJYjpRLUSJGq6UQ6xlenvX1p/hJdfXuXg==}
     peerDependencies:
       graphology-types: '>=0.24.0'
 
@@ -2020,8 +2017,8 @@ packages:
     resolution: {integrity: sha512-ZX99e6tRweoUXqR+VBrslhda51Nh5MTQwou5tnUDgbtyM0dBgmhEDtWGP/xbKn6hqfPRHujUNwz5fy/wbbhnpw==}
     engines: {node: '>= 0.4'}
 
-  sigma@2.4.0:
-    resolution: {integrity: sha512-spi4C+c3cjlhCklT+RvAxJJcarMmjRpF6RPNvBIBYDduALq8iSNm7FwSpijQNGtI+ryeZ2EfvyBNLp36OFaZiw==}
+  sigma@3.0.1:
+    resolution: {integrity: sha512-z67BX1FhIpD+wLs2WJ7QS2aR49TcSr3YaVZ2zU8cAc5jMiUYlSbeDp4EI6euBDUpm3/lzO4pfytP/gW4BhXWuA==}
 
   signal-exit@4.1.0:
     resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
@@ -2953,8 +2950,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@yomguithereal/helpers@1.1.1': {}
-
   acorn-jsx@5.3.2(acorn@8.14.0):
     dependencies:
       acorn: 8.14.0
@@ -3604,11 +3599,10 @@ snapshots:
     dependencies:
       graphology-types: 0.24.8
 
-  graphology@0.24.1(graphology-types@0.24.8):
+  graphology@0.26.0(graphology-types@0.24.8):
     dependencies:
       events: 3.3.0
       graphology-types: 0.24.8
-      obliterator: 2.0.5
 
   has-bigints@1.1.0: {}
 
@@ -4247,9 +4241,8 @@ snapshots:
       side-channel-map: 1.0.1
       side-channel-weakmap: 1.0.2
 
-  sigma@2.4.0(graphology-types@0.24.8):
+  sigma@3.0.1(graphology-types@0.24.8):
     dependencies:
-      '@yomguithereal/helpers': 1.1.1
       events: 3.3.0
       graphology-utils: 2.5.2(graphology-types@0.24.8)
     transitivePeerDependencies:

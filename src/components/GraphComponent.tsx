@@ -1,9 +1,9 @@
 import GraphContext from "../context/GraphContext";
 import { useEffect, useRef, useContext, useState } from "react";
 import Sigma from "sigma";
-import { SigmaStageEventPayload } from "sigma/sigma";
 import { useDrawDefaultGraph } from "../hooks/useDrawDefaultGraph";
-import { useHandleRightClick } from "../hooks/useHadleRightClick";
+import { useHandleClicks } from "../hooks/useHadleClicks";
+import { SigmaStageEventPayload } from "sigma/dist/declarations/src/types";
 
 const GraphComponent = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -11,11 +11,10 @@ const GraphComponent = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [draggedNode, setDraggedNode] = useState<string | null>(null);
   const [firstRender, setFirstRender] = useState(true);
-  const { rigthClick } = useHandleRightClick();
+  const { doubleClick } = useHandleClicks();
 
   if (firstRender) {
     clearGraph();
-    console.log("draw default graph");
     useDrawDefaultGraph(graph);
   }
 
@@ -41,9 +40,9 @@ const GraphComponent = () => {
       sigma.getCamera().y = 0.5;
     }
 
-    // Custom event to handle right click on canvas
-    sigma.on("rightClickStage", (e: SigmaStageEventPayload) => {
-      rigthClick(e, sigma, graph);
+    // Custom event to handle double LMB click on canvas
+    sigma.on("doubleClickStage", (e: SigmaStageEventPayload) => {
+      doubleClick(e, sigma, graph);
     });
 
     // Custom event to handle dragging
@@ -56,8 +55,6 @@ const GraphComponent = () => {
 
     sigma.getMouseCaptor().on("mousemovebody", (event) => {
       if (!isDragging || !draggedNode) return;
-
-      sigma.getCamera().disable();
 
       // Get new position of node
       const pos = sigma.viewportToGraph({ x: event.x, y: event.y });
@@ -72,16 +69,19 @@ const GraphComponent = () => {
     });
 
     const handleUp = () => {
-      console.log("up", draggedNode);
+      console.log("hadleUp");
       if (draggedNode) {
         graph.setNodeAttribute(draggedNode, "highlighted", false);
+        // graph.removeNodeAttribute(draggedNode, "highlighted");
       }
       setIsDragging(false);
       setDraggedNode(null);
       sigma.getCamera().enable();
     };
 
-    sigma.getMouseCaptor().on("mouseup", handleUp);
+    // sigma.getMouseCaptor().on("mouseup", handleUp);
+    sigma.on("upNode", handleUp);
+    sigma.on("upStage", handleUp);
 
     return () => {
       sigma.kill();

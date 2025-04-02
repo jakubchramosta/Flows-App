@@ -1,8 +1,9 @@
 import Graph from "graphology";
-import Sigma, { SigmaStageEventPayload } from "sigma/sigma";
+import Sigma from "sigma";
+import { SigmaStageEventPayload } from "sigma/dist/declarations/src/types";
 
-export const useHandleRightClick = () => {
-  const rigthClick = (
+export const useHandleClicks = () => {
+  const doubleClick = (
     e: SigmaStageEventPayload,
     sigma: Sigma,
     graph: Graph,
@@ -22,5 +23,5 @@ export const useHandleRightClick = () => {
     graph.addNode(id, node);
   };
 
-  return { rigthClick };
+  return { doubleClick };
 };
