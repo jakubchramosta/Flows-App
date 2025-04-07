@@ -1,16 +1,18 @@
-import { useRef } from "react";
+import { useContext, useRef } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
 } from "./ui/dropdown-menu";
 import { useOnClickOutside } from "../hooks/useOnClickOutside";
+import GraphContext from "../context/GraphContext";
 
 interface ContextMenuProps {
   isOpen: boolean;
   position: { x: number; y: number };
   setIsOpen: (val: boolean) => void;
   isNode: boolean;
+  id: string | null;
 }
 
 const ContextMenu = ({
@@ -18,12 +20,19 @@ const ContextMenu = ({
   position,
   setIsOpen,
   isNode,
+  id,
 }: ContextMenuProps) => {
-  console.log("ContextMenu", isOpen, position);
+  const { removeEdge } = useContext(GraphContext);
 
   const ref = useRef<HTMLDivElement>(null);
 
   const handleClickOutside = () => {
+    setIsOpen(false);
+  };
+
+  const handleRemoveEdge = (id: string | null) => {
+    if (!id) return;
+    removeEdge(id);
     setIsOpen(false);
   };
 
@@ -45,7 +54,9 @@ const ContextMenu = ({
             </>
           ) : (
             <>
-              <DropdownMenuItem>edge</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => handleRemoveEdge(id)}>
+                Odstranit hranu
+              </DropdownMenuItem>
               <DropdownMenuItem>edge</DropdownMenuItem>
             </>
           )}

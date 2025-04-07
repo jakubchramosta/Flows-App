@@ -10,6 +10,7 @@ interface GraphContextType {
   addNode: (id: string, attributes: object) => void;
   addEdge: (source: string, target: string) => void;
   clearGraph: () => void;
+  removeEdge: (id: string) => void;
 }
 
 interface GraphProviderProps {
@@ -42,6 +43,10 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     graphs[activeGraph].addEdge(source, target);
   };
 
+  const removeEdge = (id: string) => {
+    graphs[activeGraph].dropEdge(id);
+  };
+
   const clearGraph = () => {
     graphs[activeGraph].clear();
   };
@@ -57,6 +62,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
         addNode,
         addEdge,
         clearGraph,
+        removeEdge,
       }}
     >
       {children}

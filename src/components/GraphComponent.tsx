@@ -14,6 +14,7 @@ const GraphComponent = () => {
   const [firstRender, setFirstRender] = useState(true);
   const { doubleClick } = useHandleClicks();
   const [isNode, setIsNode] = useState(true);
+  const [id, setId] = useState<string | null>(null);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
@@ -35,6 +36,8 @@ const GraphComponent = () => {
       defaultEdgeType: "arrow",
       renderEdgeLabels: true,
       defaultEdgeColor: "#ccc",
+      enableEdgeEvents: true,
+      minEdgeThickness: 5,
       labelSize: 20,
       edgeLabelSize: 20,
       edgeLabelColor: { color: "#000" },
@@ -103,6 +106,7 @@ const GraphComponent = () => {
 
     sigma.on("rightClickEdge", (e) => {
       console.log("rightClickEdge", e);
+      setId(e.edge);
       setIsNode(false);
       // e.preventSigmaDefault();
       e.event.original.preventDefault();
@@ -133,6 +137,7 @@ const GraphComponent = () => {
         position={menuPosition}
         setIsOpen={setIsMenuOpen}
         isNode={isNode}
+        id={id}
       />
       <div
         ref={containerRef}
