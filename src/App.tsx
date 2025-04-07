@@ -15,7 +15,7 @@ function App() {
   };
 
   return (
-    <>
+    <div className="relative">
       <GraphProvider>
         <GraphComponent />
         <GraphTabs />
@@ -23,7 +23,7 @@ function App() {
         <BottomToolBar handleInfoClick={handleInfoClick} />
         {showInfo && <InfoTab setShowInfo={setShowInfo} />}
       </GraphProvider>
-    </>
+    </div>
   );
 }
 

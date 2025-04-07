@@ -4,6 +4,7 @@ import Sigma from "sigma";
 import { useDrawDefaultGraph } from "../hooks/useDrawDefaultGraph";
 import { useHandleClicks } from "../hooks/useHadleClicks";
 import { SigmaStageEventPayload } from "sigma/dist/declarations/src/types";
+import ContextMenu from "./ContextMenu";
 
 const GraphComponent = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -12,6 +13,10 @@ const GraphComponent = () => {
   const [draggedNode, setDraggedNode] = useState<string | null>(null);
   const [firstRender, setFirstRender] = useState(true);
   const { doubleClick } = useHandleClicks();
+  const [isNode, setIsNode] = useState(true);
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
 
   if (firstRender) {
     clearGraph();
@@ -26,9 +31,10 @@ const GraphComponent = () => {
     const sigma = new Sigma(graph, containerRef.current, {
       maxCameraRatio: 3,
       minCameraRatio: 0.5,
+      defaultNodeColor: "#0091ff",
       defaultEdgeType: "arrow",
       renderEdgeLabels: true,
-      defaultEdgeColor: "#808080",
+      defaultEdgeColor: "#ccc",
       labelSize: 20,
       edgeLabelSize: 20,
       edgeLabelColor: { color: "#000" },
@@ -47,6 +53,9 @@ const GraphComponent = () => {
 
     // Custom event to handle dragging
     sigma.on("downNode", (e) => {
+      console.log("downNode", e);
+      console.log("isMenuOpen", isMenuOpen);
+      if (e.event.original.button === 2) return;
       setIsDragging(true);
       setDraggedNode(e.node);
       graph.setNodeAttribute(e.node, "highlighted", true);
@@ -72,16 +81,37 @@ const GraphComponent = () => {
       console.log("hadleUp");
       if (draggedNode) {
         graph.setNodeAttribute(draggedNode, "highlighted", false);
-        // graph.removeNodeAttribute(draggedNode, "highlighted");
       }
       setIsDragging(false);
       setDraggedNode(null);
       sigma.getCamera().enable();
     };
 
-    // sigma.getMouseCaptor().on("mouseup", handleUp);
     sigma.on("upNode", handleUp);
     sigma.on("upStage", handleUp);
+    sigma.getMouseCaptor().on("mouseup", () => console.log("mouseup"));
+
+    ////////////////////////////////////////////////////////////////////////
+    sigma.on("rightClickNode", (e) => {
+      console.log("rightClickNode", e);
+      setIsNode(true);
+      // e.preventSigmaDefault();
+      e.event.original.preventDefault();
+      setIsMenuOpen(true);
+      setMenuPosition({ x: e.event.x, y: e.event.y });
+    });
+
+    sigma.on("rightClickEdge", (e) => {
+      console.log("rightClickEdge", e);
+      setIsNode(false);
+      // e.preventSigmaDefault();
+      e.event.original.preventDefault();
+      setIsMenuOpen(true);
+      setMenuPosition({ x: e.event.x, y: e.event.y });
+    });
+    ///////////////////////////////////////////////////////////////////////
+
+    console.log("rendering sigma");
 
     return () => {
       sigma.kill();
@@ -97,11 +127,19 @@ const GraphComponent = () => {
   ]);
 
   return (
-    <div
-      ref={containerRef}
-      className="h-screen w-screen"
-      onContextMenu={(e) => e.preventDefault()}
-    />
+    <>
+      <ContextMenu
+        isOpen={isMenuOpen}
+        position={menuPosition}
+        setIsOpen={setIsMenuOpen}
+        isNode={isNode}
+      />
+      <div
+        ref={containerRef}
+        className="h-screen w-screen"
+        onContextMenu={(e) => e.preventDefault()}
+      />
+    </>
   );
 };
 
