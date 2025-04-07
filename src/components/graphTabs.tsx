@@ -21,7 +21,7 @@ const GraphTabs = () => {
               value={index.toString()}
               onClick={() => setActiveGraphIndex(index)}
             >
-              {`Graph ${index + 1}`}
+              {`Graf ${index + 1}`}
             </TabsTrigger>
           ))}
         </TabsList>

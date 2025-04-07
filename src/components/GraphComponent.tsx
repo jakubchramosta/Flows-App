@@ -37,7 +37,7 @@ const GraphComponent = () => {
       renderEdgeLabels: true,
       defaultEdgeColor: "#ccc",
       enableEdgeEvents: true,
-      minEdgeThickness: 5,
+      minEdgeThickness: 13,
       labelSize: 20,
       edgeLabelSize: 20,
       edgeLabelColor: { color: "#000" },
@@ -97,6 +97,7 @@ const GraphComponent = () => {
     ////////////////////////////////////////////////////////////////////////
     sigma.on("rightClickNode", (e) => {
       console.log("rightClickNode", e);
+      setId(e.node);
       setIsNode(true);
       // e.preventSigmaDefault();
       e.event.original.preventDefault();
