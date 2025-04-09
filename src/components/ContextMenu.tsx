@@ -23,7 +23,8 @@ const ContextMenu = ({
   isNode,
   id,
 }: ContextMenuProps) => {
-  const { removeEdge, removeNode, graph } = useContext(GraphContext);
+  const { removeEdge, removeNode, setFirstNodeInEdge, setAddingEdgeMode } =
+    useContext(GraphContext);
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -41,8 +42,14 @@ const ContextMenu = ({
     if (!id) return;
     removeNode(id);
     setIsOpen(false);
-    console.log("graph after removing node", graph.nodes());
-    console.log("graph after removing node", graph.edges());
+  };
+
+  const handleFirstNodeForEdge = (id: string | null) => {
+    if (!id) return;
+    setAddingEdgeMode(true);
+    setFirstNodeInEdge(id);
+    setIsOpen(false);
+    console.log("firstNodeInEdge", id);
   };
 
   useOnClickOutside(ref, handleClickOutside);
@@ -57,20 +64,23 @@ const ContextMenu = ({
         >
           {isNode ? (
             <>
-              <DropdownMenuItem className="flex w-44 justify-between">
+              <DropdownMenuItem
+                className="flex justify-between w-44"
+                onClick={() => handleFirstNodeForEdge(id)}
+              >
                 Přidat hanu <PlusIcon />
               </DropdownMenuItem>
-              <DropdownMenuItem className="flex w-44 justify-between">
+              <DropdownMenuItem className="flex justify-between w-44">
                 Přejmenovat <PencilIcon />
               </DropdownMenuItem>
-              <DropdownMenuItem className="flex w-44 justify-between">
+              <DropdownMenuItem className="flex justify-between w-44">
                 Označit jako START
               </DropdownMenuItem>
-              <DropdownMenuItem className="flex w-44 justify-between">
+              <DropdownMenuItem className="flex justify-between w-44">
                 Označit jako CÍL
               </DropdownMenuItem>
               <DropdownMenuItem
-                className="flex w-44 justify-between"
+                className="flex justify-between w-44"
                 onClick={() => handleRemoveNode(id)}
               >
                 Odstranit bod <Trash2Icon />
@@ -78,11 +88,11 @@ const ContextMenu = ({
             </>
           ) : (
             <>
-              <DropdownMenuItem className="flex w-36 justify-between">
+              <DropdownMenuItem className="flex justify-between w-36">
                 Změnit kapacitu <PencilIcon />
               </DropdownMenuItem>
               <DropdownMenuItem
-                className="flex w-36 justify-between"
+                className="flex justify-between w-36"
                 onClick={() => handleRemoveEdge(id)}
               >
                 Odstranit hranu <Trash2Icon />

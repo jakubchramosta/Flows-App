@@ -4,6 +4,8 @@ import Graph from "graphology";
 interface GraphContextType {
   graph: Graph;
   graphs: Graph[];
+  firstNodeInEdge: string | null;
+  setFirstNodeInEdge: (id: string | null) => void;
   addGraph: () => void;
   setActiveGraphIndex: (index: number) => void;
   activeGraph: number;
@@ -12,6 +14,8 @@ interface GraphContextType {
   clearGraph: () => void;
   removeEdge: (id: string) => void;
   removeNode: (id: string) => void;
+  addingEdgeMode: boolean;
+  setAddingEdgeMode: (value: boolean) => void;
 }
 
 interface GraphProviderProps {
@@ -23,6 +27,8 @@ const GraphContext = createContext<GraphContextType>({} as GraphContextType);
 export const GraphProvider = ({ children }: GraphProviderProps) => {
   const [graphs, setGraphs] = useState<Graph[]>([new Graph()]);
   const [activeGraph, setActiveGraph] = useState<number>(0);
+  const [firstNodeInEdge, setFirstNodeInEdge] = useState<string | null>(null);
+  const [addingEdgeMode, setAddingEdgeMode] = useState(false);
 
   const graph = graphs[activeGraph];
 
@@ -61,6 +67,8 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
       value={{
         graph,
         graphs,
+        firstNodeInEdge,
+        setFirstNodeInEdge,
         addGraph,
         setActiveGraphIndex,
         activeGraph,
@@ -69,6 +77,8 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
         clearGraph,
         removeEdge,
         removeNode,
+        addingEdgeMode,
+        setAddingEdgeMode,
       }}
     >
       {children}
