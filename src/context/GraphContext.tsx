@@ -1,9 +1,15 @@
 import { createContext, ReactNode, useState } from "react";
 import Graph from "graphology";
 
+interface GraphInfo {
+  graph: Graph;
+  source: string;
+  sink: string;
+}
+
 interface GraphContextType {
   graph: Graph;
-  graphs: Graph[];
+  graphs: GraphInfo[];
   firstNodeInEdge: string | null;
   setFirstNodeInEdge: (id: string | null) => void;
   addGraph: () => void;
@@ -16,6 +22,8 @@ interface GraphContextType {
   removeNode: (id: string) => void;
   addingEdgeMode: boolean;
   setAddingEdgeMode: (value: boolean) => void;
+  setSource: (source: string) => void;
+  setSink: (sink: string) => void;
 }
 
 interface GraphProviderProps {
@@ -25,15 +33,17 @@ interface GraphProviderProps {
 const GraphContext = createContext<GraphContextType>({} as GraphContextType);
 
 export const GraphProvider = ({ children }: GraphProviderProps) => {
-  const [graphs, setGraphs] = useState<Graph[]>([new Graph()]);
+  const [graphs, setGraphs] = useState<GraphInfo[]>([
+    { graph: new Graph(), source: "", sink: "" },
+  ]);
   const [activeGraph, setActiveGraph] = useState<number>(0);
   const [firstNodeInEdge, setFirstNodeInEdge] = useState<string | null>(null);
   const [addingEdgeMode, setAddingEdgeMode] = useState(false);
 
-  const graph = graphs[activeGraph];
+  const graph = graphs[activeGraph].graph;
 
   const addGraph = () => {
-    const newGraph = new Graph();
+    const newGraph = { graph: new Graph(), source: "", sink: "" };
     setGraphs((prevGraphs) => [...prevGraphs, newGraph]);
     setActiveGraph(graphs.length);
   };
@@ -43,23 +53,41 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
   };
 
   const addNode = (id: string, attributes: object) => {
-    graphs[activeGraph].addNode(id, attributes);
+    graphs[activeGraph].graph.addNode(id, attributes);
   };
 
   const removeNode = (id: string) => {
-    graphs[activeGraph].dropNode(id);
+    graphs[activeGraph].graph.dropNode(id);
   };
 
   const addEdge = (source: string, target: string) => {
-    graphs[activeGraph].addEdge(source, target);
+    graphs[activeGraph].graph.addEdge(source, target);
   };
 
   const removeEdge = (id: string) => {
-    graphs[activeGraph].dropEdge(id);
+    graphs[activeGraph].graph.dropEdge(id);
   };
 
   const clearGraph = () => {
-    graphs[activeGraph].clear();
+    graphs[activeGraph].graph.clear();
+  };
+
+  const setSource = (source: string) => {
+    if (graphs[activeGraph].source !== "") {
+      const previousSource = graphs[activeGraph].source;
+      graph.setNodeAttribute(previousSource, "color", "#0091ff");
+    }
+    graphs[activeGraph].source = source;
+    graph.setNodeAttribute(source, "color", "#0f0");
+  };
+
+  const setSink = (sink: string) => {
+    if (graphs[activeGraph].sink !== "") {
+      const previousSink = graphs[activeGraph].sink;
+      graph.setNodeAttribute(previousSink, "color", "#0091ff");
+    }
+    graphs[activeGraph].sink = sink;
+    graph.setNodeAttribute(sink, "color", "#f00");
   };
 
   return (
@@ -79,6 +107,8 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
         removeNode,
         addingEdgeMode,
         setAddingEdgeMode,
+        setSource,
+        setSink,
       }}
     >
       {children}
