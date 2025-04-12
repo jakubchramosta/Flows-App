@@ -11,6 +11,7 @@ const GraphComponent = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const {
     graph,
+    graphs,
     addNode,
     addEdge,
     clearGraph,
@@ -31,7 +32,8 @@ const GraphComponent = () => {
   // Clear the graph and draw the default graph on the first render
   if (firstRender) {
     clearGraph();
-    useDrawDefaultGraph(graph);
+    useDrawDefaultGraph(graphs[0]);
+    console.log(graphs[0]);
   }
 
   useEffect(() => {
@@ -68,6 +70,7 @@ const GraphComponent = () => {
 
     // Handle dragging of nodes
     sigma.on("downNode", (e) => {
+      // @ts-ignore
       if (e.event.original.button === 2) return; // Ignore right-click
       setIsDragging(true);
       setDraggedNode(e.node);
@@ -76,17 +79,23 @@ const GraphComponent = () => {
     });
 
     //Handle adding edges on click
-    //TODO: implement adding edges
     sigma.on("clickNode", (e) => {
-      console.log("clickNode", e.node);
+      // @ts-ignore
       if (e.event.original.button === 2) return; // Ignore right-click
-      console.log("clickNode", e.node);
-      console.log("addingEdgeMode", addingEdgeMode);
       if (!addingEdgeMode) return; // Ignore if not in adding edge mode
       if (firstNodeInEdge) {
         console.log("firstNodeInEdge", firstNodeInEdge, e.node);
         addEdge(firstNodeInEdge, e.node);
       }
+
+      // if (
+      //   // @ts-ignore
+      //   (e.event.original.button === 2 && !addingEdgeMode) ||
+      //   !firstNodeInEdge
+      // )
+      //   return;
+      // console.log("firstNodeInEdge", firstNodeInEdge, e.node);
+      // addEdge(firstNodeInEdge, e.node);
     });
 
     // Update node position while dragging
@@ -100,8 +109,6 @@ const GraphComponent = () => {
       graph.setNodeAttribute(draggedNode, "y", pos.y);
 
       // Prevent default camera movement
-      sigma.getCamera().disable();
-      console.log("disable camera");
 
       e.preventSigmaDefault();
       e.original.preventDefault();

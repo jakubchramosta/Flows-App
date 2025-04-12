@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useState } from "react";
 import Graph from "graphology";
 
-interface GraphInfo {
+export interface GraphInfo {
   graph: Graph;
   source: string;
   sink: string;
@@ -61,7 +61,10 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
   };
 
   const addEdge = (source: string, target: string) => {
-    graphs[activeGraph].graph.addEdge(source, target);
+    graphs[activeGraph].graph.addEdge(source, target, {
+      label: "0/1",
+      size: 7,
+    });
   };
 
   const removeEdge = (id: string) => {
