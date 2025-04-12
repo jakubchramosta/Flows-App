@@ -17,7 +17,8 @@ interface BottomToolBarProps {
 }
 
 const BottomToolBar = ({ handleInfoClick }: BottomToolBarProps) => {
-  const { graph, clearGraph } = useContext(GraphContext);
+  const { graphs, activeGraph, clearGraph, calculateMaxFlow } =
+    useContext(GraphContext);
   return (
     <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between rounded-md border border-input bg-background p-2.5 shadow-sm">
       <div className="flex items-center gap-4">
@@ -29,14 +30,21 @@ const BottomToolBar = ({ handleInfoClick }: BottomToolBarProps) => {
           size={"icon"}
           onClick={() => {
             clearGraph();
-            useDrawDefaultGraph(graph);
+            useDrawDefaultGraph(graphs[activeGraph]);
+            console.log("play clicked");
           }}
         >
           <NetworkIcon />
         </Button>
       </div>
       <div className="flex items-center gap-12">
-        <Button variant={"outline"} size={"rounded"}>
+        <Button
+          variant={"outline"}
+          size={"rounded"}
+          onClick={() => {
+            calculateMaxFlow(graphs[activeGraph]);
+          }}
+        >
           <PlayIcon />
         </Button>
         <div className="flex items-center gap-4">

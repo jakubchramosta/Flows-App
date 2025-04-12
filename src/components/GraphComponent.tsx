@@ -16,6 +16,7 @@ const GraphComponent = () => {
     addEdge,
     clearGraph,
     firstNodeInEdge,
+    setAddingEdgeMode,
     addingEdgeMode,
   } = useContext(GraphContext);
 
@@ -34,6 +35,9 @@ const GraphComponent = () => {
     clearGraph();
     useDrawDefaultGraph(graphs[0]);
     console.log(graphs[0]);
+
+    const edge = graph.edge("a", "b");
+    console.log(graph.getEdgeAttributes(edge));
   }
 
   useEffect(() => {
@@ -68,34 +72,37 @@ const GraphComponent = () => {
       doubleClick(e, sigma, graph);
     });
 
+    //Handle adding edges on click
+    sigma.on("clickNode", (e) => {
+      // // @ts-ignore
+      // if (e.event.original.button === 2) return; // Ignore right-click
+      // if (!addingEdgeMode) return; // Ignore if not in adding edge mode
+      // if (firstNodeInEdge) {
+      //   console.log("firstNodeInEdge", firstNodeInEdge, e.node);
+      //   addEdge(firstNodeInEdge, e.node);
+      // }
+      // setAddingEdgeMode(false); // Exit adding edge mode
+
+      if (
+        // @ts-ignore
+        (e.event.original.button === 2 && !addingEdgeMode) ||
+        !firstNodeInEdge
+      )
+        return;
+      console.log("firstNodeInEdge", firstNodeInEdge, e.node);
+      addEdge(firstNodeInEdge, e.node);
+      setAddingEdgeMode(false); // Exit adding edge mode
+    });
+
     // Handle dragging of nodes
     sigma.on("downNode", (e) => {
       // @ts-ignore
       if (e.event.original.button === 2) return; // Ignore right-click
+      if (addingEdgeMode) return;
       setIsDragging(true);
       setDraggedNode(e.node);
       graph.setNodeAttribute(e.node, "highlighted", true);
       if (!sigma.getCustomBBox()) sigma.setCustomBBox(sigma.getBBox());
-    });
-
-    //Handle adding edges on click
-    sigma.on("clickNode", (e) => {
-      // @ts-ignore
-      if (e.event.original.button === 2) return; // Ignore right-click
-      if (!addingEdgeMode) return; // Ignore if not in adding edge mode
-      if (firstNodeInEdge) {
-        console.log("firstNodeInEdge", firstNodeInEdge, e.node);
-        addEdge(firstNodeInEdge, e.node);
-      }
-
-      // if (
-      //   // @ts-ignore
-      //   (e.event.original.button === 2 && !addingEdgeMode) ||
-      //   !firstNodeInEdge
-      // )
-      //   return;
-      // console.log("firstNodeInEdge", firstNodeInEdge, e.node);
-      // addEdge(firstNodeInEdge, e.node);
     });
 
     // Update node position while dragging

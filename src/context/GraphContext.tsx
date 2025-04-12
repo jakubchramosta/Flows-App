@@ -1,10 +1,12 @@
 import { createContext, ReactNode, useState } from "react";
 import Graph from "graphology";
+import { useFordFulkerson } from "../hooks/useFordFulkerson";
 
 export interface GraphInfo {
   graph: Graph;
   source: string;
   sink: string;
+  maxFlow: number;
 }
 
 interface GraphContextType {
@@ -24,6 +26,7 @@ interface GraphContextType {
   setAddingEdgeMode: (value: boolean) => void;
   setSource: (source: string) => void;
   setSink: (sink: string) => void;
+  calculateMaxFlow: (graphInfo: GraphInfo) => void;
 }
 
 interface GraphProviderProps {
@@ -34,7 +37,7 @@ const GraphContext = createContext<GraphContextType>({} as GraphContextType);
 
 export const GraphProvider = ({ children }: GraphProviderProps) => {
   const [graphs, setGraphs] = useState<GraphInfo[]>([
-    { graph: new Graph(), source: "", sink: "" },
+    { graph: new Graph(), source: "", sink: "", maxFlow: 0 },
   ]);
   const [activeGraph, setActiveGraph] = useState<number>(0);
   const [firstNodeInEdge, setFirstNodeInEdge] = useState<string | null>(null);
@@ -43,7 +46,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
   const graph = graphs[activeGraph].graph;
 
   const addGraph = () => {
-    const newGraph = { graph: new Graph(), source: "", sink: "" };
+    const newGraph = { graph: new Graph(), source: "", sink: "", maxFlow: 0 };
     setGraphs((prevGraphs) => [...prevGraphs, newGraph]);
     setActiveGraph(graphs.length);
   };
@@ -64,6 +67,8 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     graphs[activeGraph].graph.addEdge(source, target, {
       label: "0/1",
       size: 7,
+      flow: 0,
+      capacity: 1,
     });
   };
 
@@ -93,6 +98,14 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     graph.setNodeAttribute(sink, "color", "#f00");
   };
 
+  const calculateMaxFlow = (grapInfo: GraphInfo) => {
+    const maxFlow = useFordFulkerson(grapInfo);
+    console.log("Max flow:", maxFlow);
+    const newGraphs = [...graphs];
+    newGraphs[activeGraph].maxFlow = maxFlow;
+    setGraphs(newGraphs);
+  };
+
   return (
     <GraphContext.Provider
       value={{
@@ -112,6 +125,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
         setAddingEdgeMode,
         setSource,
         setSink,
+        calculateMaxFlow,
       }}
     >
       {children}
