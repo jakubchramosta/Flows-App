@@ -8,6 +8,7 @@ export const useFordFulkerson = ({ graph, source, sink }: GraphInfo) => {
     sink: string,
     visited: Set<string>,
   ): string[] | null {
+    // debugger;
     if (current === sink) {
       return [current];
     }
@@ -34,6 +35,7 @@ export const useFordFulkerson = ({ graph, source, sink }: GraphInfo) => {
 
   let path: string[] | null;
 
+  debugger;
   while ((path = dfs(source, sink, new Set())) !== null) {
     // Find the minimum residual capacity along the path
     let pathFlow = Infinity;
@@ -73,7 +75,9 @@ export const useFordFulkerson = ({ graph, source, sink }: GraphInfo) => {
       graph.setEdgeAttribute(
         edge,
         "label",
-        `${attrs.flow + pathFlow}/${attrs.capacity}`,
+        // `${attrs.flow + pathFlow}/${attrs.capacity}`,
+        `${attrs.flow}/${attrs.capacity}`,
+        // `${pathFlow}/${attrs.capacity}`,
       );
     }
 
@@ -82,6 +86,8 @@ export const useFordFulkerson = ({ graph, source, sink }: GraphInfo) => {
     // Convert path from vertex names to a readable format
     console.log(`Path: ${path.join(" -> ")}, Flow: ${pathFlow}`);
   }
+
+  console.log(graph);
 
   return maxFlow;
 };

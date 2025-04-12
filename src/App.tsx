@@ -5,6 +5,7 @@ import TopRightMenu from "./components/TopRightMenu";
 import { GraphProvider } from "./context/GraphContext.js";
 import { useState } from "react";
 import InfoTab from "./components/InfoTab";
+import { Toaster } from "./components/ui/sonner";
 
 function App() {
   const [showInfo, setShowInfo] = useState(false);
@@ -23,6 +24,7 @@ function App() {
         <BottomToolBar handleInfoClick={handleInfoClick} />
         {showInfo && <InfoTab setShowInfo={setShowInfo} />}
       </GraphProvider>
+      <Toaster />
     </div>
   );
 }

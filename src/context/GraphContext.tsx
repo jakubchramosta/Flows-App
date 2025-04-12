@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useState } from "react";
 import Graph from "graphology";
 import { useFordFulkerson } from "../hooks/useFordFulkerson";
+import { toast } from "sonner";
 
 export interface GraphInfo {
   graph: Graph;
@@ -99,6 +100,14 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
   };
 
   const calculateMaxFlow = (grapInfo: GraphInfo) => {
+    if (
+      !grapInfo.source ||
+      !grapInfo.sink ||
+      grapInfo.source === grapInfo.sink
+    ) {
+      toast.error("Nastavte zdroj a cíl toku!");
+      return;
+    }
     const maxFlow = useFordFulkerson(grapInfo);
     console.log("Max flow:", maxFlow);
     const newGraphs = [...graphs];
