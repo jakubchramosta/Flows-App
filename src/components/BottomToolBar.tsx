@@ -31,7 +31,6 @@ const BottomToolBar = ({ handleInfoClick }: BottomToolBarProps) => {
           onClick={() => {
             clearGraph();
             useDrawDefaultGraph(graphs[activeGraph]);
-            console.log("play clicked");
           }}
         >
           <NetworkIcon />

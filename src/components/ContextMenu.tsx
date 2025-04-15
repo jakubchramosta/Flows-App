@@ -55,19 +55,16 @@ const ContextMenu = ({
     setAddingEdgeMode(true);
     setFirstNodeInEdge(id);
     setIsOpen(false);
-    console.log("firstNodeInEdge", id);
   };
 
   const handleMakrAsSource = (id: string | null) => {
     if (!id) return;
-    //TODO:mark node as source -> green; if there is already source, change it to this one and previous one to default color
     setSource(id);
     setIsOpen(false);
   };
 
   const handleMarkAsSink = (id: string | null) => {
     if (!id) return;
-    //TODO:mark node as sink -> red; if there is already sink, change it to this one and previous one to default color
     setSink(id);
     setIsOpen(false);
   };

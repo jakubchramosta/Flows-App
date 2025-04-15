@@ -8,6 +8,7 @@ export interface GraphInfo {
   source: string;
   sink: string;
   maxFlow: number;
+  paths: string[][];
 }
 
 interface GraphContextType {
@@ -28,6 +29,7 @@ interface GraphContextType {
   setSource: (source: string) => void;
   setSink: (sink: string) => void;
   calculateMaxFlow: (graphInfo: GraphInfo) => void;
+  addToPaths: (newPath: string[]) => void;
 }
 
 interface GraphProviderProps {
@@ -38,7 +40,7 @@ const GraphContext = createContext<GraphContextType>({} as GraphContextType);
 
 export const GraphProvider = ({ children }: GraphProviderProps) => {
   const [graphs, setGraphs] = useState<GraphInfo[]>([
-    { graph: new Graph(), source: "", sink: "", maxFlow: 0 },
+    { graph: new Graph(), source: "", sink: "", maxFlow: 0, paths: [] },
   ]);
   const [activeGraph, setActiveGraph] = useState<number>(0);
   const [firstNodeInEdge, setFirstNodeInEdge] = useState<string | null>(null);
@@ -47,7 +49,13 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
   const graph = graphs[activeGraph].graph;
 
   const addGraph = () => {
-    const newGraph = { graph: new Graph(), source: "", sink: "", maxFlow: 0 };
+    const newGraph = {
+      graph: new Graph(),
+      source: "",
+      sink: "",
+      maxFlow: 0,
+      paths: [],
+    };
     setGraphs((prevGraphs) => [...prevGraphs, newGraph]);
     setActiveGraph(graphs.length);
   };
@@ -79,6 +87,10 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
 
   const clearGraph = () => {
     graphs[activeGraph].graph.clear();
+    graphs[activeGraph].source = "";
+    graphs[activeGraph].sink = "";
+    graphs[activeGraph].maxFlow = 0;
+    graphs[activeGraph].paths = [];
   };
 
   const setSource = (source: string) => {
@@ -109,9 +121,14 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
       return;
     }
     const maxFlow = useFordFulkerson(grapInfo);
-    console.log("Max flow:", maxFlow);
     const newGraphs = [...graphs];
     newGraphs[activeGraph].maxFlow = maxFlow;
+    setGraphs(newGraphs);
+  };
+
+  const addToPaths = (newPath: string[]) => {
+    const newGraphs = [...graphs];
+    newGraphs[activeGraph].paths.push(newPath);
     setGraphs(newGraphs);
   };
 
@@ -135,6 +152,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
         setSource,
         setSink,
         calculateMaxFlow,
+        addToPaths,
       }}
     >
       {children}

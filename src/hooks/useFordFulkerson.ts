@@ -1,6 +1,6 @@
 import { GraphInfo } from "../context/GraphContext";
 
-export const useFordFulkerson = ({ graph, source, sink }: GraphInfo) => {
+export const useFordFulkerson = ({ graph, source, sink, paths }: GraphInfo) => {
   let maxFlow = 0;
 
   function dfs(
@@ -35,7 +35,7 @@ export const useFordFulkerson = ({ graph, source, sink }: GraphInfo) => {
 
   let path: string[] | null;
 
-  debugger;
+  // debugger;
   while ((path = dfs(source, sink, new Set())) !== null) {
     // Find the minimum residual capacity along the path
     let pathFlow = Infinity;
@@ -61,33 +61,39 @@ export const useFordFulkerson = ({ graph, source, sink }: GraphInfo) => {
       // Update reverse edge
       if (reverseEdge) {
         const reverseAttrs = graph.getEdgeAttributes(reverseEdge);
+
         graph.setEdgeAttribute(
           reverseEdge,
           "flow",
-          reverseAttrs.flow - pathFlow,
+          reverseAttrs.flow + pathFlow,
+        );
+        graph.setEdgeAttribute(
+          edge,
+          "label",
+          `${attrs.flow - pathFlow}/${attrs.capacity}`,
         );
       } else {
-        graph.addEdge(v, u, { flow: -pathFlow, capacity: 0 });
+        graph.addEdge(v, u, {
+          flow: -pathFlow,
+          capacity: 0,
+          isReverse: true,
+          hidden: true,
+        });
       }
-
-      // Update visualization attributes
-      graph.setEdgeAttribute(edge, "color", "#33a02c");
-      graph.setEdgeAttribute(
-        edge,
-        "label",
-        // `${attrs.flow + pathFlow}/${attrs.capacity}`,
-        `${attrs.flow}/${attrs.capacity}`,
-        // `${pathFlow}/${attrs.capacity}`,
-      );
     }
 
     maxFlow += pathFlow;
 
     // Convert path from vertex names to a readable format
     console.log(`Path: ${path.join(" -> ")}, Flow: ${pathFlow}`);
+
+    paths.push(path);
   }
 
+  // Update the graph visualization
+
   console.log(graph);
+  console.log(paths);
 
   return maxFlow;
 };

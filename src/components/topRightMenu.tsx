@@ -12,6 +12,7 @@ import { useContext } from "react";
 const TopRightMenu = () => {
   const { graphs, activeGraph } = useContext(GraphContext);
   const currentMaxFlow = graphs[activeGraph].maxFlow;
+  const discoveredPaths = graphs[activeGraph].paths;
 
   return (
     <div className="absolute flex flex-col gap-4 right-5 top-5">
@@ -32,9 +33,9 @@ const TopRightMenu = () => {
       <div className="rounded-md border border-input bg-background p-2.5 shadow-sm">
         <h1 className="pb-2">Postup algoritmu</h1>
         <div className="flex flex-col gap-1">
-          <AlgProgressRow />
-          <AlgProgressRow />
-          <AlgProgressRow />
+          {discoveredPaths.map((path, index) => (
+            <AlgProgressRow key={index} path={path} label={index + 1} />
+          ))}
         </div>
       </div>
     </div>

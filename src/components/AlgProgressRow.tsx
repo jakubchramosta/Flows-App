@@ -1,29 +1,28 @@
 import { ArrowRight } from "lucide-react";
 import SquareWrapper from "./SquareWrapper";
+import React from "react";
 
-const AlgProgressRow = () => {
+interface AlgProgressRowProps {
+  path: string[];
+  label: number;
+}
+
+const AlgProgressRow: React.FC<AlgProgressRowProps> = ({ path, label }) => {
   return (
     <div className="flex items-center justify-between gap-1">
-      <p>1.</p>
+      <p>{label}</p>
       <div className="flex items-center gap-x-0.5">
-        <SquareWrapper>
-          <p>a</p>
-        </SquareWrapper>
-        <ArrowRight size={14} />
-        <SquareWrapper>
-          <p>b</p>
-        </SquareWrapper>
-        <ArrowRight size={14} />
-        <SquareWrapper>
-          <p>b</p>
-        </SquareWrapper>
-        <ArrowRight size={14} />
-        <SquareWrapper>
-          <p>b</p>
-        </SquareWrapper>
+        {path.map((node, index) => (
+          <React.Fragment key={index}>
+            <SquareWrapper>
+              <p>{node}</p>
+            </SquareWrapper>
+            {index < path.length - 1 && <ArrowRight size={14} />}
+          </React.Fragment>
+        ))}
       </div>
       <p className="font-bold">=</p>
-      <div className="grid h-5 w-5 place-content-center rounded-full border border-input bg-background text-sm shadow-sm">
+      <div className="grid w-5 h-5 text-sm border rounded-full shadow-sm place-content-center border-input bg-background">
         <p>4</p>
       </div>
     </div>

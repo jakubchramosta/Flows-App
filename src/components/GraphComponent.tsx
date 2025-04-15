@@ -5,6 +5,7 @@ import { useDrawDefaultGraph } from "../hooks/useDrawDefaultGraph";
 import { useHandleClicks } from "../hooks/useHadleClicks";
 import { SigmaStageEventPayload } from "sigma/dist/declarations/src/types";
 import ContextMenu from "./ContextMenu";
+import { edgeReducer } from "./utils/edgeReducer";
 
 const GraphComponent = () => {
   // Reference to the container div for rendering the graph
@@ -35,9 +36,6 @@ const GraphComponent = () => {
     clearGraph();
     useDrawDefaultGraph(graphs[0]);
     console.log(graphs[0]);
-
-    const edge = graph.edge("a", "b");
-    console.log(graph.getEdgeAttributes(edge));
   }
 
   useEffect(() => {
@@ -58,6 +56,7 @@ const GraphComponent = () => {
       labelSize: 20,
       edgeLabelSize: 20,
       edgeLabelColor: { color: "#000" },
+      edgeReducer: edgeReducer,
     });
 
     // Set initial camera state
@@ -74,22 +73,12 @@ const GraphComponent = () => {
 
     //Handle adding edges on click
     sigma.on("clickNode", (e) => {
-      // // @ts-ignore
-      // if (e.event.original.button === 2) return; // Ignore right-click
-      // if (!addingEdgeMode) return; // Ignore if not in adding edge mode
-      // if (firstNodeInEdge) {
-      //   console.log("firstNodeInEdge", firstNodeInEdge, e.node);
-      //   addEdge(firstNodeInEdge, e.node);
-      // }
-      // setAddingEdgeMode(false); // Exit adding edge mode
-
       if (
         // @ts-ignore
         (e.event.original.button === 2 && !addingEdgeMode) ||
         !firstNodeInEdge
       )
         return;
-      console.log("firstNodeInEdge", firstNodeInEdge, e.node);
       addEdge(firstNodeInEdge, e.node);
       setAddingEdgeMode(false); // Exit adding edge mode
     });
@@ -132,24 +121,8 @@ const GraphComponent = () => {
       }
     });
 
-    // const handleUp = () => {
-    //   console.log("hadleUp");
-    //   if (draggedNode) {
-    //     graph.setNodeAttribute(draggedNode, "highlighted", false);
-    //   }
-    //   setIsDragging(false);
-    //   setDraggedNode(null);
-    //   sigma.getCamera().enable();
-    // };
-
-    // sigma.on("upNode", handleUp);
-    // sigma.on("upStage", handleUp);
-    // sigma.getMouseCaptor().on("mouseup", () => console.log("mouseup"));
-    // sigma.getMouseCaptor().on("mouseup", handleUp);
-
     // Handle right-click on a node
     sigma.on("rightClickNode", (e) => {
-      console.log("rightClickNode", e);
       setId(e.node);
       setIsNode(true);
       e.event.original.preventDefault();
@@ -159,7 +132,6 @@ const GraphComponent = () => {
 
     // Handle right-click on an edge
     sigma.on("rightClickEdge", (e) => {
-      console.log("rightClickEdge", e);
       setId(e.edge);
       setIsNode(false);
       e.event.original.preventDefault();
