@@ -23,7 +23,7 @@ const AlgProgressRow: React.FC<AlgProgressRowProps> = ({ path, label }) => {
       </div>
       <p className="font-bold">=</p>
       <div className="grid w-5 h-5 text-sm border rounded-full shadow-sm place-content-center border-input bg-background">
-        <p>4</p>
+        <p>{path[path.length - 1]}</p>
       </div>
     </div>
   );
