@@ -3,7 +3,10 @@ import SquareWrapper from "./SquareWrapper";
 import React from "react";
 
 interface AlgProgressRowProps {
-  path: string[];
+  path: {
+    path: string[];
+    flow: number;
+  };
   label: number;
 }
 
@@ -12,18 +15,18 @@ const AlgProgressRow: React.FC<AlgProgressRowProps> = ({ path, label }) => {
     <div className="flex items-center justify-between gap-1">
       <p>{label}</p>
       <div className="flex items-center gap-x-0.5">
-        {path.map((node, index) => (
+        {path.path.map((node, index) => (
           <React.Fragment key={index}>
             <SquareWrapper>
               <p>{node}</p>
             </SquareWrapper>
-            {index < path.length - 1 && <ArrowRight size={14} />}
+            {index < path.path.length - 1 && <ArrowRight size={14} />}
           </React.Fragment>
         ))}
       </div>
       <p className="font-bold">=</p>
-      <div className="grid w-5 h-5 text-sm border rounded-full shadow-sm place-content-center border-input bg-background">
-        <p>{path[path.length - 1]}</p>
+      <div className="grid h-5 w-5 place-content-center rounded-full border border-input bg-background text-sm shadow-sm">
+        <p>{path.flow}</p>
       </div>
     </div>
   );

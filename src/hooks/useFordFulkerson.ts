@@ -87,9 +87,7 @@ export const useFordFulkerson = ({ graph, source, sink, paths }: GraphInfo) => {
     // Convert path from vertex names to a readable format
     console.log(`Path: ${path.join(" -> ")}, Flow: ${pathFlow}`);
 
-    path.push(pathFlow.toString());
-
-    paths.push(path);
+    paths.push({ path: path, flow: pathFlow });
   }
 
   // Update the graph visualization

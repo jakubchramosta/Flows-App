@@ -8,7 +8,10 @@ export interface GraphInfo {
   source: string;
   sink: string;
   maxFlow: number;
-  paths: string[][];
+  paths: {
+    path: string[];
+    flow: number;
+  }[];
 }
 
 interface GraphContextType {
@@ -29,7 +32,7 @@ interface GraphContextType {
   setSource: (source: string) => void;
   setSink: (sink: string) => void;
   calculateMaxFlow: (graphInfo: GraphInfo) => void;
-  addToPaths: (newPath: string[]) => void;
+  addToPaths: (newPath: string[], itsFlow: number) => void;
 }
 
 interface GraphProviderProps {
@@ -126,9 +129,9 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     setGraphs(newGraphs);
   };
 
-  const addToPaths = (newPath: string[]) => {
+  const addToPaths = (newPath: string[], itsFlow: number) => {
     const newGraphs = [...graphs];
-    newGraphs[activeGraph].paths.push(newPath);
+    newGraphs[activeGraph].paths.push({ path: newPath, flow: itsFlow });
     setGraphs(newGraphs);
   };
 
