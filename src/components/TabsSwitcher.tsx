@@ -4,7 +4,7 @@ import { Tabs, TabsList, TabsTrigger } from "./ui/tabs.js";
 import GraphContext from "../context/GraphContext.js";
 import { useContext } from "react";
 
-const GraphTabs = () => {
+const TabsSwitcher = () => {
   const { graphs, addGraph, setActiveGraphIndex, activeGraph } =
     useContext(GraphContext);
 
@@ -39,4 +39,4 @@ const GraphTabs = () => {
   );
 };
 
-export default GraphTabs;
+export default TabsSwitcher;

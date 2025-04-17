@@ -9,13 +9,13 @@ import {
 } from "./ui/select";
 import { useContext } from "react";
 
-const TopRightMenu = () => {
+const GraphSidebar = () => {
   const { graphs, activeGraph } = useContext(GraphContext);
   const currentMaxFlow = graphs[activeGraph].maxFlow;
   const discoveredPaths = graphs[activeGraph].paths;
 
   return (
-    <div className="absolute flex flex-col gap-4 right-5 top-5">
+    <div className="absolute right-5 top-5 flex flex-col gap-4">
       <Select>
         <SelectTrigger className="w-full bg-background">
           <SelectValue placeholder="Zvolit algoritmus" />
@@ -28,7 +28,7 @@ const TopRightMenu = () => {
       </Select>
       <div className="rounded-md border border-input bg-background p-2.5 px-3 shadow-sm">
         <h1>Maximální tok</h1>
-        <p className="my-1 text-2xl font-bold text-center">{currentMaxFlow}</p>
+        <p className="my-1 text-center text-2xl font-bold">{currentMaxFlow}</p>
       </div>
       <div className="rounded-md border border-input bg-background p-2.5 shadow-sm">
         <h1 className="pb-2">Postup algoritmu</h1>
@@ -42,4 +42,4 @@ const TopRightMenu = () => {
   );
 };
 
-export default TopRightMenu;
+export default GraphSidebar;

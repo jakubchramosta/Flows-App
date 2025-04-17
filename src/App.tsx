@@ -1,7 +1,7 @@
 import GraphComponent from "./components/GraphComponent";
 import BottomToolBar from "./components/BottomToolBar";
-import GraphTabs from "./components/GraphTabs";
-import TopRightMenu from "./components/TopRightMenu";
+import TabsSwitcher from "./components/TabsSwitcher";
+import GraphSidebar from "./components/GraphSidebar";
 import { GraphProvider } from "./context/GraphContext.js";
 import { useState } from "react";
 import InfoTab from "./components/InfoTab";
@@ -19,8 +19,8 @@ function App() {
     <div className="relative">
       <GraphProvider>
         <GraphComponent />
-        <GraphTabs />
-        <TopRightMenu />
+        <TabsSwitcher />
+        <GraphSidebar />
         <BottomToolBar handleInfoClick={handleInfoClick} />
         {showInfo && <InfoTab setShowInfo={setShowInfo} />}
       </GraphProvider>
