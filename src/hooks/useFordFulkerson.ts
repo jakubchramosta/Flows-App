@@ -57,6 +57,7 @@ export const useFordFulkerson = ({ graph, source, sink, paths }: GraphInfo) => {
       // Update forward edge
       const attrs = graph.getEdgeAttributes(edge);
       graph.setEdgeAttribute(edge, "flow", attrs.flow + pathFlow);
+      graph.setEdgeAttribute(edge, "label", `${attrs.flow}/${attrs.capacity}`);
 
       // Update reverse edge
       if (reverseEdge) {
@@ -66,11 +67,6 @@ export const useFordFulkerson = ({ graph, source, sink, paths }: GraphInfo) => {
           reverseEdge,
           "flow",
           reverseAttrs.flow + pathFlow,
-        );
-        graph.setEdgeAttribute(
-          edge,
-          "label",
-          `${attrs.flow - pathFlow}/${attrs.capacity}`,
         );
       } else {
         graph.addEdge(v, u, {
