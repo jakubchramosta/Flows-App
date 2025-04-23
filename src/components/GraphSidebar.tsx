@@ -7,28 +7,32 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import { Algorithms } from "./utils/consts";
 
 const GraphSidebar = () => {
-  const { graphs, activeGraph } = useContext(GraphContext);
+  const { graphs, activeGraph, setSelectedAlgorithm } =
+    useContext(GraphContext);
   const currentMaxFlow = graphs[activeGraph].maxFlow;
   const discoveredPaths = graphs[activeGraph].paths;
 
   return (
-    <div className="absolute right-5 top-5 flex flex-col gap-4">
-      <Select>
+    <div className="absolute flex flex-col gap-4 right-5 top-5">
+      <Select onValueChange={(value) => setSelectedAlgorithm(value)}>
         <SelectTrigger className="w-full bg-background">
           <SelectValue placeholder="Zvolit algoritmus" />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="test1">Ford-Fullkerson algoritmus</SelectItem>
-          <SelectItem value="test2">Edmonds-Karp algoritmus</SelectItem>
-          <SelectItem value="test3">Dinic's algoritmus</SelectItem>
+          <SelectItem value={Algorithms.FORD_FULKERSON}>
+            Ford-Fulkerson
+          </SelectItem>
+          <SelectItem value={Algorithms.EDMONDS_KARP}>Edmonds-Karp</SelectItem>
+          {/* <SelectItem value="test3">Dinic's algoritmus</SelectItem> */}
         </SelectContent>
       </Select>
       <div className="rounded-md border border-input bg-background p-2.5 px-3 shadow-sm">
         <h1>Maximální tok</h1>
-        <p className="my-1 text-center text-2xl font-bold">{currentMaxFlow}</p>
+        <p className="my-1 text-2xl font-bold text-center">{currentMaxFlow}</p>
       </div>
       <div className="rounded-md border border-input bg-background p-2.5 shadow-sm">
         <h1 className="pb-2">Postup algoritmu</h1>

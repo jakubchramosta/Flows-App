@@ -2,6 +2,8 @@ import { createContext, ReactNode, useState } from "react";
 import Graph from "graphology";
 import { useFordFulkerson } from "../hooks/useFordFulkerson";
 import { toast } from "sonner";
+import { Algorithms } from "../components/utils/consts";
+import { useEdmondsKarp } from "../hooks/useEdmondsKarp";
 
 export interface GraphInfo {
   graph: Graph;
@@ -31,9 +33,10 @@ interface GraphContextType {
   setAddingEdgeMode: (value: boolean) => void;
   setSource: (source: string) => void;
   setSink: (sink: string) => void;
-  calculateMaxFlow: (graphInfo: GraphInfo) => void;
+  calculateMaxFlow: (graphInfo: GraphInfo, algIndex: string) => void;
   addToPaths: (newPath: string[], itsFlow: number) => void;
   setEdgeCapacity: (edgeId: string, capacity: number) => void;
+  setSelectedAlgorithm: (alg: string) => void;
 }
 
 interface GraphProviderProps {
@@ -49,6 +52,9 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
   const [activeGraph, setActiveGraph] = useState<number>(0);
   const [firstNodeInEdge, setFirstNodeInEdge] = useState<string | null>(null);
   const [addingEdgeMode, setAddingEdgeMode] = useState(false);
+  const [selectedAlgorithm, setSelectedAlgorithm] = useState<string>(
+    Algorithms.FORD_FULKERSON,
+  );
 
   const graph = graphs[activeGraph].graph;
 
@@ -90,11 +96,13 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
   };
 
   const clearGraph = () => {
-    graphs[activeGraph].graph.clear();
-    graphs[activeGraph].source = "";
-    graphs[activeGraph].sink = "";
-    graphs[activeGraph].maxFlow = 0;
-    graphs[activeGraph].paths = [];
+    const newGraphs = [...graphs];
+    newGraphs[activeGraph].graph.clear();
+    newGraphs[activeGraph].source = "";
+    newGraphs[activeGraph].sink = "";
+    newGraphs[activeGraph].maxFlow = 0;
+    newGraphs[activeGraph].paths = [];
+    setGraphs(newGraphs);
   };
 
   const setSource = (source: string) => {
@@ -124,7 +132,22 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
       toast.error("Nastavte zdroj a cíl toku!");
       return;
     }
-    const maxFlow = useFordFulkerson(grapInfo);
+
+    let maxFlow = 0;
+
+    switch (selectedAlgorithm) {
+      case Algorithms.FORD_FULKERSON:
+        toast.success("Používá se Ford-Fulkerson algoritmus.");
+        maxFlow = useFordFulkerson(grapInfo);
+        break;
+      case Algorithms.EDMONDS_KARP:
+        toast.success("Používá se Edmonds-Karp algoritmus.");
+        maxFlow = useEdmondsKarp(grapInfo);
+        break;
+      default:
+        maxFlow = useFordFulkerson(grapInfo);
+        return;
+    }
     const newGraphs = [...graphs];
     newGraphs[activeGraph].maxFlow = maxFlow;
     setGraphs(newGraphs);
@@ -144,6 +167,19 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
       "label",
       `${graph.getEdgeAttribute(edgeId, "flow")}/${graph.getEdgeAttribute(edgeId, "capacity")}`,
     );
+  };
+
+  const resetGraph = () => {
+    //TODO: should keep the graph, but shoul empty paths, maxFlow and flows of all edges
+    const newGraphs = [...graphs];
+  };
+
+  const updateEdgeLabels = () => {
+    graph.forEachEdge((edge) => {
+      const flow = graph.getEdgeAttribute(edge, "flow");
+      const capacity = graph.getEdgeAttribute(edge, "capacity");
+      graph.setEdgeAttribute(edge, "label", `${flow}/${capacity}`);
+    });
   };
 
   return (
@@ -168,6 +204,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
         calculateMaxFlow,
         addToPaths,
         setEdgeCapacity,
+        setSelectedAlgorithm,
       }}
     >
       {children}

@@ -35,7 +35,7 @@ const GraphComponent = () => {
 
   // Clear the graph and draw the default graph on the first render
   if (firstRender) {
-    clearGraph();
+    graph.clear();
     useDrawDefaultGraph(graphs[0]);
     console.log(graphs[0]);
   }
