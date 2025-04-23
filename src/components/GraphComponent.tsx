@@ -6,6 +6,7 @@ import { useHandleClicks } from "../hooks/useHadleClicks";
 import { SigmaStageEventPayload } from "sigma/dist/declarations/src/types";
 import ContextMenu from "./ContextMenu";
 import { edgeReducer } from "./utils/edgeReducer";
+import EdgeCapacityInput from "./EdgeCapacityInput";
 
 const GraphComponent = () => {
   // Reference to the container div for rendering the graph
@@ -29,6 +30,7 @@ const GraphComponent = () => {
   const [isNode, setIsNode] = useState(true);
   const [id, setId] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [inputIsOpen, setInputIsOpen] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
 
   // Clear the graph and draw the default graph on the first render
@@ -162,7 +164,15 @@ const GraphComponent = () => {
         isOpen={isMenuOpen}
         position={menuPosition}
         setIsOpen={setIsMenuOpen}
+        setInputMenuOpen={setInputIsOpen}
         isNode={isNode}
+        id={id}
+      />
+      {/* Edge capacity input */}
+      <EdgeCapacityInput
+        isOpen={inputIsOpen}
+        position={menuPosition}
+        setIsOpen={setInputIsOpen}
         id={id}
       />
       {/* Graph container */}

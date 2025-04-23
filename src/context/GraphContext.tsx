@@ -33,6 +33,7 @@ interface GraphContextType {
   setSink: (sink: string) => void;
   calculateMaxFlow: (graphInfo: GraphInfo) => void;
   addToPaths: (newPath: string[], itsFlow: number) => void;
+  setEdgeCapacity: (edgeId: string, capacity: number) => void;
 }
 
 interface GraphProviderProps {
@@ -135,6 +136,16 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     setGraphs(newGraphs);
   };
 
+  const setEdgeCapacity = (edgeId: string, capacity: number) => {
+    if (!edgeId) return;
+    graph.setEdgeAttribute(edgeId, "capacity", capacity);
+    graph.setEdgeAttribute(
+      edgeId,
+      "label",
+      `${graph.getEdgeAttribute(edgeId, "flow")}/${graph.getEdgeAttribute(edgeId, "capacity")}`,
+    );
+  };
+
   return (
     <GraphContext.Provider
       value={{
@@ -156,6 +167,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
         setSink,
         calculateMaxFlow,
         addToPaths,
+        setEdgeCapacity,
       }}
     >
       {children}

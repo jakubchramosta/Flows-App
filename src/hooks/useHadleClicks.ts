@@ -19,7 +19,7 @@ export const useHandleClicks = () => {
       ...coordForGraph,
       size: 20,
     };
-    const id = `node-${String.fromCharCode(97 + graph.nodes().length).toUpperCase()}`;
+    const id = String.fromCharCode(97 + graph.nodes().length).toUpperCase();
     graph.addNode(id, node);
   };
 

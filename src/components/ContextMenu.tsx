@@ -12,6 +12,7 @@ interface ContextMenuProps {
   isOpen: boolean;
   position: { x: number; y: number };
   setIsOpen: (val: boolean) => void;
+  setInputMenuOpen: (val: boolean) => void;
   isNode: boolean;
   id: string | null;
 }
@@ -20,6 +21,7 @@ const ContextMenu = ({
   isOpen,
   position,
   setIsOpen,
+  setInputMenuOpen,
   isNode,
   id,
 }: ContextMenuProps) => {
@@ -69,7 +71,10 @@ const ContextMenu = ({
     setIsOpen(false);
   };
 
-  const handleChangeCapacity = (id: string | null) => {};
+  const handleCapacityChangeOnClick = () => {
+    setInputMenuOpen(true);
+    setIsOpen(false);
+  };
 
   useOnClickOutside(ref, handleClickOutside);
 
@@ -115,7 +120,7 @@ const ContextMenu = ({
             <>
               <DropdownMenuItem
                 className="flex justify-between w-36"
-                onClick={() => handleChangeCapacity(id)}
+                onClick={() => handleCapacityChangeOnClick()}
               >
                 Změnit kapacitu <PencilIcon />
               </DropdownMenuItem>
