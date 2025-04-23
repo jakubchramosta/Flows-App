@@ -33,10 +33,11 @@ interface GraphContextType {
   setAddingEdgeMode: (value: boolean) => void;
   setSource: (source: string) => void;
   setSink: (sink: string) => void;
-  calculateMaxFlow: (graphInfo: GraphInfo, algIndex: string) => void;
+  calculateMaxFlow: (graphInfo: GraphInfo) => void;
   addToPaths: (newPath: string[], itsFlow: number) => void;
   setEdgeCapacity: (edgeId: string, capacity: number) => void;
   setSelectedAlgorithm: (alg: string) => void;
+  resetGraph: () => void;
 }
 
 interface GraphProviderProps {
@@ -151,6 +152,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     const newGraphs = [...graphs];
     newGraphs[activeGraph].maxFlow = maxFlow;
     setGraphs(newGraphs);
+    updateEdgeLabels();
   };
 
   const addToPaths = (newPath: string[], itsFlow: number) => {
@@ -170,8 +172,14 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
   };
 
   const resetGraph = () => {
-    //TODO: should keep the graph, but shoul empty paths, maxFlow and flows of all edges
     const newGraphs = [...graphs];
+    graphs[activeGraph].graph.forEachEdge((edge) => {
+      graph.setEdgeAttribute(edge, "flow", 0);
+    });
+    newGraphs[activeGraph].maxFlow = 0;
+    newGraphs[activeGraph].paths = [];
+    setGraphs(newGraphs);
+    updateEdgeLabels();
   };
 
   const updateEdgeLabels = () => {
@@ -180,6 +188,10 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
       const capacity = graph.getEdgeAttribute(edge, "capacity");
       graph.setEdgeAttribute(edge, "label", `${flow}/${capacity}`);
     });
+  };
+
+  const downloadGraph = () => {
+    const graphData = graph.export();
   };
 
   return (
@@ -205,6 +217,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
         addToPaths,
         setEdgeCapacity,
         setSelectedAlgorithm,
+        resetGraph,
       }}
     >
       {children}

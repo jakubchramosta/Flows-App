@@ -3,6 +3,7 @@ import { GraphInfo } from "../context/GraphContext";
 export const useFordFulkerson = ({ graph, source, sink, paths }: GraphInfo) => {
   let maxFlow = 0;
 
+  // Helper function to perform DFS and find an augmenting path
   function dfs(
     current: string,
     sink: string,
@@ -34,8 +35,9 @@ export const useFordFulkerson = ({ graph, source, sink, paths }: GraphInfo) => {
 
   let path: string[] | null;
 
+  // Main loop to find augmenting paths and update the flow
   while ((path = dfs(source, sink, new Set())) !== null) {
-    // Find the minimum residual capacity along the path
+    // Find the minimum residual capacity (bottleneck) along the path
     let pathFlow = Infinity;
     for (let i = 0; i < path.length - 1; i++) {
       const u = path[i];
@@ -60,11 +62,10 @@ export const useFordFulkerson = ({ graph, source, sink, paths }: GraphInfo) => {
       // Update reverse edge
       if (reverseEdge) {
         const reverseAttrs = graph.getEdgeAttributes(reverseEdge);
-
         graph.setEdgeAttribute(
           reverseEdge,
           "flow",
-          reverseAttrs.flow + pathFlow,
+          reverseAttrs.flow - pathFlow,
         );
       } else {
         graph.addEdge(v, u, {
@@ -76,19 +77,19 @@ export const useFordFulkerson = ({ graph, source, sink, paths }: GraphInfo) => {
       }
     }
 
+    // Add the path flow to the total maximum flow
     maxFlow += pathFlow;
 
-    // Convert path from vertex names to a readable format
-    console.log(`Path: ${path.join(" -> ")}, Flow: ${pathFlow}`);
+    // Push the valid path and its flow into the paths array
+    paths.push({ path, flow: pathFlow });
 
-    paths.push({ path: path, flow: pathFlow });
+    // Debugging logs
+    console.log(`Path: ${path.join(" -> ")}, Flow: ${pathFlow}`);
   }
 
-  // Update the graph visualization
-
-  //logiigng for the debugging purpose
-  console.log(graph);
-  console.log(paths);
+  // Debugging logs
+  console.log("Final Graph:", graph);
+  console.log("All Paths:", paths);
 
   return maxFlow;
 };

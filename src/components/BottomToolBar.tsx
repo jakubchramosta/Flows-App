@@ -5,6 +5,7 @@ import { Button } from "./ui/button.js";
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
+  DownloadIcon,
   InfoIcon,
   NetworkIcon,
   PlayIcon,
@@ -17,10 +18,10 @@ interface BottomToolBarProps {
 }
 
 const BottomToolBar = ({ handleInfoClick }: BottomToolBarProps) => {
-  const { graphs, activeGraph, clearGraph, calculateMaxFlow } =
+  const { graphs, activeGraph, clearGraph, calculateMaxFlow, resetGraph } =
     useContext(GraphContext);
   return (
-    <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between rounded-md border border-input bg-background p-2.5 shadow-sm">
+    <div className="absolute bottom-3 left-0 right-0 mx-3 flex items-center justify-between rounded-md border border-input bg-background p-2.5 shadow-sm">
       <div className="flex items-center gap-4">
         <Button variant={"outline"} size={"icon"} onClick={handleInfoClick}>
           <InfoIcon />
@@ -54,7 +55,7 @@ const BottomToolBar = ({ handleInfoClick }: BottomToolBarProps) => {
             <ArrowRightIcon />
           </Button>
         </div>
-        <Button variant={"outline"} size={"rounded"}>
+        <Button variant={"outline"} size={"rounded"} onClick={resetGraph}>
           <RotateCcwIcon />
         </Button>
       </div>

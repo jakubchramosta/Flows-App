@@ -169,12 +169,13 @@ const GraphComponent = () => {
         id={id}
       />
       {/* Edge capacity input */}
-      <EdgeCapacityInput
-        isOpen={inputIsOpen}
-        position={menuPosition}
-        setIsOpen={setInputIsOpen}
-        id={id}
-      />
+      {inputIsOpen && (
+        <EdgeCapacityInput
+          position={menuPosition}
+          setIsOpen={setInputIsOpen}
+          id={id}
+        />
+      )}
       {/* Graph container */}
       <div
         ref={containerRef}

@@ -94,9 +94,6 @@ const ContextMenu = ({
               >
                 Přidat hanu <PlusIcon />
               </DropdownMenuItem>
-              {/* <DropdownMenuItem className="flex justify-between w-44">
-                Přejmenovat <PencilIcon />
-              </DropdownMenuItem> */}
               <DropdownMenuItem
                 className="flex justify-between w-44"
                 onClick={() => handleMakrAsSource(id)}
