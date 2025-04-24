@@ -17,7 +17,7 @@ const GraphSidebar = () => {
   const discoveredPaths = graphs[activeGraph].paths;
 
   return (
-    <div className="absolute right-5 top-5 flex max-w-[300px] flex-col gap-4">
+    <div className="absolute right-5 top-5 flex w-[340px] flex-col gap-4">
       <Select onValueChange={(value) => setSelectedAlgorithm(value)}>
         <SelectTrigger className="w-full bg-background">
           <SelectValue placeholder="Zvolit algoritmus" />

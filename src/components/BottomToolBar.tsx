@@ -5,20 +5,13 @@ import { Button } from "./ui/button.js";
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
-  Bot,
-  DownloadIcon,
   InfoIcon,
   NetworkIcon,
   PlayIcon,
   RotateCcwIcon,
   Trash2Icon,
 } from "lucide-react";
-import {
-  Tooltip,
-  TooltipProvider,
-  TooltipTrigger,
-  TooltipContent,
-} from "./ui/tooltip.js";
+import { TooltipProvider } from "./ui/tooltip.js";
 import BottomToolBarButton from "./BottomToolBarButton.js";
 import { ButtonSizes, ButtonVariants } from "./utils/consts.js";
 
@@ -33,13 +26,13 @@ const BottomToolBar = ({ handleInfoClick }: BottomToolBarProps) => {
     <TooltipProvider>
       <div className="absolute bottom-3 left-0 right-0 mx-3 flex items-center justify-between rounded-md border border-input bg-background p-2.5 shadow-sm">
         <div className="flex items-center gap-4">
-          <BottomToolBarButton
+          <Button
             variant={ButtonVariants.OUTLINE}
             size={ButtonSizes.ICON}
-            icon={<InfoIcon />}
-            tooltipText="Informace o aplikaci"
             onClick={handleInfoClick}
-          />
+          >
+            <InfoIcon />
+          </Button>
           <BottomToolBarButton
             variant={ButtonVariants.OUTLINE}
             size={ButtonSizes.ICON}

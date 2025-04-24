@@ -19,18 +19,37 @@ const InfoTab = ({ setShowInfo }: InfoTabProps) => {
       ref={ref}
       className="absolute bottom-20 left-3 max-w-[calc(100vw/3)] rounded-md border border-input bg-background p-2.5 shadow-sm"
     >
-      <p>Info</p>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean dapibus
-        quis nisi vitae pharetra. Nam ut erat lectus. Aenean faucibus augue
-        nisl, sit amet finibus erat vestibulum ac. Etiam eget convallis dui, vel
-        varius leo. Duis blandit ex vel pretium faucibus. Morbi faucibus, massa
-        elementum scelerisque luctus, risus enim suscipit risus, a dapibus mi
-        lacus et nulla. Integer vel sodales elit. Nam id feugiat ante.
-        Pellentesque tincidunt ac ipsum in pharetra. Nulla imperdiet nisl dui,
-        in porttitor ipsum dapibus vitae. Pellentesque blandit arcu eget congue
-        vehicula. Pellentesque ac justo bibendum, auctor nisl sit amet,
-        tincidunt ex.
+      <div className="p-3">
+        <p>
+          Vítejte v aplikaci <strong>Flows App</strong>, která slouží k
+          vizualizaci a výpočtu maximálního toku v síti pomocí různých
+          algoritmů. Aplikace umožňuje:
+        </p>
+        <ul className="pl-5 list-disc">
+          <li>
+            <strong>Vytvářet vlastní grafy:</strong> Přidávejte uzly dvouklikem
+            <strong>LMB</strong> a hrany kliknutím <strong>RMB</strong> na bod,
+            nastavujte kapacity a definujte zdroj a cíl toku.
+          </li>
+          <li>
+            <strong>Spouštět algoritmy:</strong> Vyberte si z algoritmů jako
+            Ford-Fulkerson nebo Edmonds-Karp a sledujte postup výpočtu.
+          </li>
+          <li>
+            <strong>Upravovat graf:</strong> Měňte kapacity hran kliknutím{" "}
+            <strong>RMB</strong> na hranu, přidávejte nebo odstraňujte uzly a
+            hrany podle potřeby.
+          </li>
+        </ul>
+        <p>
+          Pro začátek nastavte <strong>zdroj</strong> a <strong>cíl</strong>{" "}
+          toku, přidejte hrany s kapacitami a spusťte algoritmus tlačítkem{" "}
+          <strong>Play</strong>.
+        </p>
+      </div>
+      <hr className="my-2 border-t border-gray-300" />
+      <p className="text-sm text-center text-gray-500">
+        &copy; {new Date().getFullYear()} Flows App
       </p>
     </div>
   );
