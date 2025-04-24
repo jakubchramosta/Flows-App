@@ -40,6 +40,8 @@ interface GraphContextType {
   resetGraph: () => void;
   navigatePath: (direction: "forward" | "backward") => void;
   resetPathNavigation: () => void;
+  highlightPath: (path: string[]) => void;
+  currentPathIndex: number | null;
 }
 
 interface GraphProviderProps {
@@ -127,6 +129,29 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     graph.setNodeAttribute(sink, "color", "#f00");
   };
 
+  const highlightPath = (path: string[]) => {
+    // Reset all edge colors
+    graph.forEachEdge((edge) => {
+      const isReverse = graph.getEdgeAttribute(edge, "isReverse");
+      if (isReverse) {
+        graph.setEdgeAttribute(edge, "hidden", true);
+      } else {
+        graph.setEdgeAttribute(edge, "color", "grey");
+      }
+    });
+
+    // Highlight the current path
+    for (let i = 0; i < path.length - 1; i++) {
+      const u = path[i];
+      const v = path[i + 1];
+      const edge = graph.edge(u, v);
+      const reverseEdge = graph.edge(v, u);
+
+      if (edge) graph.setEdgeAttribute(edge, "color", "green");
+      if (reverseEdge) graph.setEdgeAttribute(reverseEdge, "color", "red");
+    }
+  };
+
   const calculateMaxFlow = (grapInfo: GraphInfo) => {
     if (
       !grapInfo.source ||
@@ -152,10 +177,18 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
         maxFlow = useFordFulkerson(grapInfo);
         return;
     }
+
     const newGraphs = [...graphs];
     newGraphs[activeGraph].maxFlow = maxFlow;
     setGraphs(newGraphs);
     updateEdgeLabels();
+
+    // Highlight the last path after calculation
+    const lastPathIndex = newGraphs[activeGraph].paths.length - 1;
+    if (lastPathIndex >= 0) {
+      setCurrentPathIndex(lastPathIndex);
+      highlightPath(newGraphs[activeGraph].paths[lastPathIndex].path);
+    }
   };
 
   const addToPaths = (newPath: string[], itsFlow: number) => {
@@ -195,29 +228,6 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
 
   const downloadGraph = () => {
     const graphData = graph.export();
-  };
-
-  const highlightPath = (path: string[]) => {
-    // Reset all edge colors
-    graph.forEachEdge((edge) => {
-      const isReverse = graph.getEdgeAttribute(edge, "isReverse");
-      if (isReverse) {
-        graph.setEdgeAttribute(edge, "hidden", true);
-      } else {
-        graph.setEdgeAttribute(edge, "color", "grey");
-      }
-    });
-
-    // Highlight the current path
-    for (let i = 0; i < path.length - 1; i++) {
-      const u = path[i];
-      const v = path[i + 1];
-      const edge = graph.edge(u, v);
-      const reverseEdge = graph.edge(v, u);
-
-      if (edge) graph.setEdgeAttribute(edge, "color", "green");
-      if (reverseEdge) graph.setEdgeAttribute(reverseEdge, "color", "red");
-    }
   };
 
   const navigatePath = (direction: "forward" | "backward") => {
@@ -274,6 +284,8 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
         resetGraph,
         navigatePath,
         resetPathNavigation,
+        highlightPath,
+        currentPathIndex,
       }}
     >
       {children}

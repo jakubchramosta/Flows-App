@@ -8,6 +8,7 @@ import {
   InfoIcon,
   NetworkIcon,
   PlayIcon,
+  RefreshCcwIcon,
   RotateCcwIcon,
   Trash2Icon,
 } from "lucide-react";
@@ -20,8 +21,15 @@ interface BottomToolBarProps {
 }
 
 const BottomToolBar = ({ handleInfoClick }: BottomToolBarProps) => {
-  const { graphs, activeGraph, clearGraph, calculateMaxFlow, resetGraph } =
-    useContext(GraphContext);
+  const {
+    graphs,
+    activeGraph,
+    clearGraph,
+    calculateMaxFlow,
+    resetGraph,
+    navigatePath,
+    resetPathNavigation,
+  } = useContext(GraphContext);
   return (
     <TooltipProvider>
       <div className="absolute bottom-3 left-0 right-0 mx-3 flex items-center justify-between rounded-md border border-input bg-background p-2.5 shadow-sm">
@@ -60,20 +68,23 @@ const BottomToolBar = ({ handleInfoClick }: BottomToolBarProps) => {
               size={ButtonSizes.ROUNDED}
               icon={<ArrowLeftIcon />}
               tooltipText="Předchozí krok"
-              onClick={() => {
-                // Implement the logic for going to the previous step
-              }}
+              onClick={() => navigatePath("backward")}
             />
             <BottomToolBarButton
               variant={ButtonVariants.OUTLINE}
               size={ButtonSizes.ROUNDED}
               icon={<ArrowRightIcon />}
               tooltipText="Další krok"
-              onClick={() => {
-                // Implement the logic for going to the next step
-              }}
+              onClick={() => navigatePath("forward")}
             />
           </div>
+          <BottomToolBarButton
+            variant={ButtonVariants.OUTLINE}
+            size={ButtonSizes.ROUNDED}
+            icon={<RefreshCcwIcon />}
+            tooltipText="Reset navidace"
+            onClick={resetPathNavigation}
+          />
           <BottomToolBarButton
             variant={ButtonVariants.OUTLINE}
             size={ButtonSizes.ROUNDED}
