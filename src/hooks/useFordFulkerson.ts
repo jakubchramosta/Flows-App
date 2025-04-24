@@ -1,65 +1,68 @@
 import { GraphInfo } from "../context/GraphContext";
 
+// Funkce pro výpočet maximálního toku pomocí Ford-Fulkerson algoritmu
 export const useFordFulkerson = ({ graph, source, sink, paths }: GraphInfo) => {
-  let maxFlow = 0;
+  let maxFlow = 0; // Proměnná pro uchování maximálního toku
 
-  // Helper function to perform DFS and find an augmenting path
+  // Pomocná funkce pro provedení DFS a nalezení augmentační cesty
   function dfs(
     current: string,
     sink: string,
     visited: Set<string>,
   ): string[] | null {
+    // Pokud jsme dosáhli cílového uzlu, vrátíme cestu
     if (current === sink) {
       return [current];
     }
 
-    visited.add(current);
+    visited.add(current); // Označení uzlu jako navštíveného
 
+    // Procházení sousedů aktuálního uzlu
     for (const neighbor of graph.outNeighbors(current)) {
       if (!visited.has(neighbor)) {
-        const edge = graph.edge(current, neighbor);
-        const { capacity, flow } = graph.getEdgeAttributes(edge);
+        const edge = graph.edge(current, neighbor); // Získání hrany
+        const { capacity, flow } = graph.getEdgeAttributes(edge); // Získání atributů hrany
 
+        // Pokud má hrana zbývající kapacitu, pokračujeme v DFS
         if (capacity - flow > 0) {
           const subPath = dfs(neighbor, sink, visited);
           if (subPath) {
-            subPath.unshift(current);
+            subPath.unshift(current); // Přidání aktuálního uzlu do cesty
             return subPath;
           }
         }
       }
     }
 
-    return null;
+    return null; // Pokud neexistuje augmentační cesta, vrátíme null
   }
 
   let path: string[] | null;
 
-  // Main loop to find augmenting paths and update the flow
+  // Hlavní smyčka pro nalezení augmentačních cest a aktualizaci toku
   while ((path = dfs(source, sink, new Set())) !== null) {
-    // Find the minimum residual capacity (bottleneck) along the path
+    // Nalezení minimální reziduální kapacity (bottleneck) podél cesty
     let pathFlow = Infinity;
     for (let i = 0; i < path.length - 1; i++) {
       const u = path[i];
       const v = path[i + 1];
       const edge = graph.edge(u, v);
       const { capacity, flow } = graph.getEdgeAttributes(edge);
-      pathFlow = Math.min(pathFlow, capacity - flow);
+      pathFlow = Math.min(pathFlow, capacity - flow); // Výpočet bottleneck kapacity
     }
 
-    // Update the residual capacities of the edges and reverse edges
+    // Aktualizace reziduálních kapacit hran a zpětných hran
     for (let i = 0; i < path.length - 1; i++) {
       const u = path[i];
       const v = path[i + 1];
       const edge = graph.edge(u, v);
       const reverseEdge = graph.edge(v, u);
 
-      // Update forward edge
+      // Aktualizace toku na přímé hraně
       const attrs = graph.getEdgeAttributes(edge);
       graph.setEdgeAttribute(edge, "flow", attrs.flow + pathFlow);
-      graph.setEdgeAttribute(edge, "label", `${attrs.flow}/${attrs.capacity}`);
 
-      // Update reverse edge
+      // Aktualizace toku na zpětné hraně
       if (reverseEdge) {
         const reverseAttrs = graph.getEdgeAttributes(reverseEdge);
         graph.setEdgeAttribute(
@@ -68,6 +71,7 @@ export const useFordFulkerson = ({ graph, source, sink, paths }: GraphInfo) => {
           reverseAttrs.flow - pathFlow,
         );
       } else {
+        // Pokud zpětná hrana neexistuje, vytvoříme ji
         graph.addEdge(v, u, {
           flow: -pathFlow,
           capacity: 0,
@@ -77,19 +81,19 @@ export const useFordFulkerson = ({ graph, source, sink, paths }: GraphInfo) => {
       }
     }
 
-    // Add the path flow to the total maximum flow
+    // Přidání aktuálního toku do celkového maximálního toku
     maxFlow += pathFlow;
 
-    // Push the valid path and its flow into the paths array
+    // Uložení nalezené cesty a jejího toku do pole paths
     paths.push({ path, flow: pathFlow });
 
-    // Debugging logs
+    // Ladící výpisy
     console.log(`Path: ${path.join(" -> ")}, Flow: ${pathFlow}`);
   }
 
-  // Debugging logs
+  // Ladící výpisy
   console.log("Final Graph:", graph);
   console.log("All Paths:", paths);
 
-  return maxFlow;
+  return maxFlow; // Vrácení maximálního toku
 };

@@ -1,31 +1,35 @@
 import { GraphInfo } from "../context/GraphContext";
 
+// Funkce pro výpočet maximálního toku pomocí Edmonds-Karp algoritmu
 export const useEdmondsKarp = ({ graph, source, sink, paths }: GraphInfo) => {
-  let maxFlow = 0;
+  let maxFlow = 0; // Proměnná pro uchování maximálního toku
 
-  // Helper function to perform BFS and find an augmenting path
+  // Pomocná funkce pro provedení BFS a nalezení augmentační cesty
   function bfs(): { path: string[]; pathFlow: number } | null {
-    const visited = new Set<string>();
+    const visited = new Set<string>(); // Množina navštívených uzlů
     const queue: { node: string; path: string[]; pathFlow: number }[] = [
-      { node: source, path: [source], pathFlow: Infinity },
+      { node: source, path: [source], pathFlow: Infinity }, // Fronta pro BFS
     ];
 
     while (queue.length > 0) {
-      const { node, path, pathFlow } = queue.shift()!;
+      const { node, path, pathFlow } = queue.shift()!; // Odebrání prvku z fronty
 
+      // Pokud jsme dosáhli cílového uzlu, vrátíme cestu a její průtok
       if (node === sink) {
         return { path, pathFlow };
       }
 
-      visited.add(node);
+      visited.add(node); // Označení uzlu jako navštíveného
 
+      // Procházení sousedů aktuálního uzlu
       for (const neighbor of graph.outNeighbors(node)) {
         if (!visited.has(neighbor)) {
-          const edge = graph.edge(node, neighbor);
-          const { capacity, flow } = graph.getEdgeAttributes(edge);
+          const edge = graph.edge(node, neighbor); // Získání hrany
+          const { capacity, flow } = graph.getEdgeAttributes(edge); // Získání atributů hrany
 
+          // Pokud má hrana zbývající kapacitu, přidáme ji do fronty
           if (capacity - flow > 0) {
-            const newPathFlow = Math.min(pathFlow, capacity - flow);
+            const newPathFlow = Math.min(pathFlow, capacity - flow); // Výpočet minimálního toku
             queue.push({
               node: neighbor,
               path: [...path, neighbor],
@@ -36,27 +40,26 @@ export const useEdmondsKarp = ({ graph, source, sink, paths }: GraphInfo) => {
       }
     }
 
-    return null;
+    return null; // Pokud neexistuje augmentační cesta, vrátíme null
   }
 
-  // Main loop to find augmenting paths and update the flow
+  // Hlavní smyčka pro nalezení augmentačních cest a aktualizaci toku
   let result;
   while ((result = bfs()) !== null) {
     const { path, pathFlow } = result;
 
-    // Update the residual capacities of the edges and reverse edges
+    // Aktualizace reziduálních kapacit hran a zpětných hran
     for (let i = 0; i < path.length - 1; i++) {
       const u = path[i];
       const v = path[i + 1];
       const edge = graph.edge(u, v);
       const reverseEdge = graph.edge(v, u);
 
-      // Update forward edge
+      // Aktualizace toku na přímé hraně
       const attrs = graph.getEdgeAttributes(edge);
       graph.setEdgeAttribute(edge, "flow", attrs.flow + pathFlow);
-      graph.setEdgeAttribute(edge, "label", `${attrs.flow}/${attrs.capacity}`);
 
-      // Update reverse edge
+      // Aktualizace toku na zpětné hraně
       if (reverseEdge) {
         const reverseAttrs = graph.getEdgeAttributes(reverseEdge);
         graph.setEdgeAttribute(
@@ -65,6 +68,7 @@ export const useEdmondsKarp = ({ graph, source, sink, paths }: GraphInfo) => {
           reverseAttrs.flow - pathFlow,
         );
       } else {
+        // Pokud zpětná hrana neexistuje, vytvoříme ji
         graph.addEdge(v, u, {
           flow: -pathFlow,
           capacity: 0,
@@ -74,18 +78,18 @@ export const useEdmondsKarp = ({ graph, source, sink, paths }: GraphInfo) => {
       }
     }
 
-    maxFlow += pathFlow;
+    maxFlow += pathFlow; // Přidání toku do celkového maximálního toku
 
-    // Push the valid path and its flow into the paths array
+    // Uložení nalezené cesty a jejího toku do pole paths
     paths.push({ path, flow: pathFlow });
 
-    // Debugging logs
+    // Ladící výpisy
     console.log(`Path: ${path.join(" -> ")}, Flow: ${pathFlow}`);
   }
 
-  // Debugging logs
+  // Ladící výpisy
   console.log(graph);
   console.log(paths);
 
-  return maxFlow;
+  return maxFlow; // Vrácení maximálního toku
 };
