@@ -98,7 +98,7 @@ const ContextMenu = ({
                 className="flex justify-between w-44"
                 onClick={() => handleMakrAsSource(id)}
               >
-                Označit jako START
+                Označit jako ZDROJ
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="flex justify-between w-44"

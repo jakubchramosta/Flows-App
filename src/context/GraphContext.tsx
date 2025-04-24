@@ -130,7 +130,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
       !grapInfo.sink ||
       grapInfo.source === grapInfo.sink
     ) {
-      toast.error("Nastavte zdroj a cíl toku!");
+      toast.error("Nastavte ZDROJ a CÍL!");
       return;
     }
 

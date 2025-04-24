@@ -5,6 +5,7 @@ import { Button } from "./ui/button.js";
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
+  Bot,
   DownloadIcon,
   InfoIcon,
   NetworkIcon,
@@ -12,6 +13,14 @@ import {
   RotateCcwIcon,
   Trash2Icon,
 } from "lucide-react";
+import {
+  Tooltip,
+  TooltipProvider,
+  TooltipTrigger,
+  TooltipContent,
+} from "./ui/tooltip.js";
+import BottomToolBarButton from "./BottomToolBarButton.js";
+import { ButtonSizes, ButtonVariants } from "./utils/consts.js";
 
 interface BottomToolBarProps {
   handleInfoClick: (e: any) => void;
@@ -21,48 +30,74 @@ const BottomToolBar = ({ handleInfoClick }: BottomToolBarProps) => {
   const { graphs, activeGraph, clearGraph, calculateMaxFlow, resetGraph } =
     useContext(GraphContext);
   return (
-    <div className="absolute bottom-3 left-0 right-0 mx-3 flex items-center justify-between rounded-md border border-input bg-background p-2.5 shadow-sm">
-      <div className="flex items-center gap-4">
-        <Button variant={"outline"} size={"icon"} onClick={handleInfoClick}>
-          <InfoIcon />
-        </Button>
-        <Button
-          variant={"outline"}
-          size={"icon"}
-          onClick={() => {
-            clearGraph();
-            useDrawDefaultGraph(graphs[activeGraph]);
-          }}
-        >
-          <NetworkIcon />
-        </Button>
-      </div>
-      <div className="flex items-center gap-12">
-        <Button
-          variant={"outline"}
-          size={"rounded"}
-          onClick={() => {
-            calculateMaxFlow(graphs[activeGraph]);
-          }}
-        >
-          <PlayIcon />
-        </Button>
+    <TooltipProvider>
+      <div className="absolute bottom-3 left-0 right-0 mx-3 flex items-center justify-between rounded-md border border-input bg-background p-2.5 shadow-sm">
         <div className="flex items-center gap-4">
-          <Button variant={"outline"} size={"rounded"}>
-            <ArrowLeftIcon />
-          </Button>
-          <Button variant={"outline"} size={"rounded"}>
-            <ArrowRightIcon />
-          </Button>
+          <BottomToolBarButton
+            variant={ButtonVariants.OUTLINE}
+            size={ButtonSizes.ICON}
+            icon={<InfoIcon />}
+            tooltipText="Informace o aplikaci"
+            onClick={handleInfoClick}
+          />
+          <BottomToolBarButton
+            variant={ButtonVariants.OUTLINE}
+            size={ButtonSizes.ICON}
+            icon={<NetworkIcon />}
+            tooltipText="Vykreslit výchozí graf"
+            onClick={() => {
+              clearGraph();
+              useDrawDefaultGraph(graphs[activeGraph]);
+            }}
+          />
         </div>
-        <Button variant={"outline"} size={"rounded"} onClick={resetGraph}>
-          <RotateCcwIcon />
-        </Button>
+        <div className="flex items-center gap-12">
+          <BottomToolBarButton
+            variant={ButtonVariants.OUTLINE}
+            size={ButtonSizes.ROUNDED}
+            icon={<PlayIcon />}
+            tooltipText="Spustit algoritmus"
+            onClick={() => {
+              calculateMaxFlow(graphs[activeGraph]);
+            }}
+          />
+          <div className="flex items-center gap-4">
+            <BottomToolBarButton
+              variant={ButtonVariants.OUTLINE}
+              size={ButtonSizes.ROUNDED}
+              icon={<ArrowLeftIcon />}
+              tooltipText="Předchozí krok"
+              onClick={() => {
+                // Implement the logic for going to the previous step
+              }}
+            />
+            <BottomToolBarButton
+              variant={ButtonVariants.OUTLINE}
+              size={ButtonSizes.ROUNDED}
+              icon={<ArrowRightIcon />}
+              tooltipText="Další krok"
+              onClick={() => {
+                // Implement the logic for going to the next step
+              }}
+            />
+          </div>
+          <BottomToolBarButton
+            variant={ButtonVariants.OUTLINE}
+            size={ButtonSizes.ROUNDED}
+            icon={<RotateCcwIcon />}
+            tooltipText="Obnovit graf"
+            onClick={resetGraph}
+          />
+        </div>
+        <BottomToolBarButton
+          variant={ButtonVariants.OUTLINE}
+          size={ButtonSizes.ICON}
+          icon={<Trash2Icon />}
+          tooltipText="Vymazat graf"
+          onClick={clearGraph}
+        />
       </div>
-      <Button variant={"outline"} size={"icon"} onClick={clearGraph}>
-        <Trash2Icon />
-      </Button>
-    </div>
+    </TooltipProvider>
   );
 };
 export default BottomToolBar;
