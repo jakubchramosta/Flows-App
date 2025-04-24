@@ -38,6 +38,8 @@ interface GraphContextType {
   setEdgeCapacity: (edgeId: string, capacity: number) => void;
   setSelectedAlgorithm: (alg: string) => void;
   resetGraph: () => void;
+  navigatePath: (direction: "forward" | "backward") => void;
+  resetPathNavigation: () => void;
 }
 
 interface GraphProviderProps {
@@ -56,6 +58,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
   const [selectedAlgorithm, setSelectedAlgorithm] = useState<string>(
     Algorithms.FORD_FULKERSON,
   );
+  const [currentPathIndex, setCurrentPathIndex] = useState<number | null>(null);
 
   const graph = graphs[activeGraph].graph;
 
@@ -194,6 +197,57 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     const graphData = graph.export();
   };
 
+  const highlightPath = (path: string[]) => {
+    // Reset all edge colors
+    graph.forEachEdge((edge) => {
+      const isReverse = graph.getEdgeAttribute(edge, "isReverse");
+      if (isReverse) {
+        graph.setEdgeAttribute(edge, "hidden", true);
+      } else {
+        graph.setEdgeAttribute(edge, "color", "grey");
+      }
+    });
+
+    // Highlight the current path
+    for (let i = 0; i < path.length - 1; i++) {
+      const u = path[i];
+      const v = path[i + 1];
+      const edge = graph.edge(u, v);
+      const reverseEdge = graph.edge(v, u);
+
+      if (edge) graph.setEdgeAttribute(edge, "color", "green");
+      if (reverseEdge) graph.setEdgeAttribute(reverseEdge, "color", "red");
+    }
+  };
+
+  const navigatePath = (direction: "forward" | "backward") => {
+    if (currentPathIndex === null) {
+      setCurrentPathIndex(0);
+      highlightPath(graphs[activeGraph].paths[0].path);
+      return;
+    }
+
+    const newIndex =
+      direction === "forward"
+        ? Math.min(currentPathIndex + 1, graphs[activeGraph].paths.length - 1)
+        : Math.max(currentPathIndex - 1, 0);
+
+    setCurrentPathIndex(newIndex);
+    highlightPath(graphs[activeGraph].paths[newIndex].path);
+  };
+
+  const resetPathNavigation = () => {
+    setCurrentPathIndex(null);
+    graph.forEachEdge((edge) => {
+      const isReverse = graph.getEdgeAttribute(edge, "isReverse");
+      if (isReverse) {
+        graph.setEdgeAttribute(edge, "hidden", true);
+      } else {
+        graph.setEdgeAttribute(edge, "color", "grey");
+      }
+    });
+  };
+
   return (
     <GraphContext.Provider
       value={{
@@ -218,6 +272,8 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
         setEdgeCapacity,
         setSelectedAlgorithm,
         resetGraph,
+        navigatePath,
+        resetPathNavigation,
       }}
     >
       {children}
