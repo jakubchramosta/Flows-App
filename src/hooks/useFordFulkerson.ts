@@ -22,9 +22,9 @@ export const useFordFulkerson = ({
       const edge = graph.edge(u, v);
       const reverseEdge = graph.edge(v, u);
 
-      graph.setEdgeAttribute(edge, "color", "#0f0"); // Forward edge: green
+      graph.setEdgeAttribute(edge, "color", "green"); // Forward edge: green
       if (reverseEdge) {
-        graph.setEdgeAttribute(reverseEdge, "color", "#f00"); // Backward edge: red
+        graph.setEdgeAttribute(reverseEdge, "color", "red"); // Backward edge: red
       }
     }
   };

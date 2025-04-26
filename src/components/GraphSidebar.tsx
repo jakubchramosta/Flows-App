@@ -10,16 +10,22 @@ import {
 import { useContext } from "react";
 import { Algorithms } from "./utils/consts";
 
-const GraphSidebar = () => {
+interface GraphSidebarProps {
+  isVisible: boolean;
+}
+
+const GraphSidebar: React.FC<GraphSidebarProps> = ({ isVisible }) => {
   const { graphs, activeGraph, setSelectedAlgorithm, currentSnapshotIndex } =
     useContext(GraphContext);
   const currentMaxFlow = graphs[activeGraph].maxFlow;
   const discoveredPaths = graphs[activeGraph].paths;
 
+  if (!isVisible) return null;
+
   return (
-    <div className="absolute right-5 top-5 flex w-[340px] flex-col gap-4">
+    <div className="absolute right-5 top-5 flex w-[340px] flex-col gap-3">
       <Select onValueChange={(value) => setSelectedAlgorithm(value)}>
-        <SelectTrigger className="w-full bg-background">
+        <SelectTrigger className="w-full max-w-[290px] bg-background">
           <SelectValue placeholder="Zvolit algoritmus" />
         </SelectTrigger>
         <SelectContent>
