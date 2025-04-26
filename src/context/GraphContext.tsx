@@ -218,6 +218,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
 
   const showPreviousSnapshot = () => {
     if (currentSnapshotIndex > 0) {
+      console.log("showPreviousSnapshot", currentSnapshotIndex);
       setCurrentSnapshotIndex((prevIndex) => {
         const newIndex = prevIndex - 1;
         switchGrapfInActiveGraphForSnapshotGraph(newIndex);
@@ -228,6 +229,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
 
   const showNextSnapshot = () => {
     if (currentSnapshotIndex < graphs[activeGraph].snapshots.length - 1) {
+      console.log("showNextSnapshot", currentSnapshotIndex);
       setCurrentSnapshotIndex((prevIndex) => {
         const newIndex = prevIndex + 1;
         switchGrapfInActiveGraphForSnapshotGraph(newIndex);

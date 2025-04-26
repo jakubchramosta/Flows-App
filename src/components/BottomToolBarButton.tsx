@@ -32,6 +32,7 @@ const BottomToolBarButton = ({
           size={size}
           onClick={onClick}
           disabled={isDisabled}
+          // className="min-h-10 min-w-10"
         >
           {icon}
         </Button>

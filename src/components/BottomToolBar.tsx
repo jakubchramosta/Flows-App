@@ -13,7 +13,13 @@ import {
 } from "lucide-react";
 import { TooltipProvider } from "./ui/tooltip.js";
 import BottomToolBarButton from "./BottomToolBarButton.js";
-import { ButtonSizes, ButtonVariants } from "./utils/consts.js";
+import { ButtonSizes, ButtonVariants, GraphTypes } from "./utils/consts.js";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+} from "./ui/select.js";
 
 interface BottomToolBarProps {
   handleInfoClick: (e: any) => void;
@@ -40,20 +46,32 @@ const BottomToolBar = ({ handleInfoClick }: BottomToolBarProps) => {
             variant={ButtonVariants.OUTLINE}
             size={ButtonSizes.ICON}
             onClick={handleInfoClick}
+            className="min-w-10"
           >
             <InfoIcon />
           </Button>
-          <BottomToolBarButton
-            variant={ButtonVariants.OUTLINE}
-            size={ButtonSizes.ICON}
-            icon={<NetworkIcon />}
-            tooltipText="Vykreslit výchozí graf"
-            onClick={() => {
+          <Select
+            onValueChange={(value) => {
               clearGraph();
-              useDrawDefaultGraph(graphs[activeGraph]);
+              useDrawDefaultGraph(graphs[activeGraph], value);
             }}
-            isDisabled={false}
-          />
+          >
+            <SelectTrigger>Draw Graph</SelectTrigger>
+            <SelectContent>
+              <SelectItem value={GraphTypes.EXAMPLE}>
+                {GraphTypes.EXAMPLE}
+              </SelectItem>
+              <SelectItem value={GraphTypes.SIMPLE_LINEAR}>
+                {GraphTypes.SIMPLE_LINEAR}
+              </SelectItem>
+              <SelectItem value={GraphTypes.MANY_PATHS}>
+                {GraphTypes.MANY_PATHS}
+              </SelectItem>
+              <SelectItem value={GraphTypes.CYCLE}>
+                {GraphTypes.CYCLE}
+              </SelectItem>
+            </SelectContent>
+          </Select>
         </div>
         <div className="flex items-center gap-12">
           <BottomToolBarButton
