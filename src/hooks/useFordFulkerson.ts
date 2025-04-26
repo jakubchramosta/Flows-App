@@ -1,3 +1,8 @@
+import {
+  highlightCurrentPath,
+  resetEdgeColors,
+  updateEdgeLabels,
+} from "../lib/graphEdgeOperations";
 import { GraphInfo } from "../context/GraphContext";
 
 // Funkce pro výpočet maximálního toku pomocí Ford-Fulkerson algoritmu
@@ -10,41 +15,6 @@ export const useFordFulkerson = ({
 }: GraphInfo) => {
   let maxFlow = 0; // Proměnná pro uchování maximálního toku
   let path: string[] | null; // Proměnná pro uchování aktuální cesty
-
-  ////////////////////////////////////////////////////////////////////////////////////////
-  //Asi bude dobré tohle hodit do solo souboru, aby to bylo přehlednější a pak to importovat
-  // Funkce pro zvýraznění aktuální cesty v grafu
-  const highlightCurrentPath = () => {
-    if (!path) return; // Pokud není cesta, nic nedělej
-    for (let i = 0; i < path.length - 1; i++) {
-      const u = path[i];
-      const v = path[i + 1];
-      const edge = graph.edge(u, v);
-      const reverseEdge = graph.edge(v, u);
-
-      graph.setEdgeAttribute(edge, "color", "green"); // Forward edge: green
-      if (reverseEdge) {
-        graph.setEdgeAttribute(reverseEdge, "color", "red"); // Backward edge: red
-      }
-    }
-  };
-
-  // Funkce pro resetování barev hran v grafu
-  const resetEdgeColors = () => {
-    graph.forEachEdge((edge) => {
-      graph.setEdgeAttribute(edge, "color", "#ccc"); // Reset all edges to black
-    });
-  };
-
-  // Funkce pro aktualizaci popisků hran v grafu
-  const updateEdgeLabels = () => {
-    graph.forEachEdge((edge) => {
-      const flow = graph.getEdgeAttribute(edge, "flow");
-      const capacity = graph.getEdgeAttribute(edge, "capacity");
-      graph.setEdgeAttribute(edge, "label", `${flow}/${capacity}`);
-    });
-  };
-  ////////////////////////////////////////////////////////////////////////////////////////
 
   // Pomocná funkce pro provedení DFS a nalezení augmentační cesty
   function dfs(
@@ -127,13 +97,13 @@ export const useFordFulkerson = ({
     // Uložení nalezené cesty a jejího toku do pole paths
     paths.push({ path, flow: pathFlow });
 
-    highlightCurrentPath(); // Zvýraznění aktuální cesty
+    highlightCurrentPath(graph, path); // Zvýraznění aktuální cesty
 
-    updateEdgeLabels(); // Aktualizace popisků hran
+    updateEdgeLabels(graph); // Aktualizace popisků hran
 
     snapshots.push(graph.copy()); // Uložení aktuálního stavu grafu do snapshots
 
-    resetEdgeColors(); // Resetování barev hran pro další iteraci
+    resetEdgeColors(graph); // Resetování barev hran pro další iteraci
 
     // Ladící výpisy
     console.log(`Path: ${path.join(" -> ")}, Flow: ${pathFlow}`);

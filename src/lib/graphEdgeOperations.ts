@@ -1,0 +1,33 @@
+import Graph from "graphology";
+
+// Funkce pro zvýraznění aktuální cesty v grafu
+export const highlightCurrentPath = (graph: Graph, path: string[]) => {
+  if (!path) return; // Pokud není cesta, nic nedělej
+  for (let i = 0; i < path.length - 1; i++) {
+    const u = path[i];
+    const v = path[i + 1];
+    const edge = graph.edge(u, v);
+    const reverseEdge = graph.edge(v, u);
+
+    graph.setEdgeAttribute(edge, "color", "green"); // Forward edge: green
+    if (reverseEdge) {
+      graph.setEdgeAttribute(reverseEdge, "color", "red"); // Backward edge: red
+    }
+  }
+};
+
+// Funkce pro resetování barev hran v grafu
+export const resetEdgeColors = (graph: Graph) => {
+  graph.forEachEdge((edge) => {
+    graph.setEdgeAttribute(edge, "color", "#ccc"); // Reset all edges to black
+  });
+};
+
+// Funkce pro aktualizaci popisků hran v grafu
+export const updateEdgeLabels = (graph: Graph) => {
+  graph.forEachEdge((edge) => {
+    const flow = graph.getEdgeAttribute(edge, "flow");
+    const capacity = graph.getEdgeAttribute(edge, "capacity");
+    graph.setEdgeAttribute(edge, "label", `${flow}/${capacity}`);
+  });
+};

@@ -1,7 +1,18 @@
+import {
+  highlightCurrentPath,
+  resetEdgeColors,
+  updateEdgeLabels,
+} from "../lib/graphEdgeOperations";
 import { GraphInfo } from "../context/GraphContext";
 
 // Funkce pro výpočet maximálního toku pomocí Edmonds-Karp algoritmu
-export const useEdmondsKarp = ({ graph, source, sink, paths }: GraphInfo) => {
+export const useEdmondsKarp = ({
+  graph,
+  source,
+  sink,
+  paths,
+  snapshots,
+}: GraphInfo) => {
   let maxFlow = 0; // Proměnná pro uchování maximálního toku
 
   // Pomocná funkce pro provedení BFS a nalezení augmentační cesty
@@ -82,6 +93,14 @@ export const useEdmondsKarp = ({ graph, source, sink, paths }: GraphInfo) => {
 
     // Uložení nalezené cesty a jejího toku do pole paths
     paths.push({ path, flow: pathFlow });
+
+    highlightCurrentPath(graph, path); // Zvýraznění aktuální cesty
+
+    updateEdgeLabels(graph); // Aktualizace popisků hran
+
+    snapshots.push(graph.copy()); // Uložení aktuálního stavu grafu do snapshots
+
+    resetEdgeColors(graph); // Resetování barev hran pro další iteraci
 
     // Ladící výpisy
     console.log(`Path: ${path.join(" -> ")}, Flow: ${pathFlow}`);

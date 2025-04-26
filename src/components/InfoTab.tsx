@@ -27,7 +27,7 @@ const InfoTab = ({ setShowInfo }: InfoTabProps) => {
         </p>
         <ul className="pl-5 list-disc">
           <li>
-            <strong>Vytvářet vlastní grafy:</strong> Přidávejte uzly dvouklikem
+            <strong>Vytvářet vlastní grafy:</strong> Přidávejte uzly dvouklikem{" "}
             <strong>LMB</strong> a hrany kliknutím <strong>RMB</strong> na bod,
             nastavujte kapacity a definujte zdroj a cíl toku.
           </li>

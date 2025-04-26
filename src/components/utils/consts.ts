@@ -17,3 +17,10 @@ export enum ButtonSizes {
   ROUNDED = "rounded",
   DEFAULT = "default",
 }
+
+export enum GraphTypes {
+  EXAMPLE = "Základní graf",
+  SIMPLE_LINEAR = "Jednoduchý lineární graf",
+  MANY_PATHS = "Graf s více cestami",
+  CYCLE = "Graf s cyklem",
+}
