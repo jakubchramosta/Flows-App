@@ -13,6 +13,7 @@ interface BottomToolBarButtonProps {
   icon: React.ReactNode;
   tooltipText: string;
   onClick: (e: any) => void;
+  isDisabled: boolean;
 }
 
 const BottomToolBarButton = ({
@@ -21,11 +22,17 @@ const BottomToolBarButton = ({
   size,
   tooltipText,
   onClick,
+  isDisabled,
 }: BottomToolBarButtonProps) => {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button variant={variant} size={size} onClick={onClick}>
+        <Button
+          variant={variant}
+          size={size}
+          onClick={onClick}
+          disabled={isDisabled}
+        >
           {icon}
         </Button>
       </TooltipTrigger>

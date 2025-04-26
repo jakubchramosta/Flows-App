@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { Algorithms } from "./utils/consts";
 
 const GraphSidebar = () => {

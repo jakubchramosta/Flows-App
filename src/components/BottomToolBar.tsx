@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import GraphContext from "../context/GraphContext.js";
 import { useDrawDefaultGraph } from "../hooks/useDrawDefaultGraph";
 import { Button } from "./ui/button.js";
@@ -22,6 +22,21 @@ interface BottomToolBarProps {
 const BottomToolBar = ({ handleInfoClick }: BottomToolBarProps) => {
   const { graphs, activeGraph, clearGraph, calculateMaxFlow, resetGraph } =
     useContext(GraphContext);
+  const [currentSnapshotIndex, setCurrentSnapshotIndex] = useState(0);
+  const snapshots = graphs[activeGraph].snapshots;
+
+  const showPreviousSnapshot = () => {
+    if (currentSnapshotIndex > 0) {
+      setCurrentSnapshotIndex(currentSnapshotIndex - 1);
+    }
+  };
+
+  const showNextSnapshot = () => {
+    if (currentSnapshotIndex < snapshots.length - 1) {
+      setCurrentSnapshotIndex(currentSnapshotIndex + 1);
+    }
+  };
+
   return (
     <TooltipProvider>
       <div className="absolute bottom-3 left-0 right-0 mx-3 flex items-center justify-between rounded-md border border-input bg-background p-2.5 shadow-sm">
@@ -42,6 +57,7 @@ const BottomToolBar = ({ handleInfoClick }: BottomToolBarProps) => {
               clearGraph();
               useDrawDefaultGraph(graphs[activeGraph]);
             }}
+            isDisabled={false}
           />
         </div>
         <div className="flex items-center gap-12">
@@ -53,6 +69,7 @@ const BottomToolBar = ({ handleInfoClick }: BottomToolBarProps) => {
             onClick={() => {
               calculateMaxFlow(graphs[activeGraph]);
             }}
+            isDisabled={false}
           />
           <div className="flex items-center gap-4">
             <BottomToolBarButton
@@ -60,18 +77,16 @@ const BottomToolBar = ({ handleInfoClick }: BottomToolBarProps) => {
               size={ButtonSizes.ROUNDED}
               icon={<ArrowLeftIcon />}
               tooltipText="Předchozí krok"
-              onClick={() => {
-                // Implement the logic for going to the previous step
-              }}
+              onClick={() => showPreviousSnapshot()}
+              isDisabled={currentSnapshotIndex === 0}
             />
             <BottomToolBarButton
               variant={ButtonVariants.OUTLINE}
               size={ButtonSizes.ROUNDED}
               icon={<ArrowRightIcon />}
               tooltipText="Další krok"
-              onClick={() => {
-                // Implement the logic for going to the next step
-              }}
+              onClick={() => showNextSnapshot()}
+              isDisabled={currentSnapshotIndex === snapshots.length - 1}
             />
           </div>
           <BottomToolBarButton
@@ -80,6 +95,7 @@ const BottomToolBar = ({ handleInfoClick }: BottomToolBarProps) => {
             icon={<RotateCcwIcon />}
             tooltipText="Obnovit graf"
             onClick={resetGraph}
+            isDisabled={false}
           />
         </div>
         <BottomToolBarButton
@@ -88,6 +104,7 @@ const BottomToolBar = ({ handleInfoClick }: BottomToolBarProps) => {
           icon={<Trash2Icon />}
           tooltipText="Vymazat graf"
           onClick={clearGraph}
+          isDisabled={false}
         />
       </div>
     </TooltipProvider>

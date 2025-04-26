@@ -1,8 +1,44 @@
 import { GraphInfo } from "../context/GraphContext";
 
 // Funkce pro výpočet maximálního toku pomocí Ford-Fulkerson algoritmu
-export const useFordFulkerson = ({ graph, source, sink, paths }: GraphInfo) => {
+export const useFordFulkerson = ({
+  graph,
+  source,
+  sink,
+  paths,
+  snapshots,
+}: GraphInfo) => {
   let maxFlow = 0; // Proměnná pro uchování maximálního toku
+  let path: string[] | null;
+
+  const highlightCurrentPath = () => {
+    if (!path) return; // Pokud není cesta, nic nedělej
+    for (let i = 0; i < path.length - 1; i++) {
+      const u = path[i];
+      const v = path[i + 1];
+      const edge = graph.edge(u, v);
+      const reverseEdge = graph.edge(v, u);
+
+      graph.setEdgeAttribute(edge, "color", "#0f0"); // Forward edge: green
+      if (reverseEdge) {
+        graph.setEdgeAttribute(reverseEdge, "color", "#f00"); // Backward edge: red
+      }
+    }
+  };
+
+  const resetEdgeColors = () => {
+    graph.forEachEdge((edge) => {
+      graph.setEdgeAttribute(edge, "color", "#ccc"); // Reset all edges to black
+    });
+  };
+
+  const updateEdgeLabels = () => {
+    graph.forEachEdge((edge) => {
+      const flow = graph.getEdgeAttribute(edge, "flow");
+      const capacity = graph.getEdgeAttribute(edge, "capacity");
+      graph.setEdgeAttribute(edge, "label", `${flow}/${capacity}`);
+    });
+  };
 
   // Pomocná funkce pro provedení DFS a nalezení augmentační cesty
   function dfs(
@@ -36,8 +72,6 @@ export const useFordFulkerson = ({ graph, source, sink, paths }: GraphInfo) => {
 
     return null; // Pokud neexistuje augmentační cesta, vrátíme null
   }
-
-  let path: string[] | null;
 
   // Hlavní smyčka pro nalezení augmentačních cest a aktualizaci toku
   while ((path = dfs(source, sink, new Set())) !== null) {
@@ -87,6 +121,14 @@ export const useFordFulkerson = ({ graph, source, sink, paths }: GraphInfo) => {
     // Uložení nalezené cesty a jejího toku do pole paths
     paths.push({ path, flow: pathFlow });
 
+    highlightCurrentPath(); // Zvýraznění aktuální cesty
+
+    updateEdgeLabels(); // Aktualizace popisků hran
+
+    snapshots.push(graph.copy()); // Uložení aktuálního stavu grafu do snapshots
+
+    resetEdgeColors(); // Resetování barev hran pro další iteraci
+
     // Ladící výpisy
     console.log(`Path: ${path.join(" -> ")}, Flow: ${pathFlow}`);
   }
@@ -94,6 +136,7 @@ export const useFordFulkerson = ({ graph, source, sink, paths }: GraphInfo) => {
   // Ladící výpisy
   console.log("Final Graph:", graph);
   console.log("All Paths:", paths);
+  console.log("All snapshots:", snapshots);
 
   return maxFlow; // Vrácení maximálního toku
 };
