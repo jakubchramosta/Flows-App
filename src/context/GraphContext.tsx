@@ -14,6 +14,7 @@ export interface GraphInfo {
     path: string[];
     flow: number;
   }[];
+  snapshots: Graph[]; // Array to store graph snapshots
 }
 
 interface GraphContextType {
@@ -48,7 +49,14 @@ const GraphContext = createContext<GraphContextType>({} as GraphContextType);
 
 export const GraphProvider = ({ children }: GraphProviderProps) => {
   const [graphs, setGraphs] = useState<GraphInfo[]>([
-    { graph: new Graph(), source: "", sink: "", maxFlow: 0, paths: [] },
+    {
+      graph: new Graph(),
+      source: "",
+      sink: "",
+      maxFlow: 0,
+      paths: [],
+      snapshots: [],
+    },
   ]);
   const [activeGraph, setActiveGraph] = useState<number>(0);
   const [firstNodeInEdge, setFirstNodeInEdge] = useState<string | null>(null);
@@ -66,6 +74,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
       sink: "",
       maxFlow: 0,
       paths: [],
+      snapshots: [],
     };
     setGraphs((prevGraphs) => [...prevGraphs, newGraph]);
     setActiveGraph(graphs.length);
@@ -103,6 +112,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     newGraphs[activeGraph].sink = "";
     newGraphs[activeGraph].maxFlow = 0;
     newGraphs[activeGraph].paths = [];
+    newGraphs[activeGraph].snapshots = [];
     setGraphs(newGraphs);
   };
 
@@ -178,6 +188,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     });
     newGraphs[activeGraph].maxFlow = 0;
     newGraphs[activeGraph].paths = [];
+    newGraphs[activeGraph].snapshots = [];
     setGraphs(newGraphs);
     updateEdgeLabels();
   };
@@ -188,10 +199,6 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
       const capacity = graph.getEdgeAttribute(edge, "capacity");
       graph.setEdgeAttribute(edge, "label", `${flow}/${capacity}`);
     });
-  };
-
-  const downloadGraph = () => {
-    const graphData = graph.export();
   };
 
   return (
