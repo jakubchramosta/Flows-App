@@ -8,11 +8,20 @@ interface AlgProgressRowProps {
     flow: number;
   };
   label: number;
+  isActive: boolean;
 }
 
-const AlgProgressRow: React.FC<AlgProgressRowProps> = ({ path, label }) => {
+const AlgProgressRow: React.FC<AlgProgressRowProps> = ({
+  path,
+  label,
+  isActive,
+}) => {
   return (
-    <div className="flex items-center justify-between gap-1">
+    <div
+      className={`flex items-center justify-between gap-1 rounded-md px-2 py-1 ${
+        isActive ? "bg-blue-100" : ""
+      }`}
+    >
       <p>{label} &#41;</p>
       <div className="flex flex-wrap items-center gap-x-0.5 gap-y-0.5">
         {path.path.map((node, index) => (
