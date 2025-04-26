@@ -117,10 +117,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
 
   const clearGraph = () => {
     const newGraphs = [...graphs];
-    newGraphs[activeGraph].graph.clear();
-    newGraphs[activeGraph].graph.forEachEdge((edge) => {
-      graph.setEdgeAttribute(edge, "color", "#ccc"); // Reset all edges to grey !!!!!!!should be called imported function
-    });
+    newGraphs[activeGraph].graph.clear(); // Reset all edges to grey !!!!!!!should be called imported function
     newGraphs[activeGraph].source = "";
     newGraphs[activeGraph].sink = "";
     newGraphs[activeGraph].maxFlow = 0;
@@ -200,11 +197,15 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     graphs[activeGraph].graph.forEachEdge((edge) => {
       graph.setEdgeAttribute(edge, "flow", 0);
     });
+    graphs[activeGraph].graph.forEachEdge((edge) => {
+      graph.setEdgeAttribute(edge, "color", "#ccc"); // Reset all edges to black
+    });
     newGraphs[activeGraph].maxFlow = 0;
     newGraphs[activeGraph].paths = [];
     newGraphs[activeGraph].snapshots = [];
     setGraphs(newGraphs);
     updateEdgeLabels();
+    setCurrentSnapshotIndex(0);
   };
 
   const updateEdgeLabels = () => {
@@ -215,22 +216,24 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     });
   };
 
-  // Bykule asi dělá tohle to
-
   const showPreviousSnapshot = () => {
     if (currentSnapshotIndex > 0) {
-      setCurrentSnapshotIndex((prevIndex) => prevIndex - 1);
+      setCurrentSnapshotIndex((prevIndex) => {
+        const newIndex = prevIndex - 1;
+        switchGrapfInActiveGraphForSnapshotGraph(newIndex);
+        return newIndex;
+      });
     }
-    switchGrapfInActiveGraphForSnapshotGraph(currentSnapshotIndex);
-    console.log("showprevcalled" + currentSnapshotIndex);
   };
 
   const showNextSnapshot = () => {
     if (currentSnapshotIndex < graphs[activeGraph].snapshots.length - 1) {
-      setCurrentSnapshotIndex((prevIndex) => prevIndex + 1);
+      setCurrentSnapshotIndex((prevIndex) => {
+        const newIndex = prevIndex + 1;
+        switchGrapfInActiveGraphForSnapshotGraph(newIndex);
+        return newIndex;
+      });
     }
-    switchGrapfInActiveGraphForSnapshotGraph(currentSnapshotIndex);
-    console.log("shownextcalled" + currentSnapshotIndex);
   };
 
   return (
