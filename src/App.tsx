@@ -6,13 +6,16 @@ import { GraphProvider } from "./context/GraphContext.js";
 import { useState } from "react";
 import InfoTab from "./components/InfoTab";
 import { Toaster } from "./components/ui/sonner";
+import { Button } from "./components/ui/button";
+import { ButtonVariants } from "./components/utils/consts";
+import { ChevronRightIcon, Menu } from "lucide-react";
 
 function App() {
   const [showInfo, setShowInfo] = useState(false);
-  const [currentGraph, setCurrentGraph] = useState("default");
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
-  const handleInfoClick = (e: any) => {
-    setShowInfo(true);
+  const toggleSidebar = () => {
+    setIsSidebarVisible((prev) => !prev);
   };
 
   return (
@@ -20,8 +23,15 @@ function App() {
       <GraphProvider>
         <GraphComponent />
         <TabsSwitcher />
-        <GraphSidebar />
-        <BottomToolBar handleInfoClick={handleInfoClick} />
+        <Button
+          onClick={toggleSidebar}
+          className="absolute right-5 top-5 z-50 h-9 w-[38px] rounded-md border border-input bg-white p-2 text-black shadow-md"
+          variant={ButtonVariants.OUTLINE}
+        >
+          {isSidebarVisible ? <ChevronRightIcon /> : <Menu />}
+        </Button>
+        <GraphSidebar isVisible={isSidebarVisible} />
+        <BottomToolBar handleInfoClick={() => setShowInfo(true)} />
         {showInfo && <InfoTab setShowInfo={setShowInfo} />}
       </GraphProvider>
       <Toaster />
