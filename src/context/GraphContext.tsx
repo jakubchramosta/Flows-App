@@ -39,6 +39,9 @@ interface GraphContextType {
   setEdgeCapacity: (edgeId: string, capacity: number) => void;
   setSelectedAlgorithm: (alg: string) => void;
   resetGraph: () => void;
+  currentSnapshotIndex: number;
+  showPreviousSnapshot: () => void;
+  showNextSnapshot: () => void;
 }
 
 interface GraphProviderProps {
@@ -64,6 +67,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
   const [selectedAlgorithm, setSelectedAlgorithm] = useState<string>(
     Algorithms.FORD_FULKERSON,
   );
+  const [currentSnapshotIndex, setCurrentSnapshotIndex] = useState<number>(0);
 
   const graph = graphs[activeGraph].graph;
 
@@ -78,6 +82,12 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     };
     setGraphs((prevGraphs) => [...prevGraphs, newGraph]);
     setActiveGraph(graphs.length);
+  };
+
+  const switchGrapfInActiveGraphForSnapshotGraph = (index: number) => {
+    const newGraphs = [...graphs];
+    newGraphs[activeGraph].graph = newGraphs[activeGraph].snapshots[index];
+    setGraphs(newGraphs);
   };
 
   const setActiveGraphIndex = (index: number) => {
@@ -108,6 +118,9 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
   const clearGraph = () => {
     const newGraphs = [...graphs];
     newGraphs[activeGraph].graph.clear();
+    newGraphs[activeGraph].graph.forEachEdge((edge) => {
+      graph.setEdgeAttribute(edge, "color", "#ccc"); // Reset all edges to grey !!!!!!!should be called imported function
+    });
     newGraphs[activeGraph].source = "";
     newGraphs[activeGraph].sink = "";
     newGraphs[activeGraph].maxFlow = 0;
@@ -162,6 +175,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     const newGraphs = [...graphs];
     newGraphs[activeGraph].maxFlow = maxFlow;
     setGraphs(newGraphs);
+    switchGrapfInActiveGraphForSnapshotGraph(0);
     updateEdgeLabels();
   };
 
@@ -201,6 +215,24 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     });
   };
 
+  // Bykule asi dělá tohle to
+
+  const showPreviousSnapshot = () => {
+    if (currentSnapshotIndex > 0) {
+      setCurrentSnapshotIndex((prevIndex) => prevIndex - 1);
+    }
+    switchGrapfInActiveGraphForSnapshotGraph(currentSnapshotIndex);
+    console.log("showprevcalled" + currentSnapshotIndex);
+  };
+
+  const showNextSnapshot = () => {
+    if (currentSnapshotIndex < graphs[activeGraph].snapshots.length - 1) {
+      setCurrentSnapshotIndex((prevIndex) => prevIndex + 1);
+    }
+    switchGrapfInActiveGraphForSnapshotGraph(currentSnapshotIndex);
+    console.log("shownextcalled" + currentSnapshotIndex);
+  };
+
   return (
     <GraphContext.Provider
       value={{
@@ -225,6 +257,9 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
         setEdgeCapacity,
         setSelectedAlgorithm,
         resetGraph,
+        currentSnapshotIndex,
+        showPreviousSnapshot,
+        showNextSnapshot,
       }}
     >
       {children}

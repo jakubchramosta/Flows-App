@@ -11,7 +11,7 @@ import { useContext } from "react";
 import { Algorithms } from "./utils/consts";
 
 const GraphSidebar = () => {
-  const { graphs, activeGraph, setSelectedAlgorithm } =
+  const { graphs, activeGraph, setSelectedAlgorithm, currentSnapshotIndex } =
     useContext(GraphContext);
   const currentMaxFlow = graphs[activeGraph].maxFlow;
   const discoveredPaths = graphs[activeGraph].paths;
@@ -38,7 +38,12 @@ const GraphSidebar = () => {
         <h1 className="pb-2">Postup algoritmu</h1>
         <div className="flex flex-col gap-1">
           {discoveredPaths.map((path, index) => (
-            <AlgProgressRow key={index} path={path} label={index + 1} />
+            <AlgProgressRow
+              key={index}
+              path={path}
+              label={index + 1}
+              isActive={index === currentSnapshotIndex}
+            />
           ))}
         </div>
       </div>

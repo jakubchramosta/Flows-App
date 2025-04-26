@@ -20,22 +20,17 @@ interface BottomToolBarProps {
 }
 
 const BottomToolBar = ({ handleInfoClick }: BottomToolBarProps) => {
-  const { graphs, activeGraph, clearGraph, calculateMaxFlow, resetGraph } =
-    useContext(GraphContext);
-  const [currentSnapshotIndex, setCurrentSnapshotIndex] = useState(0);
+  const {
+    graphs,
+    activeGraph,
+    clearGraph,
+    calculateMaxFlow,
+    resetGraph,
+    currentSnapshotIndex,
+    showPreviousSnapshot,
+    showNextSnapshot,
+  } = useContext(GraphContext);
   const snapshots = graphs[activeGraph].snapshots;
-
-  const showPreviousSnapshot = () => {
-    if (currentSnapshotIndex > 0) {
-      setCurrentSnapshotIndex(currentSnapshotIndex - 1);
-    }
-  };
-
-  const showNextSnapshot = () => {
-    if (currentSnapshotIndex < snapshots.length - 1) {
-      setCurrentSnapshotIndex(currentSnapshotIndex + 1);
-    }
-  };
 
   return (
     <TooltipProvider>
