@@ -70,6 +70,9 @@ const BottomToolBar = ({ handleInfoClick }: BottomToolBarProps) => {
               <SelectItem value={GraphTypes.CYCLE}>
                 {GraphTypes.CYCLE}
               </SelectItem>
+              <SelectItem value={GraphTypes.COMPLEX}>
+                {GraphTypes.COMPLEX}
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>

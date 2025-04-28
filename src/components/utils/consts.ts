@@ -23,4 +23,5 @@ export enum GraphTypes {
   SIMPLE_LINEAR = "Jednoduchý lineární graf",
   MANY_PATHS = "Graf s více cestami",
   CYCLE = "Graf s cyklem",
+  COMPLEX = "Složitý graf",
 }

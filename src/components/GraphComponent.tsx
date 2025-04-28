@@ -7,6 +7,7 @@ import { SigmaStageEventPayload } from "sigma/dist/declarations/src/types";
 import ContextMenu from "./ContextMenu";
 import { edgeReducer } from "./utils/edgeReducer";
 import EdgeCapacityInput from "./EdgeCapacityInput";
+import { GraphTypes } from "./utils/consts";
 
 const GraphComponent = () => {
   // Reference to the container div for rendering the graph
@@ -36,7 +37,7 @@ const GraphComponent = () => {
   // Clear the graph and draw the default graph on the first render
   if (firstRender) {
     graph.clear();
-    useDrawDefaultGraph(graphs[0]);
+    useDrawDefaultGraph(graphs[0], GraphTypes.EXAMPLE);
     console.log(graphs[0]);
   }
 
