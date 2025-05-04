@@ -43,6 +43,7 @@ interface GraphContextType {
   showPreviousSnapshot: () => void;
   showNextSnapshot: () => void;
   showSelectedSnapshot: (index: number) => void;
+  deleteCurrentGraph: () => void;
 }
 
 interface GraphProviderProps {
@@ -73,6 +74,10 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
   const graph = graphs[activeGraph].graph;
 
   const addGraph = () => {
+    if (graphs.length >= 5) {
+      toast.error("Maximální počet grafů je 5!");
+      return;
+    }
     const newGraph = {
       graph: new Graph(),
       source: "",
@@ -125,6 +130,18 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     newGraphs[activeGraph].paths = [];
     newGraphs[activeGraph].snapshots = [];
     setGraphs(newGraphs);
+  };
+
+  const deleteCurrentGraph = () => {
+    if (graphs.length <= 1) {
+      clearGraph();
+      toast.error("Nelze odstranit poslední graf!");
+      return;
+    }
+    const newGraphs = [...graphs];
+    newGraphs.splice(activeGraph, 1);
+    setGraphs(newGraphs);
+    setActiveGraph((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
   };
 
   const setSource = (source: string) => {
@@ -275,6 +292,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
         showPreviousSnapshot,
         showNextSnapshot,
         showSelectedSnapshot,
+        deleteCurrentGraph,
       }}
     >
       {children}
