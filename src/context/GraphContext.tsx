@@ -42,6 +42,7 @@ interface GraphContextType {
   currentSnapshotIndex: number;
   showPreviousSnapshot: () => void;
   showNextSnapshot: () => void;
+  showSelectedSnapshot: (index: number) => void;
 }
 
 interface GraphProviderProps {
@@ -238,6 +239,14 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     }
   };
 
+  const showSelectedSnapshot = (index: number) => {
+    if (index >= 0 && index < graphs[activeGraph].snapshots.length) {
+      console.log("showSelectedSnapshot", index);
+      setCurrentSnapshotIndex(index);
+      switchGrapfInActiveGraphForSnapshotGraph(index);
+    }
+  };
+
   return (
     <GraphContext.Provider
       value={{
@@ -265,6 +274,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
         currentSnapshotIndex,
         showPreviousSnapshot,
         showNextSnapshot,
+        showSelectedSnapshot,
       }}
     >
       {children}

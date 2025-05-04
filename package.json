@@ -24,7 +24,6 @@
     "esm": "^3.2.25",
     "graphology": "^0.26.0",
     "graphology-layout": "^0.6.1",
-    "graphology-layout-force": "^0.2.4",
     "lucide-react": "^0.485.0",
     "next-themes": "^0.4.6",
     "prettier-plugin-tailwindcss": "^0.6.11",

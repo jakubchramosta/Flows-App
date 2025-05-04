@@ -12,12 +12,12 @@ export const useDrawDefaultGraph = (
   // Testovací graf pro základní příklad
   const drawExapmleGraph = (graph: Graph, graphInfo: GraphInfo) => {
     // Definice uzlů
-    graph.addNode("a", { label: "A", x: -2, y: 0, size: 20, color: "#0f0" });
-    graph.addNode("b", { label: "B", x: -1, y: 1, size: 20 });
-    graph.addNode("c", { label: "C", x: -1, y: -1, size: 20 });
-    graph.addNode("d", { label: "D", x: 1, y: 1, size: 20 });
-    graph.addNode("e", { label: "E", x: 1, y: -1, size: 20 });
-    graph.addNode("f", { label: "F", x: 2, y: 0, size: 20, color: "#f00" });
+    graph.addNode("a", { label: "A", x: -200, y: 0, size: 20, color: "#0f0" });
+    graph.addNode("b", { label: "B", x: -100, y: 100, size: 20 });
+    graph.addNode("c", { label: "C", x: -100, y: -100, size: 20 });
+    graph.addNode("d", { label: "D", x: 100, y: 100, size: 20 });
+    graph.addNode("e", { label: "E", x: 100, y: -100, size: 20 });
+    graph.addNode("f", { label: "F", x: 200, y: 0, size: 20, color: "#f00" });
 
     // Definice hran
     graph.addEdge("a", "b", {

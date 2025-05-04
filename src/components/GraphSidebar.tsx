@@ -49,6 +49,7 @@ const GraphSidebar: React.FC<GraphSidebarProps> = ({ isVisible }) => {
               path={path}
               label={index + 1}
               isActive={index === currentSnapshotIndex}
+              index={index}
             />
           ))}
         </div>
