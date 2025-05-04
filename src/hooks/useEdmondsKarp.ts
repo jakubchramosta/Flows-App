@@ -13,13 +13,16 @@ export const useEdmondsKarp = ({
   paths,
   snapshots,
 }: GraphInfo) => {
-  let maxFlow = 0; // Proměnná pro uchování maximálního toku
+  // Proměnná pro uchování maximálního toku
+  let maxFlow = 0;
 
   // Pomocná funkce pro provedení BFS a nalezení augmentační cesty
   function bfs(): { path: string[]; pathFlow: number } | null {
-    const visited = new Set<string>(); // Množina navštívených uzlů
+    // Množina navštívených uzlů
+    const visited = new Set<string>();
+    // Fronta pro BFS
     const queue: { node: string; path: string[]; pathFlow: number }[] = [
-      { node: source, path: [source], pathFlow: Infinity }, // Fronta pro BFS
+      { node: source, path: [source], pathFlow: Infinity },
     ];
 
     while (queue.length > 0) {
@@ -30,17 +33,21 @@ export const useEdmondsKarp = ({
         return { path, pathFlow };
       }
 
-      visited.add(node); // Označení uzlu jako navštíveného
+      // Označení uzlu jako navštíveného
+      visited.add(node);
 
       // Procházení sousedů aktuálního uzlu
       for (const neighbor of graph.outNeighbors(node)) {
         if (!visited.has(neighbor)) {
-          const edge = graph.edge(node, neighbor); // Získání hrany
-          const { capacity, flow } = graph.getEdgeAttributes(edge); // Získání atributů hrany
+          // Získání hrany
+          const edge = graph.edge(node, neighbor);
+          // Získání atributů hrany
+          const { capacity, flow } = graph.getEdgeAttributes(edge);
 
           // Pokud má hrana zbývající kapacitu, přidáme ji do fronty
           if (capacity - flow > 0) {
-            const newPathFlow = Math.min(pathFlow, capacity - flow); // Výpočet minimálního toku
+            // Výpočet minimálního toku
+            const newPathFlow = Math.min(pathFlow, capacity - flow);
             queue.push({
               node: neighbor,
               path: [...path, neighbor],
@@ -51,7 +58,8 @@ export const useEdmondsKarp = ({
       }
     }
 
-    return null; // Pokud neexistuje augmentační cesta, vrátíme null
+    // Pokud neexistuje augmentační cesta, vrátíme null
+    return null;
   }
 
   // Hlavní smyčka pro nalezení augmentačních cest a aktualizaci toku
@@ -89,18 +97,23 @@ export const useEdmondsKarp = ({
       }
     }
 
-    maxFlow += pathFlow; // Přidání toku do celkového maximálního toku
+    // Přidání toku do celkového maximálního toku
+    maxFlow += pathFlow;
 
     // Uložení nalezené cesty a jejího toku do pole paths
     paths.push({ path, flow: pathFlow });
 
-    highlightCurrentPath(graph, path); // Zvýraznění aktuální cesty
+    // Zvýraznění aktuální cesty
+    highlightCurrentPath(graph, path);
 
-    updateEdgeLabels(graph); // Aktualizace popisků hran
+    // Aktualizace popisků hran
+    updateEdgeLabels(graph);
 
-    snapshots.push(graph.copy()); // Uložení aktuálního stavu grafu do snapshots
+    // Uložení aktuálního stavu grafu do snapshots
+    snapshots.push(graph.copy());
 
-    resetEdgeColors(graph); // Resetování barev hran pro další iteraci
+    // Resetování barev hran pro další iteraci
+    resetEdgeColors(graph);
 
     // Ladící výpisy
     console.log(`Path: ${path.join(" -> ")}, Flow: ${pathFlow}`);
@@ -110,5 +123,6 @@ export const useEdmondsKarp = ({
   console.log(graph);
   console.log(paths);
 
-  return maxFlow; // Vrácení maximálního toku
+  // Vrácení maximálního toku
+  return maxFlow;
 };

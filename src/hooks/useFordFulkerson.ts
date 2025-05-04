@@ -13,8 +13,10 @@ export const useFordFulkerson = ({
   paths,
   snapshots,
 }: GraphInfo) => {
-  let maxFlow = 0; // Proměnná pro uchování maximálního toku
-  let path: string[] | null; // Proměnná pro uchování aktuální cesty
+  // Proměnná pro uchování maximálního toku
+  let maxFlow = 0;
+  // Proměnná pro uchování aktuální cesty
+  let path: string[] | null;
 
   // Pomocná funkce pro provedení DFS a nalezení augmentační cesty
   function dfs(
@@ -27,26 +29,31 @@ export const useFordFulkerson = ({
       return [current];
     }
 
-    visited.add(current); // Označení uzlu jako navštíveného
+    // Označení uzlu jako navštíveného
+    visited.add(current);
 
     // Procházení sousedů aktuálního uzlu
     for (const neighbor of graph.outNeighbors(current)) {
       if (!visited.has(neighbor)) {
-        const edge = graph.edge(current, neighbor); // Získání hrany
-        const { capacity, flow } = graph.getEdgeAttributes(edge); // Získání atributů hrany
+        // Získání hrany
+        const edge = graph.edge(current, neighbor);
+        // Získání atributů hrany
+        const { capacity, flow } = graph.getEdgeAttributes(edge);
 
         // Pokud má hrana zbývající kapacitu, pokračujeme v DFS
         if (capacity - flow > 0) {
           const subPath = dfs(neighbor, sink, visited);
           if (subPath) {
-            subPath.unshift(current); // Přidání aktuálního uzlu do cesty
+            // Přidání aktuálního uzlu do cesty
+            subPath.unshift(current);
             return subPath;
           }
         }
       }
     }
 
-    return null; // Pokud neexistuje augmentační cesta, vrátíme null
+    // Pokud neexistuje augmentační cesta, vrátíme null
+    return null;
   }
 
   // Hlavní smyčka pro nalezení augmentačních cest a aktualizaci toku
@@ -58,7 +65,8 @@ export const useFordFulkerson = ({
       const v = path[i + 1];
       const edge = graph.edge(u, v);
       const { capacity, flow } = graph.getEdgeAttributes(edge);
-      pathFlow = Math.min(pathFlow, capacity - flow); // Výpočet bottleneck kapacity
+      // Výpočet bottleneck kapacity
+      pathFlow = Math.min(pathFlow, capacity - flow);
     }
 
     // Aktualizace reziduálních kapacit hran a zpětných hran
@@ -97,13 +105,17 @@ export const useFordFulkerson = ({
     // Uložení nalezené cesty a jejího toku do pole paths
     paths.push({ path, flow: pathFlow });
 
-    highlightCurrentPath(graph, path); // Zvýraznění aktuální cesty
+    // Zvýraznění aktuální cesty
+    highlightCurrentPath(graph, path);
 
-    updateEdgeLabels(graph); // Aktualizace popisků hran
+    // Aktualizace popisků hran
+    updateEdgeLabels(graph);
 
-    snapshots.push(graph.copy()); // Uložení aktuálního stavu grafu do snapshots
+    // Uložení aktuálního stavu grafu do snapshots
+    snapshots.push(graph.copy());
 
-    resetEdgeColors(graph); // Resetování barev hran pro další iteraci
+    // Resetování barev hran pro další iteraci
+    resetEdgeColors(graph);
 
     // Ladící výpisy
     console.log(`Path: ${path.join(" -> ")}, Flow: ${pathFlow}`);
@@ -114,5 +126,6 @@ export const useFordFulkerson = ({
   console.log("All Paths:", paths);
   console.log("All snapshots:", snapshots);
 
-  return maxFlow; // Vrácení maximálního toku
+  // Vrácení maximálního toku
+  return maxFlow;
 };
