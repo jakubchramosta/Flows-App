@@ -7,6 +7,7 @@ import {
 import { useOnClickOutside } from "../hooks/useOnClickOutside";
 import GraphContext from "../context/GraphContext";
 import { PencilIcon, PlusIcon, Trash2Icon } from "lucide-react";
+import { toast } from "sonner";
 
 interface ContextMenuProps {
   isOpen: boolean;
@@ -57,6 +58,7 @@ const ContextMenu = ({
     setAddingEdgeMode(true);
     setFirstNodeInEdge(id);
     setIsOpen(false);
+    toast.info("Klikněte na jiný BOD kam hrana povede.");
   };
 
   const handleMakrAsSource = (id: string | null) => {

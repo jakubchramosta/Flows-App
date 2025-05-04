@@ -135,7 +135,6 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
   const deleteCurrentGraph = () => {
     if (graphs.length <= 1) {
       clearGraph();
-      toast.error("Nelze odstranit poslední graf!");
       return;
     }
     const newGraphs = [...graphs];
@@ -162,13 +161,19 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     graph.setNodeAttribute(sink, "color", "#f00");
   };
 
-  const calculateMaxFlow = (grapInfo: GraphInfo) => {
+  const calculateMaxFlow = (graphInfo: GraphInfo) => {
     if (
-      !grapInfo.source ||
-      !grapInfo.sink ||
-      grapInfo.source === grapInfo.sink
+      !graphInfo.source ||
+      !graphInfo.sink ||
+      graphInfo.source === graphInfo.sink
     ) {
       toast.error("Nastavte ZDROJ a CÍL!");
+      return;
+    }
+
+    const hasPath = bfsCheckPath(graph, graphInfo.source, graphInfo.sink);
+    if (!hasPath) {
+      toast.error("Neexistuje žádná cesta mezi ZDROJEM a CÍLEM!");
       return;
     }
 
@@ -177,14 +182,14 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     switch (selectedAlgorithm) {
       case Algorithms.FORD_FULKERSON:
         toast.success("Používá se Ford-Fulkerson algoritmus.");
-        maxFlow = useFordFulkerson(grapInfo);
+        maxFlow = useFordFulkerson(graphInfo);
         break;
       case Algorithms.EDMONDS_KARP:
         toast.success("Používá se Edmonds-Karp algoritmus.");
-        maxFlow = useEdmondsKarp(grapInfo);
+        maxFlow = useEdmondsKarp(graphInfo);
         break;
       default:
-        maxFlow = useFordFulkerson(grapInfo);
+        maxFlow = useFordFulkerson(graphInfo);
         return;
     }
     const newGraphs = [...graphs];
@@ -192,6 +197,32 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     setGraphs(newGraphs);
     switchGrapfInActiveGraphForSnapshotGraph(0);
     updateEdgeLabels();
+  };
+
+  const bfsCheckPath = (
+    graph: Graph,
+    source: string,
+    sink: string,
+  ): boolean => {
+    const visited = new Set<string>();
+    const queue: string[] = [source];
+
+    while (queue.length > 0) {
+      const currentNode = queue.shift()!;
+      if (currentNode === sink) {
+        return true; // Path found
+      }
+
+      visited.add(currentNode);
+
+      graph.forEachNeighbor(currentNode, (neighbor) => {
+        if (!visited.has(neighbor)) {
+          queue.push(neighbor);
+        }
+      });
+    }
+
+    return false; // No path found
   };
 
   const addToPaths = (newPath: string[], itsFlow: number) => {

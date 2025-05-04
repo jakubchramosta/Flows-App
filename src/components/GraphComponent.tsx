@@ -8,6 +8,7 @@ import ContextMenu from "./ContextMenu";
 import { edgeReducer } from "./utils/edgeReducer";
 import EdgeCapacityInput from "./EdgeCapacityInput";
 import { GraphTypes } from "./utils/consts";
+import { toast } from "sonner";
 
 interface GraphComponentProps {
   isSideBarVisible: boolean;
@@ -70,7 +71,7 @@ const GraphComponent = ({ isSideBarVisible }: GraphComponentProps) => {
     // Set initial camera state depending on the sidebar visibility
     if (sigma) {
       sigma.getCamera().setState({
-        ratio: 1.5,
+        ratio: 1.35,
         x: isSideBarVisible ? 0.7 : 0.5,
         y: 0.5,
       });
@@ -89,6 +90,17 @@ const GraphComponent = ({ isSideBarVisible }: GraphComponentProps) => {
         !firstNodeInEdge
       )
         return;
+
+      if (firstNodeInEdge === e.node) {
+        toast.error("Nelze přidat hranu na stejný bod.");
+        return;
+      }
+
+      if (graph.hasEdge(firstNodeInEdge, e.node)) {
+        toast.error("Hrana již existuje. Vyberte jiný bod.");
+        return;
+      }
+
       addEdge(firstNodeInEdge, e.node);
       setAddingEdgeMode(false); // Exit adding edge mode
     });
