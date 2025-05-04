@@ -48,8 +48,8 @@ const GraphComponent = () => {
 
     // Initialize Sigma instance with custom settings
     const sigma = new Sigma(graph, containerRef.current, {
-      maxCameraRatio: 3,
-      minCameraRatio: 0.5,
+      // maxCameraRatio: 3,
+      // minCameraRatio: 0.5,
       defaultNodeColor: "#0091ff",
       defaultEdgeType: "arrow",
       renderEdgeLabels: true,
@@ -60,11 +60,12 @@ const GraphComponent = () => {
       edgeLabelSize: 20,
       edgeLabelColor: { color: "#000" },
       edgeReducer: edgeReducer,
+      cameraPanBoundaries: true,
     });
 
     // Set initial camera state
     if (sigma) {
-      sigma.getCamera().setState({ ratio: 1.25 });
+      sigma.getCamera().setState({ ratio: 1.5 });
       sigma.getCamera().x = 0.5;
       sigma.getCamera().y = 0.5;
     }
@@ -88,13 +89,17 @@ const GraphComponent = () => {
 
     // Handle dragging of nodes
     sigma.on("downNode", (e) => {
+      console.log("downNode", e.node);
       // @ts-ignore
       if (e.event.original.button === 2) return; // Ignore right-click
       if (addingEdgeMode) return;
       setIsDragging(true);
       setDraggedNode(e.node);
       graph.setNodeAttribute(e.node, "highlighted", true);
-      if (!sigma.getCustomBBox()) sigma.setCustomBBox(sigma.getBBox());
+      if (!sigma.getCustomBBox()) {
+        sigma.setCustomBBox(sigma.getBBox());
+        console.log("Custom BBox set");
+      }
     });
 
     // Update node position while dragging
