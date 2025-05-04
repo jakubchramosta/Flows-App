@@ -53,7 +53,7 @@ const EdgeCapacityInput = ({
   return (
     <div
       ref={ref}
-      className="absolute flex items-center justify-between gap-2 rounded-md border border-input bg-background p-2.5 shadow-sm"
+      className="absolute flex max-w-[150px] items-center justify-between gap-2 rounded-md border border-input bg-background p-2.5 shadow-sm"
       style={{
         top: position.y,
         left: position.x,

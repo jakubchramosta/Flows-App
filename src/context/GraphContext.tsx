@@ -123,7 +123,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
 
   const clearGraph = () => {
     const newGraphs = [...graphs];
-    newGraphs[activeGraph].graph.clear(); // Reset all edges to grey !!!!!!!should be called imported function
+    newGraphs[activeGraph].graph.clear();
     newGraphs[activeGraph].source = "";
     newGraphs[activeGraph].sink = "";
     newGraphs[activeGraph].maxFlow = 0;

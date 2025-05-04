@@ -45,91 +45,97 @@ const BottomToolBar = ({
 
   return (
     <TooltipProvider>
-      <div className="absolute bottom-3 left-0 right-0 mx-3 flex items-center justify-between rounded-md border border-input bg-background p-2.5 shadow-sm">
-        <div className="flex items-center gap-4">
-          <Button
-            variant={ButtonVariants.OUTLINE}
-            size={ButtonSizes.ICON}
-            onClick={handleInfoClick}
-            className="min-w-10"
-          >
-            <InfoIcon />
-          </Button>
-          <Select
-            onValueChange={(value) => {
-              clearGraph();
-              useDrawDefaultGraph(graphs[activeGraph], value);
-            }}
-          >
-            <SelectTrigger className="w-full min-w-[210px]">
-              <SelectValue placeholder="Zvol si graf pro vykreslení" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value={GraphTypes.EXAMPLE}>
-                {GraphTypes.EXAMPLE}
-              </SelectItem>
-              <SelectItem value={GraphTypes.SIMPLE_LINEAR}>
-                {GraphTypes.SIMPLE_LINEAR}
-              </SelectItem>
-              <SelectItem value={GraphTypes.MANY_PATHS}>
-                {GraphTypes.MANY_PATHS}
-              </SelectItem>
-              <SelectItem value={GraphTypes.CYCLE}>
-                {GraphTypes.CYCLE}
-              </SelectItem>
-              <SelectItem value={GraphTypes.COMPLEX}>
-                {GraphTypes.COMPLEX}
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex items-center gap-12">
-          <BottomToolBarButton
-            variant={ButtonVariants.OUTLINE}
-            size={ButtonSizes.ROUNDED}
-            icon={<PlayIcon />}
-            tooltipText="Spustit algoritmus"
-            onClick={() => {
-              calculateMaxFlow(graphs[activeGraph]);
-              openSidebar();
-            }}
-            isDisabled={false}
-          />
+      <div className="absolute bottom-3 left-0 right-0 mx-3 flex min-w-fit items-center justify-between rounded-md border border-input bg-background p-2.5 shadow-sm">
+        <div id="left" className="flex justify-start w-full">
           <div className="flex items-center gap-4">
+            <Button
+              variant={ButtonVariants.OUTLINE}
+              size={ButtonSizes.ICON}
+              onClick={handleInfoClick}
+              className="min-w-10"
+            >
+              <InfoIcon />
+            </Button>
+            <Select
+              onValueChange={(value) => {
+                clearGraph();
+                useDrawDefaultGraph(graphs[activeGraph], value);
+              }}
+            >
+              <SelectTrigger className="w-full min-w-[210px]">
+                <SelectValue placeholder="Zvol si graf pro vykreslení" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={GraphTypes.EXAMPLE}>
+                  {GraphTypes.EXAMPLE}
+                </SelectItem>
+                <SelectItem value={GraphTypes.SIMPLE_LINEAR}>
+                  {GraphTypes.SIMPLE_LINEAR}
+                </SelectItem>
+                <SelectItem value={GraphTypes.MANY_PATHS}>
+                  {GraphTypes.MANY_PATHS}
+                </SelectItem>
+                <SelectItem value={GraphTypes.CYCLE}>
+                  {GraphTypes.CYCLE}
+                </SelectItem>
+                <SelectItem value={GraphTypes.COMPLEX}>
+                  {GraphTypes.COMPLEX}
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        <div id="middle" className="flex justify-center w-full">
+          <div className="flex items-center gap-12">
             <BottomToolBarButton
               variant={ButtonVariants.OUTLINE}
               size={ButtonSizes.ROUNDED}
-              icon={<ArrowLeftIcon />}
-              tooltipText="Předchozí krok"
-              onClick={() => showPreviousSnapshot()}
-              isDisabled={currentSnapshotIndex === 0}
+              icon={<PlayIcon />}
+              tooltipText="Spustit algoritmus"
+              onClick={() => {
+                calculateMaxFlow(graphs[activeGraph]);
+                openSidebar();
+              }}
+              isDisabled={false}
             />
+            <div className="flex items-center gap-4">
+              <BottomToolBarButton
+                variant={ButtonVariants.OUTLINE}
+                size={ButtonSizes.ROUNDED}
+                icon={<ArrowLeftIcon />}
+                tooltipText="Předchozí krok"
+                onClick={() => showPreviousSnapshot()}
+                isDisabled={currentSnapshotIndex === 0}
+              />
+              <BottomToolBarButton
+                variant={ButtonVariants.OUTLINE}
+                size={ButtonSizes.ROUNDED}
+                icon={<ArrowRightIcon />}
+                tooltipText="Další krok"
+                onClick={() => showNextSnapshot()}
+                isDisabled={currentSnapshotIndex === snapshots.length - 1}
+              />
+            </div>
             <BottomToolBarButton
               variant={ButtonVariants.OUTLINE}
               size={ButtonSizes.ROUNDED}
-              icon={<ArrowRightIcon />}
-              tooltipText="Další krok"
-              onClick={() => showNextSnapshot()}
-              isDisabled={currentSnapshotIndex === snapshots.length - 1}
+              icon={<RotateCcwIcon />}
+              tooltipText="Obnovit graf"
+              onClick={resetGraph}
+              isDisabled={false}
             />
           </div>
+        </div>
+        <div id="right" className="flex justify-end w-full">
           <BottomToolBarButton
             variant={ButtonVariants.OUTLINE}
-            size={ButtonSizes.ROUNDED}
-            icon={<RotateCcwIcon />}
-            tooltipText="Obnovit graf"
-            onClick={resetGraph}
+            size={ButtonSizes.ICON}
+            icon={<Trash2Icon />}
+            tooltipText="Vymazat graf"
+            onClick={deleteCurrentGraph}
             isDisabled={false}
           />
         </div>
-        <BottomToolBarButton
-          variant={ButtonVariants.OUTLINE}
-          size={ButtonSizes.ICON}
-          icon={<Trash2Icon />}
-          tooltipText="Vymazat graf"
-          onClick={deleteCurrentGraph}
-          isDisabled={false}
-        />
       </div>
     </TooltipProvider>
   );
