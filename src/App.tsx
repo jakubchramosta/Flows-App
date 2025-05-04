@@ -21,7 +21,7 @@ function App() {
   return (
     <div className="relative">
       <GraphProvider>
-        <GraphComponent />
+        <GraphComponent isSideBarVisible={isSidebarVisible} />
         <TabsSwitcher />
         <Button
           onClick={toggleSidebar}
@@ -31,7 +31,10 @@ function App() {
           {isSidebarVisible ? <ChevronRightIcon /> : <Menu />}
         </Button>
         <GraphSidebar isVisible={isSidebarVisible} />
-        <BottomToolBar handleInfoClick={() => setShowInfo(true)} />
+        <BottomToolBar
+          handleInfoClick={() => setShowInfo(true)}
+          openSidebar={() => setIsSidebarVisible(true)}
+        />
         {showInfo && <InfoTab setShowInfo={setShowInfo} />}
       </GraphProvider>
       <Toaster />

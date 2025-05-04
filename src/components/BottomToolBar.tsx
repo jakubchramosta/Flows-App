@@ -6,7 +6,6 @@ import {
   ArrowLeftIcon,
   ArrowRightIcon,
   InfoIcon,
-  NetworkIcon,
   PlayIcon,
   RotateCcwIcon,
   Trash2Icon,
@@ -23,9 +22,13 @@ import {
 
 interface BottomToolBarProps {
   handleInfoClick: (e: any) => void;
+  openSidebar: () => void;
 }
 
-const BottomToolBar = ({ handleInfoClick }: BottomToolBarProps) => {
+const BottomToolBar = ({
+  handleInfoClick,
+  openSidebar,
+}: BottomToolBarProps) => {
   const {
     graphs,
     activeGraph,
@@ -84,6 +87,7 @@ const BottomToolBar = ({ handleInfoClick }: BottomToolBarProps) => {
             tooltipText="Spustit algoritmus"
             onClick={() => {
               calculateMaxFlow(graphs[activeGraph]);
+              openSidebar();
             }}
             isDisabled={false}
           />
