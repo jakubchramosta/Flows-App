@@ -9,7 +9,11 @@ import { edgeReducer } from "./utils/edgeReducer";
 import EdgeCapacityInput from "./EdgeCapacityInput";
 import { GraphTypes } from "./utils/consts";
 
-const GraphComponent = () => {
+interface GraphComponentProps {
+  isSideBarVisible: boolean;
+}
+
+const GraphComponent = ({ isSideBarVisible }: GraphComponentProps) => {
   // Reference to the container div for rendering the graph
   const containerRef = useRef<HTMLDivElement>(null);
   const {
@@ -63,11 +67,13 @@ const GraphComponent = () => {
       cameraPanBoundaries: true,
     });
 
-    // Set initial camera state
+    // Set initial camera state depending on the sidebar visibility
     if (sigma) {
-      sigma.getCamera().setState({ ratio: 1.5 });
-      sigma.getCamera().x = 0.5;
-      sigma.getCamera().y = 0.5;
+      sigma.getCamera().setState({
+        ratio: 1.5,
+        x: isSideBarVisible ? 0.7 : 0.5,
+        y: 0.5,
+      });
     }
 
     // Handle double left mouse button click on the canvas
