@@ -18,6 +18,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
+  SelectValue,
 } from "./ui/select.js";
 
 interface BottomToolBarProps {
@@ -38,6 +39,7 @@ const BottomToolBar = ({
     currentSnapshotIndex,
     showPreviousSnapshot,
     showNextSnapshot,
+    deleteCurrentGraph,
   } = useContext(GraphContext);
   const snapshots = graphs[activeGraph].snapshots;
 
@@ -59,7 +61,9 @@ const BottomToolBar = ({
               useDrawDefaultGraph(graphs[activeGraph], value);
             }}
           >
-            <SelectTrigger>Draw Graph</SelectTrigger>
+            <SelectTrigger className="w-full min-w-[210px]">
+              <SelectValue placeholder="Zvol si graf pro vykreslení" />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value={GraphTypes.EXAMPLE}>
                 {GraphTypes.EXAMPLE}
@@ -123,7 +127,7 @@ const BottomToolBar = ({
           size={ButtonSizes.ICON}
           icon={<Trash2Icon />}
           tooltipText="Vymazat graf"
-          onClick={clearGraph}
+          onClick={deleteCurrentGraph}
           isDisabled={false}
         />
       </div>
