@@ -1,3 +1,10 @@
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  PlayIcon,
+  RotateCcwIcon,
+  Trash2Icon,
+} from "lucide-react";
 import { useOnClickOutside } from "../hooks/useOnClickOutside";
 import { useRef } from "react";
 
@@ -25,7 +32,7 @@ const InfoTab = ({ setShowInfo }: InfoTabProps) => {
           a výpočtu <strong>maximálního toku v síti</strong>.
         </p>
         <hr className="my-2 border-t border-gray-300" />
-        <ul className="pl-5 space-y-2 list-disc">
+        <ul className="list-disc space-y-2 pl-5">
           <li>
             <strong>Vytváření vlastních grafů a jejich úprava:</strong> Uzly se
             přidávají dvojklikem
@@ -38,7 +45,7 @@ const InfoTab = ({ setShowInfo }: InfoTabProps) => {
             <strong> kapacitu hran</strong>, označit uzly jako
             <strong> zdroj</strong> nebo <strong>cíl</strong>, případně uzly a
             hrany <strong>odstraňovat</strong>.
-            <ul className="pl-5 list-disc list-inside">
+            <ul className="list-inside list-disc pl-5">
               <li>
                 <strong>Vytvoření hrany:</strong> kliknutím
                 <strong> (RMB)</strong> na uzlu – vyberte možnost
@@ -69,30 +76,32 @@ const InfoTab = ({ setShowInfo }: InfoTabProps) => {
             <strong>Ovládání krokování:</strong> Ve spodní části aplikace se
             nachází
             <strong> ovládací prvky</strong> pro krokování výpočtu:
-            <ul className="pl-5 list-disc list-inside">
-              <li>
-                <strong>Play:</strong> Spustí celý výpočet maximálního toku.
+            <ul className="list-inside list-disc pl-5">
+              <li className="flex items-center">
+                <PlayIcon className="mr-2" /> Spustí celý výpočet maximálního
+                toku.
               </li>
-              <li>
-                <strong>Šipky vpřed/vzad:</strong> Krokování mezi jednotlivými
-                nalezenými cestami.
+              <li className="flex items-center">
+                <ArrowLeftIcon className="mr-2" />
+                <ArrowRightIcon className="mx-2" /> Přepínání zpět a vpřed mezi
+                jednotlivými nalezenými cestami.
               </li>
-              <li>
-                <strong>Rotující šipka:</strong> Restartuje aktuální graf.
+              <li className="flex items-center">
+                <RotateCcwIcon className="mr-2" /> Restartuje aktuální graf.
+              </li>
+              <li className="flex items-center">
+                <Trash2Icon className="mr-2" /> Odstraní aktuální graf.
               </li>
             </ul>
-            <li>
-              <strong>Koš:</strong> Odstraní aktuální graf.
-            </li>
           </li>
         </ul>
         <p className="mt-4">
-          Pro začátek stačíkliknout na tlačítko
+          Pro začátek stačí kliknout na tlačítko
           <strong> Play</strong>. A provede se v základu nastavený alforitmus
           Ford-Fulkerson na aktuálním grafu.
         </p>
         <hr className="my-2 border-t border-gray-300" />
-        <p className="mt-4 text-sm text-center text-gray-500">
+        <p className="mt-4 text-center text-sm text-gray-500">
           &copy; {new Date().getFullYear()} Flows App
         </p>
       </div>

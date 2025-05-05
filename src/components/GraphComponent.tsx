@@ -71,7 +71,7 @@ const GraphComponent = ({ isSideBarVisible }: GraphComponentProps) => {
     // Set initial camera state depending on the sidebar visibility
     if (sigma) {
       sigma.getCamera().setState({
-        ratio: 1.35,
+        ratio: 1.45,
         x: isSideBarVisible ? 0.7 : 0.5,
         y: 0.5,
       });
@@ -203,7 +203,7 @@ const GraphComponent = ({ isSideBarVisible }: GraphComponentProps) => {
       {/* Graph container */}
       <div
         ref={containerRef}
-        className="w-screen h-screen"
+        className="h-screen w-screen"
         onContextMenu={(e) => e.preventDefault()} // Disable default context menu
       />
     </>
