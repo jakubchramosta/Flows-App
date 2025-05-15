@@ -44,6 +44,8 @@ interface GraphContextType {
   showNextSnapshot: () => void;
   showSelectedSnapshot: (index: number) => void;
   deleteCurrentGraph: () => void;
+  setEdgeStraight: (id: string) => void;
+  setEdgeCurved: (id: string) => void;
 }
 
 interface GraphProviderProps {
@@ -109,16 +111,36 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
   };
 
   const addEdge = (source: string, target: string) => {
-    graphs[activeGraph].graph.addEdge(source, target, {
-      label: "0/1",
-      size: 7,
-      flow: 0,
-      capacity: 1,
-    });
+    const opositeEdge = graph.edge(target, source);
+    if (!opositeEdge) {
+      graphs[activeGraph].graph.addEdge(source, target, {
+        label: "0/1",
+        size: 7,
+        flow: 0,
+        capacity: 1,
+      });
+    } else {
+      graphs[activeGraph].graph.addEdge(source, target, {
+        label: "0/1",
+        size: 7,
+        flow: 0,
+        capacity: 1,
+        type: "curved",
+      });
+      graph.setEdgeAttribute(opositeEdge, "type", "curved");
+    }
   };
 
   const removeEdge = (id: string) => {
     graphs[activeGraph].graph.dropEdge(id);
+  };
+
+  const setEdgeStraight = (id: string) => {
+    graph.setEdgeAttribute(id, "type", "");
+  };
+
+  const setEdgeCurved = (id: string) => {
+    graph.setEdgeAttribute(id, "type", "curved");
   };
 
   const clearGraph = () => {
@@ -324,6 +346,8 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
         showNextSnapshot,
         showSelectedSnapshot,
         deleteCurrentGraph,
+        setEdgeStraight,
+        setEdgeCurved,
       }}
     >
       {children}

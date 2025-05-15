@@ -33,6 +33,8 @@ const ContextMenu = ({
     setAddingEdgeMode,
     setSource,
     setSink,
+    setEdgeStraight,
+    setEdgeCurved,
   } = useContext(GraphContext);
 
   const ref = useRef<HTMLDivElement>(null);
@@ -78,6 +80,18 @@ const ContextMenu = ({
     setIsOpen(false);
   };
 
+  const handleStraightenEdge = (id: string | null) => {
+    if (!id) return;
+    setEdgeStraight(id);
+    setIsOpen(false);
+  };
+
+  const handleCurvedEdge = (id: string | null) => {
+    if (!id) return;
+    setEdgeCurved(id);
+    setIsOpen(false);
+  };
+
   useOnClickOutside(ref, handleClickOutside);
 
   return (
@@ -91,25 +105,25 @@ const ContextMenu = ({
           {isNode ? (
             <>
               <DropdownMenuItem
-                className="flex justify-between w-44"
+                className="flex w-44 justify-between"
                 onClick={() => handleFirstNodeForEdge(id)}
               >
                 Přidat hanu <PlusIcon />
               </DropdownMenuItem>
               <DropdownMenuItem
-                className="flex justify-between w-44"
+                className="flex w-44 justify-between"
                 onClick={() => handleMakrAsSource(id)}
               >
                 Označit jako ZDROJ
               </DropdownMenuItem>
               <DropdownMenuItem
-                className="flex justify-between w-44"
+                className="flex w-44 justify-between"
                 onClick={() => handleMarkAsSink(id)}
               >
                 Označit jako CÍL
               </DropdownMenuItem>
               <DropdownMenuItem
-                className="flex justify-between w-44"
+                className="flex w-44 justify-between"
                 onClick={() => handleRemoveNode(id)}
               >
                 Odstranit bod <Trash2Icon />
@@ -118,13 +132,25 @@ const ContextMenu = ({
           ) : (
             <>
               <DropdownMenuItem
-                className="flex justify-between w-36"
+                className="flex w-36 justify-between"
                 onClick={() => handleCapacityChangeOnClick()}
               >
                 Změnit kapacitu <PencilIcon />
               </DropdownMenuItem>
               <DropdownMenuItem
-                className="flex justify-between w-36"
+                className="flex w-36 justify-between"
+                onClick={() => handleStraightenEdge(id)}
+              >
+                Narovnat
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="flex w-36 justify-between"
+                onClick={() => handleCurvedEdge(id)}
+              >
+                Zakřivit
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="flex w-36 justify-between"
                 onClick={() => handleRemoveEdge(id)}
               >
                 Odstranit hranu <Trash2Icon />
