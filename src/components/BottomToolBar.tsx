@@ -46,7 +46,7 @@ const BottomToolBar = ({
   return (
     <TooltipProvider>
       <div className="absolute bottom-3 left-0 right-0 mx-3 flex min-w-fit items-center justify-between rounded-md border border-input bg-background p-2.5 shadow-sm">
-        <div id="left" className="flex justify-start w-full">
+        <div id="left" className="flex w-full justify-start">
           <div className="flex items-center gap-4">
             <Button
               variant={ButtonVariants.OUTLINE}
@@ -85,7 +85,7 @@ const BottomToolBar = ({
             </Select>
           </div>
         </div>
-        <div id="middle" className="flex justify-center w-full">
+        <div id="middle" className="flex w-full justify-center">
           <div className="flex items-center gap-12">
             <BottomToolBarButton
               variant={ButtonVariants.OUTLINE}
@@ -96,7 +96,7 @@ const BottomToolBar = ({
                 calculateMaxFlow(graphs[activeGraph]);
                 openSidebar();
               }}
-              isDisabled={false}
+              isDisabled={graphs[activeGraph].snapshots.length != 0}
             />
             <div className="flex items-center gap-4">
               <BottomToolBarButton
@@ -126,7 +126,7 @@ const BottomToolBar = ({
             />
           </div>
         </div>
-        <div id="right" className="flex justify-end w-full">
+        <div id="right" className="flex w-full justify-end">
           <BottomToolBarButton
             variant={ButtonVariants.OUTLINE}
             size={ButtonSizes.ICON}

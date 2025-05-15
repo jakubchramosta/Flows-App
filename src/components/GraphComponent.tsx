@@ -9,6 +9,7 @@ import { edgeReducer } from "./utils/edgeReducer";
 import EdgeCapacityInput from "./EdgeCapacityInput";
 import { GraphTypes } from "./utils/consts";
 import { toast } from "sonner";
+import { EdgeCurvedArrowProgram } from "@sigma/edge-curve";
 
 interface GraphComponentProps {
   isSideBarVisible: boolean;
@@ -42,7 +43,7 @@ const GraphComponent = ({ isSideBarVisible }: GraphComponentProps) => {
   // Clear the graph and draw the default graph on the first render
   if (firstRender) {
     graph.clear();
-    useDrawDefaultGraph(graphs[0], GraphTypes.EXAMPLE);
+    useDrawDefaultGraph(graphs[0], GraphTypes.CYCLE);
     console.log(graphs[0]);
   }
 
@@ -66,6 +67,9 @@ const GraphComponent = ({ isSideBarVisible }: GraphComponentProps) => {
       edgeLabelColor: { color: "#000" },
       edgeReducer: edgeReducer,
       cameraPanBoundaries: true,
+      edgeProgramClasses: {
+        curved: EdgeCurvedArrowProgram,
+      },
     });
 
     // Set initial camera state depending on the sidebar visibility
