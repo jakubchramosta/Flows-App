@@ -9,10 +9,9 @@ export const highlightCurrentPath = (graph: Graph, path: string[]) => {
     const edge = graph.edge(u, v);
     const reverseEdge = graph.edge(v, u);
 
-    graph.setEdgeAttribute(edge, "color", "green"); // Forward edge: green
-    if (reverseEdge) {
-      graph.setEdgeAttribute(reverseEdge, "color", "red"); // Backward edge: red
-    }
+    if (graph.getEdgeAttributes(edge).hidden === true)
+      graph.setEdgeAttribute(reverseEdge, "color", "red");
+    else graph.setEdgeAttribute(edge, "color", "green");
   }
 };
 
