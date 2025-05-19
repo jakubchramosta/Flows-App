@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import GraphContext from "../context/GraphContext.js";
 import { useDrawDefaultGraph } from "../hooks/useDrawDefaultGraph";
 import { Button } from "./ui/button.js";
@@ -40,13 +40,21 @@ const BottomToolBar = ({
     showPreviousSnapshot,
     showNextSnapshot,
     deleteCurrentGraph,
+    exportCurrentGraph,
+    importGraph,
   } = useContext(GraphContext);
   const snapshots = graphs[activeGraph].snapshots;
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleImportClick = () => {
+    console.log("handleImportClick");
+    fileInputRef.current?.click();
+  };
 
   return (
     <TooltipProvider>
       <div className="absolute bottom-3 left-0 right-0 mx-3 flex min-w-fit items-center justify-between rounded-md border border-input bg-background p-2.5 shadow-sm">
-        <div id="left" className="flex w-full justify-start">
+        <div id="left" className="flex justify-start w-full">
           <div className="flex items-center gap-4">
             <Button
               variant={ButtonVariants.OUTLINE}
@@ -85,7 +93,7 @@ const BottomToolBar = ({
             </Select>
           </div>
         </div>
-        <div id="middle" className="flex w-full justify-center">
+        <div id="middle" className="flex justify-center w-full">
           <div className="flex items-center gap-12">
             <BottomToolBarButton
               variant={ButtonVariants.OUTLINE}
@@ -113,7 +121,10 @@ const BottomToolBar = ({
                 icon={<ArrowRightIcon />}
                 tooltipText="Další krok"
                 onClick={() => showNextSnapshot()}
-                isDisabled={currentSnapshotIndex === snapshots.length - 1}
+                isDisabled={
+                  currentSnapshotIndex === snapshots.length - 1 ||
+                  snapshots.length === 0
+                }
               />
             </div>
             <BottomToolBarButton
@@ -126,7 +137,31 @@ const BottomToolBar = ({
             />
           </div>
         </div>
-        <div id="right" className="flex w-full justify-end">
+        <div id="right" className="flex justify-end w-full gap-4">
+          <Button
+            variant={ButtonVariants.OUTLINE}
+            size={ButtonSizes.DEFAULT}
+            onClick={exportCurrentGraph}
+          >
+            Export
+          </Button>
+          <Button
+            variant={ButtonVariants.OUTLINE}
+            size={ButtonSizes.DEFAULT}
+            onClick={handleImportClick}
+          >
+            Import
+          </Button>
+          <input
+            type="file"
+            accept=".json,application/json"
+            onClick={(e) => {
+              (e.target as HTMLInputElement).value = "";
+            }}
+            onChange={importGraph}
+            ref={fileInputRef}
+            style={{ display: "none" }}
+          ></input>
           <BottomToolBarButton
             variant={ButtonVariants.OUTLINE}
             size={ButtonSizes.ICON}

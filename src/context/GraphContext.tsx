@@ -46,6 +46,8 @@ interface GraphContextType {
   deleteCurrentGraph: () => void;
   setEdgeStraight: (id: string) => void;
   setEdgeCurved: (id: string) => void;
+  exportCurrentGraph: () => void;
+  importGraph: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 interface GraphProviderProps {
@@ -75,9 +77,22 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
 
   const graph = graphs[activeGraph].graph;
 
-  const addGraph = () => {
-    if (graphs.length >= 5) {
-      toast.error("Maximální počet grafů je 5!");
+  const addGraph = (importedGraph?: GraphInfo) => {
+    if (graphs.length >= 10) {
+      toast.error("Maximální počet grafů je 10!");
+      return;
+    }
+    if (importedGraph) {
+      const newGraph = {
+        graph: importedGraph.graph,
+        source: importedGraph.source,
+        sink: importedGraph.sink,
+        maxFlow: importedGraph.maxFlow,
+        paths: importedGraph.paths,
+        snapshots: importedGraph.snapshots,
+      };
+      setGraphs((prevGraphs) => [...prevGraphs, newGraph]);
+      setActiveGraph(graphs.length);
       return;
     }
     const newGraph = {
@@ -317,6 +332,65 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     }
   };
 
+  const exportCurrentGraph = () => {
+    const exportableData = {
+      graph: graphs[activeGraph].graph.export(),
+      source: graphs[activeGraph].source,
+      sink: graphs[activeGraph].sink,
+    };
+
+    const jsonStr = JSON.stringify(exportableData, null, 2);
+    const blob = new Blob([jsonStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "my-graph.json";
+    a.click();
+
+    URL.revokeObjectURL(url);
+
+    // const jsonData = new Blob([JSON.stringify(graphs[activeGraph])], {
+    //   type: "application/json",
+    // });
+    // const jsonURL = URL.createObjectURL(jsonData);
+    // const link = document.createElement("a");
+    // link.href = jsonURL;
+    // link.download = "Graph.json";
+    // document.body.appendChild(link);
+    // link.click();
+    // document.body.removeChild(link);
+  };
+
+  const importGraph = (e: React.ChangeEvent<HTMLInputElement>) => {
+    //Implementovat importování grafu
+    console.log("handleInputChange");
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      try {
+        const json = JSON.parse(event.target?.result as string);
+        const importedGraph = {
+          graph: Graph.from(json.graph), // ← znovuvytvoření instance
+          source: json.source,
+          sink: json.sink,
+          maxFlow: 0,
+          paths: [],
+          snapshots: [],
+        };
+        addGraph(importedGraph);
+        console.log("Pokus o import:", json);
+      } catch (err) {
+        toast.error("Soubor není validní JSON.");
+        console.error(err);
+      }
+    };
+    reader.readAsText(file);
+  };
+
   return (
     <GraphContext.Provider
       value={{
@@ -348,6 +422,8 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
         deleteCurrentGraph,
         setEdgeStraight,
         setEdgeCurved,
+        exportCurrentGraph,
+        importGraph,
       }}
     >
       {children}
