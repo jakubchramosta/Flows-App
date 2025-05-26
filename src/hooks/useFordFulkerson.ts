@@ -75,29 +75,30 @@ export const useFordFulkerson = ({
       const v = path[i + 1];
       const edge = graph.edge(u, v);
       const reverseEdge = graph.edge(v, u);
+      const attrs = graph.getEdgeAttributes(edge);
+
+      // !!! Asi špatný přístup, reprezentace se zápornou hodnotou lépe funguje !!!
+      // !!! Není potřeba upravovat max. kapacity !!!
+      // Pokud zpětná hrana existuje a není skrytá, aktualizujeme její atributy
+      // nejprve se snižuje tok na zpětné haně a pokud zbyde nějaký tok přičte se
+      // k dopředné hraně
+      // if (reverseEdge && !graph.getEdgeAttribute(reverseEdge, "hidden")) {
+      //   const reverseAttrs = graph.getEdgeAttributes(reverseEdge);
+
+      //   // continue;
+      // }
 
       // Aktualizace toku na přímé hraně
-      const attrs = graph.getEdgeAttributes(edge);
       graph.setEdgeAttribute(edge, "flow", attrs.flow + pathFlow);
 
       // Aktualizace toku na zpětné hraně
       if (reverseEdge) {
-        // Pokud se jedná o nereziduální hranu, aktualizujeme její kapacitu
-        // if (!graph.getEdgeAttribute(reverseEdge, "isReverse")) {
-        //   const reverseAttrs = graph.getEdgeAttributes(reverseEdge);
-        //   graph.setEdgeAttribute(
-        //     reverseEdge,
-        //     "capacity",
-        //     reverseAttrs.capacity + pathFlow,
-        //   );
-        // } else {
         const reverseAttrs = graph.getEdgeAttributes(reverseEdge);
         graph.setEdgeAttribute(
           reverseEdge,
           "flow",
           reverseAttrs.flow - pathFlow,
         );
-        // }
       } else {
         // Pokud zpětná hrana neexistuje, vytvoříme ji
         graph.addEdge(v, u, {

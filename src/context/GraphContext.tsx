@@ -2,7 +2,7 @@ import { createContext, ReactNode, useState } from "react";
 import Graph from "graphology";
 import { useFordFulkerson } from "../hooks/useFordFulkerson";
 import { toast } from "sonner";
-import { Algorithms } from "../components/utils/consts";
+import { Algorithms, Colors, EdgeTypes } from "../components/utils/consts";
 import { useEdmondsKarp } from "../hooks/useEdmondsKarp";
 
 export interface GraphInfo {
@@ -44,12 +44,13 @@ interface GraphContextType {
   showNextSnapshot: () => void;
   showSelectedSnapshot: (index: number) => void;
   deleteCurrentGraph: () => void;
-  setEdgeStraight: (id: string) => void;
-  setEdgeCurved: (id: string) => void;
+  setEdgeType: (id: string, type: string) => void;
   exportCurrentGraph: () => void;
   importGraph: (e: React.ChangeEvent<HTMLInputElement>) => void;
   editationMode: boolean;
   switchEditMode: () => void;
+  setEdgeFlow: (edgeId: string, flow: number) => void;
+  setEdgeColor: (edgeId: string, color: string) => void;
 }
 
 interface GraphProviderProps {
@@ -143,9 +144,9 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
         size: 7,
         flow: 0,
         capacity: 1,
-        type: "curved",
+        type: EdgeTypes.CURVED,
       });
-      graph.setEdgeAttribute(opositeEdge, "type", "curved");
+      graph.setEdgeAttribute(opositeEdge, "type", EdgeTypes.CURVED);
     }
   };
 
@@ -153,12 +154,8 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     graphs[activeGraph].graph.dropEdge(id);
   };
 
-  const setEdgeStraight = (id: string) => {
-    graph.setEdgeAttribute(id, "type", "");
-  };
-
-  const setEdgeCurved = (id: string) => {
-    graph.setEdgeAttribute(id, "type", "curved");
+  const setEdgeType = (id: string, type: string) => {
+    graph.setEdgeAttribute(id, "type", type);
   };
 
   const clearGraph = () => {
@@ -186,19 +183,19 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
   const setSource = (source: string) => {
     if (graphs[activeGraph].source !== "") {
       const previousSource = graphs[activeGraph].source;
-      graph.setNodeAttribute(previousSource, "color", "#0091ff");
+      graph.setNodeAttribute(previousSource, "color", Colors.DEFAULT_NODE);
     }
     graphs[activeGraph].source = source;
-    graph.setNodeAttribute(source, "color", "#0f0");
+    graph.setNodeAttribute(source, "color", Colors.SOURCE);
   };
 
   const setSink = (sink: string) => {
     if (graphs[activeGraph].sink !== "") {
       const previousSink = graphs[activeGraph].sink;
-      graph.setNodeAttribute(previousSink, "color", "#0091ff");
+      graph.setNodeAttribute(previousSink, "color", Colors.DEFAULT_NODE);
     }
     graphs[activeGraph].sink = sink;
-    graph.setNodeAttribute(sink, "color", "#f00");
+    graph.setNodeAttribute(sink, "color", Colors.SINK);
   };
 
   const calculateMaxFlow = (graphInfo: GraphInfo) => {
@@ -281,13 +278,32 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     );
   };
 
+  const setEdgeFlow = (edgeId: string, flow: number) => {
+    if (!edgeId) return;
+    if (flow > graph.getEdgeAttribute(edgeId, "capacity")) {
+      toast.error("Tok nemůže být větší než kapacita hrany!");
+      return;
+    }
+    graph.setEdgeAttribute(edgeId, "flow", flow);
+    graph.setEdgeAttribute(
+      edgeId,
+      "label",
+      `${graph.getEdgeAttribute(edgeId, "flow")}/${graph.getEdgeAttribute(edgeId, "capacity")}`,
+    );
+  };
+
+  const setEdgeColor = (edgeId: string, color: string) => {
+    if (!edgeId) return;
+    graph.setEdgeAttribute(edgeId, "color", color);
+  };
+
   const resetGraph = () => {
     const newGraphs = [...graphs];
     graphs[activeGraph].graph.forEachEdge((edge) => {
       graph.setEdgeAttribute(edge, "flow", 0);
     });
     graphs[activeGraph].graph.forEachEdge((edge) => {
-      graph.setEdgeAttribute(edge, "color", "#ccc"); // Reset all edges to black
+      graph.setEdgeAttribute(edge, "color", Colors.DEFAULT_EDGE); // Reset all edges color to default
     });
     newGraphs[activeGraph].maxFlow = 0;
     newGraphs[activeGraph].paths = [];
@@ -352,17 +368,6 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     a.click();
 
     URL.revokeObjectURL(url);
-
-    // const jsonData = new Blob([JSON.stringify(graphs[activeGraph])], {
-    //   type: "application/json",
-    // });
-    // const jsonURL = URL.createObjectURL(jsonData);
-    // const link = document.createElement("a");
-    // link.href = jsonURL;
-    // link.download = "Graph.json";
-    // document.body.appendChild(link);
-    // link.click();
-    // document.body.removeChild(link);
   };
 
   const importGraph = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -427,12 +432,13 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
         showNextSnapshot,
         showSelectedSnapshot,
         deleteCurrentGraph,
-        setEdgeStraight,
-        setEdgeCurved,
+        setEdgeType,
         exportCurrentGraph,
         importGraph,
         editationMode,
         switchEditMode,
+        setEdgeFlow,
+        setEdgeColor,
       }}
     >
       {children}
