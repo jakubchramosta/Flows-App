@@ -61,7 +61,7 @@ const TabsSwitcher = () => {
       </div>
       <div className="flex items-center gap-2">
         <Switch checked={editationMode} onCheckedChange={switchEditMode} />
-        <p>Editace {editationMode ? "ON" : "OFF"}</p>
+        <p>{editationMode ? "Trénovat" : "Editace"}</p>
       </div>
     </div>
   );
