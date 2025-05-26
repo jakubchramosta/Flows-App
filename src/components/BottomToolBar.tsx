@@ -42,6 +42,7 @@ const BottomToolBar = ({
     deleteCurrentGraph,
     exportCurrentGraph,
     importGraph,
+    editationMode,
   } = useContext(GraphContext);
   const snapshots = graphs[activeGraph].snapshots;
   const fileInputRef = useRef<HTMLInputElement | null>(null);
