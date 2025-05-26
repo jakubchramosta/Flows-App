@@ -48,6 +48,8 @@ interface GraphContextType {
   setEdgeCurved: (id: string) => void;
   exportCurrentGraph: () => void;
   importGraph: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  editationMode: boolean;
+  switchEditMode: () => void;
 }
 
 interface GraphProviderProps {
@@ -74,6 +76,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     Algorithms.FORD_FULKERSON,
   );
   const [currentSnapshotIndex, setCurrentSnapshotIndex] = useState<number>(0);
+  const [editationMode, setEditationMode] = useState(true);
 
   const graph = graphs[activeGraph].graph;
 
@@ -391,6 +394,10 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
     reader.readAsText(file);
   };
 
+  const switchEditMode = () => {
+    setEditationMode((prev) => !prev);
+  };
+
   return (
     <GraphContext.Provider
       value={{
@@ -424,6 +431,8 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
         setEdgeCurved,
         exportCurrentGraph,
         importGraph,
+        editationMode,
+        switchEditMode,
       }}
     >
       {children}

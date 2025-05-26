@@ -207,7 +207,7 @@ const GraphComponent = ({ isSideBarVisible }: GraphComponentProps) => {
       {/* Graph container */}
       <div
         ref={containerRef}
-        className="h-screen w-screen"
+        className="w-screen h-screen"
         onContextMenu={(e) => e.preventDefault()} // Disable default context menu
       />
     </>
