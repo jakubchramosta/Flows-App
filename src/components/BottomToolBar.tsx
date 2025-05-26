@@ -65,112 +65,124 @@ const BottomToolBar = ({
             >
               <InfoIcon />
             </Button>
-            <Select
-              onValueChange={(value) => {
-                clearGraph();
-                useDrawDefaultGraph(graphs[activeGraph], value);
-              }}
-            >
-              <SelectTrigger className="w-full min-w-[210px]">
-                <SelectValue placeholder="Zvol si graf pro vykreslení" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={GraphTypes.EXAMPLE}>
-                  {GraphTypes.EXAMPLE}
-                </SelectItem>
-                <SelectItem value={GraphTypes.SIMPLE_LINEAR}>
-                  {GraphTypes.SIMPLE_LINEAR}
-                </SelectItem>
-                <SelectItem value={GraphTypes.MANY_PATHS}>
-                  {GraphTypes.MANY_PATHS}
-                </SelectItem>
-                <SelectItem value={GraphTypes.CYCLE}>
-                  {GraphTypes.CYCLE}
-                </SelectItem>
-                <SelectItem value={GraphTypes.COMPLEX}>
-                  {GraphTypes.COMPLEX}
-                </SelectItem>
-              </SelectContent>
-            </Select>
+            {editationMode && (
+              <Select
+                onValueChange={(value) => {
+                  clearGraph();
+                  useDrawDefaultGraph(graphs[activeGraph], value);
+                }}
+              >
+                <SelectTrigger className="w-full min-w-[210px]">
+                  <SelectValue placeholder="Zvol si graf pro vykreslení" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={GraphTypes.EXAMPLE}>
+                    {GraphTypes.EXAMPLE}
+                  </SelectItem>
+                  <SelectItem value={GraphTypes.SIMPLE_LINEAR}>
+                    {GraphTypes.SIMPLE_LINEAR}
+                  </SelectItem>
+                  <SelectItem value={GraphTypes.MANY_PATHS}>
+                    {GraphTypes.MANY_PATHS}
+                  </SelectItem>
+                  <SelectItem value={GraphTypes.CYCLE}>
+                    {GraphTypes.CYCLE}
+                  </SelectItem>
+                  <SelectItem value={GraphTypes.COMPLEX}>
+                    {GraphTypes.COMPLEX}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            )}
           </div>
         </div>
         <div id="middle" className="flex justify-center w-full">
-          <div className="flex items-center gap-12">
-            <BottomToolBarButton
-              variant={ButtonVariants.OUTLINE}
-              size={ButtonSizes.ROUNDED}
-              icon={<PlayIcon />}
-              tooltipText="Spustit algoritmus"
-              onClick={() => {
-                calculateMaxFlow(graphs[activeGraph]);
-                openSidebar();
-              }}
-              isDisabled={graphs[activeGraph].snapshots.length != 0}
-            />
-            <div className="flex items-center gap-4">
+          {editationMode ? (
+            <div className="flex items-center gap-12">
               <BottomToolBarButton
                 variant={ButtonVariants.OUTLINE}
                 size={ButtonSizes.ROUNDED}
-                icon={<ArrowLeftIcon />}
-                tooltipText="Předchozí krok"
-                onClick={() => showPreviousSnapshot()}
-                isDisabled={currentSnapshotIndex === 0}
+                icon={<PlayIcon />}
+                tooltipText="Spustit algoritmus"
+                onClick={() => {
+                  calculateMaxFlow(graphs[activeGraph]);
+                  openSidebar();
+                }}
+                isDisabled={graphs[activeGraph].snapshots.length != 0}
               />
+              <div className="flex items-center gap-4">
+                <BottomToolBarButton
+                  variant={ButtonVariants.OUTLINE}
+                  size={ButtonSizes.ROUNDED}
+                  icon={<ArrowLeftIcon />}
+                  tooltipText="Předchozí krok"
+                  onClick={() => showPreviousSnapshot()}
+                  isDisabled={currentSnapshotIndex === 0}
+                />
+                <BottomToolBarButton
+                  variant={ButtonVariants.OUTLINE}
+                  size={ButtonSizes.ROUNDED}
+                  icon={<ArrowRightIcon />}
+                  tooltipText="Další krok"
+                  onClick={() => showNextSnapshot()}
+                  isDisabled={
+                    currentSnapshotIndex === snapshots.length - 1 ||
+                    snapshots.length === 0
+                  }
+                />
+              </div>
               <BottomToolBarButton
                 variant={ButtonVariants.OUTLINE}
                 size={ButtonSizes.ROUNDED}
-                icon={<ArrowRightIcon />}
-                tooltipText="Další krok"
-                onClick={() => showNextSnapshot()}
-                isDisabled={
-                  currentSnapshotIndex === snapshots.length - 1 ||
-                  snapshots.length === 0
-                }
+                icon={<RotateCcwIcon />}
+                tooltipText="Obnovit graf"
+                onClick={resetGraph}
+                isDisabled={false}
               />
             </div>
-            <BottomToolBarButton
-              variant={ButtonVariants.OUTLINE}
-              size={ButtonSizes.ROUNDED}
-              icon={<RotateCcwIcon />}
-              tooltipText="Obnovit graf"
-              onClick={resetGraph}
-              isDisabled={false}
-            />
-          </div>
+          ) : (
+            <Button variant={ButtonVariants.OUTLINE} size={ButtonSizes.ROUNDED}>
+              <PlayIcon />
+            </Button>
+          )}
         </div>
-        <div id="right" className="flex justify-end w-full gap-4">
-          <Button
-            variant={ButtonVariants.OUTLINE}
-            size={ButtonSizes.DEFAULT}
-            onClick={exportCurrentGraph}
-          >
-            Export
-          </Button>
-          <Button
-            variant={ButtonVariants.OUTLINE}
-            size={ButtonSizes.DEFAULT}
-            onClick={handleImportClick}
-          >
-            Import
-          </Button>
-          <input
-            type="file"
-            accept=".json,application/json"
-            onClick={(e) => {
-              (e.target as HTMLInputElement).value = "";
-            }}
-            onChange={importGraph}
-            ref={fileInputRef}
-            style={{ display: "none" }}
-          ></input>
-          <BottomToolBarButton
-            variant={ButtonVariants.OUTLINE}
-            size={ButtonSizes.ICON}
-            icon={<Trash2Icon />}
-            tooltipText="Vymazat graf"
-            onClick={deleteCurrentGraph}
-            isDisabled={false}
-          />
+        <div className="flex justify-end w-full">
+          {editationMode && (
+            <div id="right" className="flex justify-end gap-4">
+              <Button
+                variant={ButtonVariants.OUTLINE}
+                size={ButtonSizes.DEFAULT}
+                onClick={exportCurrentGraph}
+              >
+                Export
+              </Button>
+              <Button
+                variant={ButtonVariants.OUTLINE}
+                size={ButtonSizes.DEFAULT}
+                onClick={handleImportClick}
+              >
+                Import
+              </Button>
+              <input
+                type="file"
+                accept=".json,application/json"
+                onClick={(e) => {
+                  (e.target as HTMLInputElement).value = "";
+                }}
+                onChange={importGraph}
+                ref={fileInputRef}
+                style={{ display: "none" }}
+              ></input>
+              <BottomToolBarButton
+                variant={ButtonVariants.OUTLINE}
+                size={ButtonSizes.ICON}
+                icon={<Trash2Icon />}
+                tooltipText="Vymazat graf"
+                onClick={deleteCurrentGraph}
+                isDisabled={false}
+              />
+            </div>
+          )}
         </div>
       </div>
     </TooltipProvider>
