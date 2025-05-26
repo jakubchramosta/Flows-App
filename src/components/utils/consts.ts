@@ -25,3 +25,18 @@ export enum GraphTypes {
   CYCLE = "Graf s cyklem",
   COMPLEX = "Složitý graf",
 }
+
+export enum EdgeTypes {
+  STRAIGHT = "",
+  CURVED = "curved",
+}
+
+export enum Colors {
+  SOURCE = "#00ff00",
+  SINK = "#ff0000",
+  DEFAULT_NODE = "#0091ff",
+  DEFAULT_EDGE = "#ccc",
+  EDGE_LABEL = "#000",
+  RED_EDGE = "red",
+  GREEN_EDGE = "green",
+}

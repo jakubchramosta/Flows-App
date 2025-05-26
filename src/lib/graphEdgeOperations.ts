@@ -1,3 +1,4 @@
+import { Colors } from "../components/utils/consts";
 import Graph from "graphology";
 
 // Funkce pro zvýraznění aktuální cesty v grafu
@@ -10,15 +11,15 @@ export const highlightCurrentPath = (graph: Graph, path: string[]) => {
     const reverseEdge = graph.edge(v, u);
 
     if (graph.getEdgeAttributes(edge).hidden === true)
-      graph.setEdgeAttribute(reverseEdge, "color", "red");
-    else graph.setEdgeAttribute(edge, "color", "green");
+      graph.setEdgeAttribute(reverseEdge, "color", Colors.RED_EDGE);
+    else graph.setEdgeAttribute(edge, "color", Colors.GREEN_EDGE);
   }
 };
 
 // Funkce pro resetování barev hran v grafu
 export const resetEdgeColors = (graph: Graph) => {
   graph.forEachEdge((edge) => {
-    graph.setEdgeAttribute(edge, "color", "#ccc"); // Reset all edges to black
+    graph.setEdgeAttribute(edge, "color", Colors.DEFAULT_EDGE); // Reset all edges to black
   });
 };
 
