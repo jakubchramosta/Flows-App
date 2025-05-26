@@ -37,7 +37,7 @@ export const useEdmondsKarp = ({
       visited.add(node);
 
       // Procházení sousedů aktuálního uzlu
-      for (const neighbor of graph.outNeighbors(node)) {
+      for (const neighbor of graph.outNeighbors(node).sort()) {
         if (!visited.has(neighbor)) {
           // Získání hrany
           const edge = graph.edge(node, neighbor);

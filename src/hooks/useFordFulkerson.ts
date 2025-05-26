@@ -33,7 +33,7 @@ export const useFordFulkerson = ({
     visited.add(current);
 
     // Procházení sousedů aktuálního uzlu
-    for (const neighbor of graph.outNeighbors(current)) {
+    for (const neighbor of graph.outNeighbors(current).sort()) {
       if (!visited.has(neighbor)) {
         // Získání hrany
         const edge = graph.edge(current, neighbor);
@@ -82,12 +82,22 @@ export const useFordFulkerson = ({
 
       // Aktualizace toku na zpětné hraně
       if (reverseEdge) {
+        // Pokud se jedná o nereziduální hranu, aktualizujeme její kapacitu
+        // if (!graph.getEdgeAttribute(reverseEdge, "isReverse")) {
+        //   const reverseAttrs = graph.getEdgeAttributes(reverseEdge);
+        //   graph.setEdgeAttribute(
+        //     reverseEdge,
+        //     "capacity",
+        //     reverseAttrs.capacity + pathFlow,
+        //   );
+        // } else {
         const reverseAttrs = graph.getEdgeAttributes(reverseEdge);
         graph.setEdgeAttribute(
           reverseEdge,
           "flow",
           reverseAttrs.flow - pathFlow,
         );
+        // }
       } else {
         // Pokud zpětná hrana neexistuje, vytvoříme ji
         graph.addEdge(v, u, {
