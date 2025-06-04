@@ -6,7 +6,6 @@ interface SnapshotContextType {
   showPreviousSnapshot: () => void;
   showNextSnapshot: () => void;
   showSelectedSnapshot: (index: number) => void;
-  setToLastSnapshot: () => void;
 }
 
 const SnapshotContext = createContext<SnapshotContextType>(
@@ -51,14 +50,6 @@ export const SnapshotProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const setToLastSnapshot = () => {
-    const lastIndex = graphs[activeGraph].snapshots.length - 1;
-    if (lastIndex >= 0) {
-      setCurrentSnapshotIndex(lastIndex);
-      switchGraphForSnapshot(lastIndex);
-    }
-  };
-
   return (
     <SnapshotContext.Provider
       value={{
@@ -66,7 +57,6 @@ export const SnapshotProvider = ({ children }: { children: ReactNode }) => {
         showPreviousSnapshot,
         showNextSnapshot,
         showSelectedSnapshot,
-        setToLastSnapshot,
       }}
     >
       {children}

@@ -3,6 +3,7 @@ import { PlusIcon } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs.js";
 import { useGraphManagement } from "../context/GraphManagementContext";
 import { useTraining } from "../context/TrainingContext";
+import { useGraphOperations } from "../hooks/useGraphOperations";
 import {
   Tooltip,
   TooltipContent,
@@ -15,9 +16,18 @@ const TabsSwitcher = () => {
   const { graphs, addGraph, setActiveGraphIndex, activeGraph } =
     useGraphManagement();
   const { editationMode, switchEditMode } = useTraining();
+  const { resetGraph } = useGraphOperations();
+
+  const handleSwitchEditMode = () => {
+    if (editationMode) {
+      resetGraph();
+      console.log("Graph " + activeGraph + " has been reset.");
+    }
+    switchEditMode();
+  };
 
   return (
-    <div className="absolute left-5 top-5 flex flex-col gap-3">
+    <div className="absolute flex flex-col gap-3 left-5 top-5">
       <div className="flex flex-row gap-2">
         <Tabs
           defaultValue={activeGraph.toString()}
@@ -55,7 +65,10 @@ const TabsSwitcher = () => {
         </TooltipProvider>
       </div>
       <div className="flex items-center gap-2">
-        <Switch checked={editationMode} onCheckedChange={switchEditMode} />
+        <Switch
+          checked={editationMode}
+          onCheckedChange={handleSwitchEditMode}
+        />
         <p>{editationMode ? "Trénovat" : "Editace"}</p>
       </div>
     </div>
