@@ -51,6 +51,7 @@ interface GraphContextType {
   switchEditMode: () => void;
   setEdgeFlow: (edgeId: string, flow: number) => void;
   setEdgeColor: (edgeId: string, color: string) => void;
+  addEdgeToUserPath: (edgeId: string, isReverse: boolean) => void;
 }
 
 interface GraphProviderProps {
@@ -78,6 +79,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
   );
   const [currentSnapshotIndex, setCurrentSnapshotIndex] = useState<number>(0);
   const [editationMode, setEditationMode] = useState(true);
+  const [userPaths, setUserPaths] = useState<string[]>([]);
 
   const graph = graphs[activeGraph].graph;
 
@@ -223,7 +225,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
         break;
       case Algorithms.EDMONDS_KARP:
         toast.success("Používá se Edmonds-Karp algoritmus.");
-        maxFlow = useEdmondsKarp(graphInfo);
+        maxFlow = useEdmondsKarp(graphInfo, editationMode);
         break;
       default:
         maxFlow = useFordFulkerson(graphInfo);
@@ -400,7 +402,32 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
   };
 
   const switchEditMode = () => {
+    if (editationMode) {
+      resetGraph();
+      console.log("Graph " + activeGraph + " has been reset.");
+      // calculate max flow before switching from edit mode and save it for comparison
+      const correctMaxFlow = useEdmondsKarp(graphs[activeGraph], true);
+      resetGraph();
+      /*
+    TODO: udělat nový Graph sidebar, pouze pro trénování
+    Při přidávání hrany se bude kontrolovat jestli, právě přidaná hrana sdílí jeden
+    node.
+    Pokud bude chtít odebrat hranu zruší se celá aktuálně tvořená cesta.
+    kliknutím na tlačítko přidat se cestě vypočítá bottleneck a přidá se do Paths.
+    Upraví se hrany v grafu, které jsou součástí cesty.
+    Jakmile si uživatel myslí, že má hotovo, klikne na tlačítko kontrola toku.
+    Hodnota se porovná s dříve vypočítanou hodnotou toku a zobrazí se zda 
+    uživatel uspěl.
+    Možná tlačítko zpět, které odstraní poslední přidanou hranu z cesty.
+    */
+    }
     setEditationMode((prev) => !prev);
+  };
+
+  const addEdgeToUserPath = (edgeId: string, isReverse: boolean) => {
+    if (!edgeId) return;
+    if (isReverse) {
+    }
   };
 
   return (
@@ -439,6 +466,7 @@ export const GraphProvider = ({ children }: GraphProviderProps) => {
         switchEditMode,
         setEdgeFlow,
         setEdgeColor,
+        addEdgeToUserPath,
       }}
     >
       {children}
