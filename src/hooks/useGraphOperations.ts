@@ -6,7 +6,7 @@ import { useSnapshot } from "../context/SnapshotContext";
 export const useGraphOperations = () => {
   const { currentGraph, updateGraphInfo } = useGraphManagement();
   const { calculateMaxFlow } = useAlgorithm();
-  const { setToLastSnapshot } = useSnapshot();
+  const { showSelectedSnapshot } = useSnapshot(); // ✅ Používáme stávající funkci
 
   const addToPaths = (newPath: string[], itsFlow: number) => {
     const newPaths = [...currentGraph.paths, { path: newPath, flow: itsFlow }];
@@ -39,7 +39,11 @@ export const useGraphOperations = () => {
   const calculateAndUpdateMaxFlow = () => {
     const maxFlow = calculateMaxFlow(currentGraph, false);
     updateGraphInfo({ maxFlow });
-    setToLastSnapshot(); // Nastaví na poslední snapshot
+    const lastIndex = currentGraph.snapshots.length - 1;
+    if (lastIndex >= 0) {
+      showSelectedSnapshot(lastIndex);
+    }
+
     updateEdgeLabels();
   };
 
