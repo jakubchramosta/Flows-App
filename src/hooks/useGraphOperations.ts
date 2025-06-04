@@ -6,7 +6,7 @@ import { useSnapshot } from "../context/SnapshotContext";
 export const useGraphOperations = () => {
   const { currentGraph, updateGraphInfo } = useGraphManagement();
   const { calculateMaxFlow } = useAlgorithm();
-  const { showSelectedSnapshot } = useSnapshot(); // ✅ Používáme stávající funkci
+  const { showSelectedSnapshot } = useSnapshot();
 
   const addToPaths = (newPath: string[], itsFlow: number) => {
     const newPaths = [...currentGraph.paths, { path: newPath, flow: itsFlow }];
