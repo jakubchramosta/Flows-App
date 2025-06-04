@@ -33,12 +33,11 @@ const GraphSidebar: React.FC<GraphSidebarProps> = ({ isVisible }) => {
             Ford-Fulkerson
           </SelectItem>
           <SelectItem value={Algorithms.EDMONDS_KARP}>Edmonds-Karp</SelectItem>
-          {/* <SelectItem value="test3">Dinic's algoritmus</SelectItem> */}
         </SelectContent>
       </Select>
       <div className="rounded-md border border-input bg-background p-2.5 px-3 shadow-sm">
         <h1>Maximální tok</h1>
-        <p className="my-1 text-2xl font-bold text-center">{currentMaxFlow}</p>
+        <p className="my-1 text-center text-2xl font-bold">{currentMaxFlow}</p>
       </div>
       <div className="rounded-md border border-input bg-background p-2.5 shadow-sm">
         <h1 className="pb-2">Postup algoritmu</h1>

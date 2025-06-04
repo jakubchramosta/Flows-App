@@ -6,13 +6,10 @@ import {
 import { GraphInfo } from "../context/GraphContext";
 
 // Funkce pro výpočet maximálního toku pomocí Edmonds-Karp algoritmu
-export const useEdmondsKarp = ({
-  graph,
-  source,
-  sink,
-  paths,
-  snapshots,
-}: GraphInfo) => {
+export const useEdmondsKarp = (
+  { graph, source, sink, paths, snapshots }: GraphInfo,
+  editMode: boolean,
+) => {
   // Proměnná pro uchování maximálního toku
   let maxFlow = 0;
 
@@ -100,23 +97,25 @@ export const useEdmondsKarp = ({
     // Přidání toku do celkového maximálního toku
     maxFlow += pathFlow;
 
-    // Uložení nalezené cesty a jejího toku do pole paths
-    paths.push({ path, flow: pathFlow });
+    if (!editMode) {
+      // Uložení nalezené cesty a jejího toku do pole paths
+      paths.push({ path, flow: pathFlow });
 
-    // Zvýraznění aktuální cesty
-    highlightCurrentPath(graph, path);
+      // Zvýraznění aktuální cesty
+      highlightCurrentPath(graph, path);
 
-    // Aktualizace popisků hran
-    updateEdgeLabels(graph);
+      // Aktualizace popisků hran
+      updateEdgeLabels(graph);
 
-    // Uložení aktuálního stavu grafu do snapshots
-    snapshots.push(graph.copy());
+      // Uložení aktuálního stavu grafu do snapshots
+      snapshots.push(graph.copy());
 
-    // Resetování barev hran pro další iteraci
-    resetEdgeColors(graph);
+      // Resetování barev hran pro další iteraci
+      resetEdgeColors(graph);
 
-    // Ladící výpisy
-    console.log(`Path: ${path.join(" -> ")}, Flow: ${pathFlow}`);
+      // Ladící výpisy
+      console.log(`Path: ${path.join(" -> ")}, Flow: ${pathFlow}`);
+    }
   }
 
   // Ladící výpisy
