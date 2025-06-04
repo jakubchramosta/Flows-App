@@ -1,4 +1,4 @@
-import { useContext, useRef } from "react";
+import { useRef } from "react";
 import { useGraphManagement } from "../context/GraphManagementContext";
 import { useSnapshot } from "../context/SnapshotContext";
 import { useTraining } from "../context/TrainingContext";
@@ -53,7 +53,7 @@ const BottomToolBar = ({
   return (
     <TooltipProvider>
       <div className="absolute bottom-3 left-0 right-0 mx-3 flex min-w-fit items-center justify-between rounded-md border border-input bg-background p-2.5 shadow-sm">
-        <div id="left" className="flex w-full justify-start">
+        <div id="left" className="flex justify-start w-full">
           <div className="flex items-center gap-4">
             <Button
               variant={ButtonVariants.OUTLINE}
@@ -94,7 +94,7 @@ const BottomToolBar = ({
             )}
           </div>
         </div>
-        <div id="middle" className="flex w-full justify-center">
+        <div id="middle" className="flex justify-center w-full">
           {editationMode ? (
             <div className="flex items-center gap-12">
               <BottomToolBarButton
@@ -144,7 +144,7 @@ const BottomToolBar = ({
             </Button>
           )}
         </div>
-        <div className="flex w-full justify-end">
+        <div className="flex justify-end w-full">
           {editationMode && (
             <div id="right" className="flex justify-end gap-4">
               <Button
