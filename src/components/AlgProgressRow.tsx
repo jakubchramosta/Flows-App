@@ -1,7 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import SquareWrapper from "./SquareWrapper";
-import React, { useContext } from "react";
-import GraphContext from "../context/GraphContext";
+import React from "react";
+import { useSnapshot } from "../context/SnapshotContext";
 
 interface AlgProgressRowProps {
   path: {
@@ -19,7 +19,7 @@ const AlgProgressRow: React.FC<AlgProgressRowProps> = ({
   isActive,
   index,
 }) => {
-  const { showSelectedSnapshot } = useContext(GraphContext);
+  const { showSelectedSnapshot } = useSnapshot();
 
   return (
     <button
@@ -42,7 +42,7 @@ const AlgProgressRow: React.FC<AlgProgressRowProps> = ({
         ))}
       </div>
       <p className="font-bold">=</p>
-      <div className="grid w-5 h-5 p-3 text-base border rounded-full shadow-sm place-content-center border-input bg-background">
+      <div className="grid h-5 w-5 place-content-center rounded-full border border-input bg-background p-3 text-base shadow-sm">
         <p className="font-bold">{path.flow}</p>
       </div>
     </button>

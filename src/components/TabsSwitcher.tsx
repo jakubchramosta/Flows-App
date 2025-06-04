@@ -1,8 +1,8 @@
 import { Button } from "./ui/button.js";
 import { PlusIcon } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs.js";
-import GraphContext from "../context/GraphContext.js";
-import { useContext } from "react";
+import { useGraphManagement } from "../context/GraphManagementContext";
+import { useTraining } from "../context/TrainingContext";
 import {
   Tooltip,
   TooltipContent,
@@ -12,17 +12,12 @@ import {
 import { Switch } from "./ui/switch.js";
 
 const TabsSwitcher = () => {
-  const {
-    graphs,
-    addGraph,
-    setActiveGraphIndex,
-    activeGraph,
-    editationMode,
-    switchEditMode,
-  } = useContext(GraphContext);
+  const { graphs, addGraph, setActiveGraphIndex, activeGraph } =
+    useGraphManagement();
+  const { editationMode, switchEditMode } = useTraining();
 
   return (
-    <div className="absolute flex flex-col gap-3 left-5 top-5">
+    <div className="absolute left-5 top-5 flex flex-col gap-3">
       <div className="flex flex-row gap-2">
         <Tabs
           defaultValue={activeGraph.toString()}

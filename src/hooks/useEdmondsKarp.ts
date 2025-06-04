@@ -3,7 +3,7 @@ import {
   resetEdgeColors,
   updateEdgeLabels,
 } from "../lib/graphEdgeOperations";
-import { GraphInfo } from "../context/GraphContext";
+import { GraphInfo } from "../context/GraphManagementContext";
 
 // Funkce pro výpočet maximálního toku pomocí Edmonds-Karp algoritmu
 export const useEdmondsKarp = (

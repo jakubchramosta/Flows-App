@@ -1,0 +1,52 @@
+import { Colors } from "../components/utils/consts";
+import { useGraphManagement } from "../context/GraphManagementContext";
+import { useAlgorithm } from "../context/AlgorithmContext";
+import { useSnapshot } from "../context/SnapshotContext";
+
+export const useGraphOperations = () => {
+  const { currentGraph, updateGraphInfo } = useGraphManagement();
+  const { calculateMaxFlow } = useAlgorithm();
+  const { setToLastSnapshot } = useSnapshot();
+
+  const addToPaths = (newPath: string[], itsFlow: number) => {
+    const newPaths = [...currentGraph.paths, { path: newPath, flow: itsFlow }];
+    updateGraphInfo({ paths: newPaths });
+  };
+
+  const resetGraph = () => {
+    currentGraph.graph.forEachEdge((edge) => {
+      currentGraph.graph.setEdgeAttribute(edge, "flow", 0);
+      currentGraph.graph.setEdgeAttribute(edge, "color", Colors.DEFAULT_EDGE);
+    });
+
+    updateGraphInfo({
+      maxFlow: 0,
+      paths: [],
+      snapshots: [],
+    });
+
+    updateEdgeLabels();
+  };
+
+  const updateEdgeLabels = () => {
+    currentGraph.graph.forEachEdge((edge) => {
+      const flow = currentGraph.graph.getEdgeAttribute(edge, "flow");
+      const capacity = currentGraph.graph.getEdgeAttribute(edge, "capacity");
+      currentGraph.graph.setEdgeAttribute(edge, "label", `${flow}/${capacity}`);
+    });
+  };
+
+  const calculateAndUpdateMaxFlow = () => {
+    const maxFlow = calculateMaxFlow(currentGraph, false);
+    updateGraphInfo({ maxFlow });
+    setToLastSnapshot(); // Nastaví na poslední snapshot
+    updateEdgeLabels();
+  };
+
+  return {
+    addToPaths,
+    resetGraph,
+    updateEdgeLabels,
+    calculateAndUpdateMaxFlow,
+  };
+};

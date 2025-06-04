@@ -5,7 +5,8 @@ import {
   DropdownMenuItem,
 } from "./ui/dropdown-menu";
 import { useOnClickOutside } from "../hooks/useOnClickOutside";
-import GraphContext from "../context/GraphContext";
+import { useNodes } from "../context/NodesContext";
+import { useEdges } from "../context/EdgesContext";
 import {
   MoveLeft,
   MoveLeftIcon,
@@ -35,16 +36,14 @@ const ContextMenu = ({
   isNode,
   id,
 }: ContextMenuProps) => {
+  const { removeNode, setSource, setSink } = useNodes();
   const {
     removeEdge,
-    removeNode,
     setFirstNodeInEdge,
     setAddingEdgeMode,
-    setSource,
-    setSink,
     setEdgeType,
     setEdgeColor,
-  } = useContext(GraphContext);
+  } = useEdges();
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -89,11 +88,6 @@ const ContextMenu = ({
     setIsOpen(false);
   };
 
-  const handleFlowChangeOnClick = () => {
-    setInputMenuOpen(true);
-    setIsOpen(false);
-  };
-
   const handleSetEdgeColor = (id: string | null, color: string) => {
     if (!id) return;
     setEdgeColor(id, color);
@@ -119,25 +113,25 @@ const ContextMenu = ({
           {isNode ? (
             <>
               <DropdownMenuItem
-                className="flex justify-between w-44"
+                className="flex w-44 justify-between"
                 onClick={() => handleFirstNodeForEdge(id)}
               >
                 Přidat hanu <PlusIcon />
               </DropdownMenuItem>
               <DropdownMenuItem
-                className="flex justify-between w-44"
+                className="flex w-44 justify-between"
                 onClick={() => handleMakrAsSource(id)}
               >
                 Označit jako ZDROJ
               </DropdownMenuItem>
               <DropdownMenuItem
-                className="flex justify-between w-44"
+                className="flex w-44 justify-between"
                 onClick={() => handleMarkAsSink(id)}
               >
                 Označit jako CÍL
               </DropdownMenuItem>
               <DropdownMenuItem
-                className="flex justify-between w-44"
+                className="flex w-44 justify-between"
                 onClick={() => handleRemoveNode(id)}
               >
                 Odstranit bod <Trash2Icon />
@@ -146,43 +140,43 @@ const ContextMenu = ({
           ) : (
             <>
               <DropdownMenuItem
-                className="flex justify-between w-36"
+                className="flex w-36 justify-between"
                 onClick={() => handleCapacityChangeOnClick()}
               >
                 Změnit kapacitu <PencilIcon />
               </DropdownMenuItem>
               <DropdownMenuItem
-                className="flex justify-between w-36"
+                className="flex w-36 justify-between"
                 onClick={() => handleSetEdgeType(id, EdgeTypes.STRAIGHT)}
               >
                 Narovnat <MoveLeftIcon />
               </DropdownMenuItem>
               <DropdownMenuItem
-                className="flex justify-between w-36"
+                className="flex w-36 justify-between"
                 onClick={() => handleSetEdgeType(id, EdgeTypes.CURVED)}
               >
                 Zakřivit <UndoIcon />
               </DropdownMenuItem>
               <DropdownMenuItem
-                className="flex justify-between w-36"
+                className="flex w-36 justify-between"
                 onClick={() => handleSetEdgeColor(id, Colors.GREEN_EDGE)}
               >
                 Obarvit na <ColorDot color={Colors.GREEN_EDGE} />
               </DropdownMenuItem>
               <DropdownMenuItem
-                className="flex justify-between w-36"
+                className="flex w-36 justify-between"
                 onClick={() => handleSetEdgeColor(id, Colors.RED_EDGE)}
               >
                 Obarvit na <ColorDot color={Colors.RED_EDGE} />
               </DropdownMenuItem>
               <DropdownMenuItem
-                className="flex justify-between w-36"
+                className="flex w-36 justify-between"
                 onClick={() => handleSetEdgeColor(id, Colors.DEFAULT_EDGE)}
               >
                 Obarvit na <ColorDot color={Colors.DEFAULT_EDGE} />
               </DropdownMenuItem>
               <DropdownMenuItem
-                className="flex justify-between w-36"
+                className="flex w-36 justify-between"
                 onClick={() => handleRemoveEdge(id)}
               >
                 Odstranit hranu <Trash2Icon />

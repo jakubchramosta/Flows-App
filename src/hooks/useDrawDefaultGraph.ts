@@ -1,5 +1,5 @@
 import Graph from "graphology";
-import { GraphInfo } from "../context/GraphContext";
+import { GraphInfo } from "../context/GraphManagementContext";
 import { GraphTypes } from "../components/utils/consts";
 
 export const useDrawDefaultGraph = (

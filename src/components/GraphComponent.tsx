@@ -1,5 +1,9 @@
-import GraphContext from "../context/GraphContext";
-import { useEffect, useRef, useContext, useState } from "react";
+import { useGraph } from "../context/GraphContext";
+import { useGraphManagement } from "../context/GraphManagementContext";
+import { useTraining } from "../context/TrainingContext";
+import { useNodes } from "../context/NodesContext";
+import { useEdges } from "../context/EdgesContext";
+import { useEffect, useRef, useState } from "react";
 import Sigma from "sigma";
 import { useDrawDefaultGraph } from "../hooks/useDrawDefaultGraph";
 import { useHandleClicks } from "../hooks/useHadleClicks";
@@ -18,18 +22,14 @@ interface GraphComponentProps {
 const GraphComponent = ({ isSideBarVisible }: GraphComponentProps) => {
   // Reference to the container div for rendering the graph
   const containerRef = useRef<HTMLDivElement>(null);
-  const {
-    graph,
-    graphs,
-    addNode,
-    addEdge,
-    clearGraph,
-    firstNodeInEdge,
-    setAddingEdgeMode,
-    addingEdgeMode,
-    editationMode,
-    addEdgeToUserPath,
-  } = useContext(GraphContext);
+
+  // Use new context hooks
+  const { graph } = useGraph();
+  const { graphs, clearGraph } = useGraphManagement();
+  const { editationMode, addEdgeToUserPath } = useTraining();
+  const { addNode } = useNodes();
+  const { addEdge, firstNodeInEdge, setAddingEdgeMode, addingEdgeMode } =
+    useEdges();
 
   // State variables for dragging, context menu, and rendering
   const [isDragging, setIsDragging] = useState(false);
@@ -234,7 +234,7 @@ const GraphComponent = ({ isSideBarVisible }: GraphComponentProps) => {
       {/* Graph container */}
       <div
         ref={containerRef}
-        className="h-screen w-screen"
+        className="w-screen h-screen"
         onContextMenu={(e) => e.preventDefault()} // Disable default context menu
       />
     </>
