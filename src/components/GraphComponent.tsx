@@ -179,20 +179,11 @@ const GraphComponent = ({ isSideBarVisible }: GraphComponentProps) => {
         graph.setEdgeAttribute(e.edge, "color", Colors.GREEN_EDGE);
       });
 
-      // Handle left double-click on a edge in training mode
-      sigma.on("doubleClickEdge", (e) => {
-        // @ts-ignore
-        if (e.event.original.button === 2) return;
-        // remove edge from list of edges
-      });
-
       // Handle right-click on a edge in training mode
-      sigma.on("rightClickEdge", (e) => {});
-
-      // Handle right double-click on a edge in training mode
-      sigma.on("doubleClickEdge", (e) => {
-        // @ts-ignore
-        if (e.event.original.button === 1) return;
+      sigma.on("rightClickEdge", (e) => {
+        e.event.original.preventDefault();
+        addEdgeToUserPath(e.edge, false);
+        graph.setEdgeAttribute(e.edge, "color", Colors.RED_EDGE);
       });
     }
 
@@ -234,7 +225,7 @@ const GraphComponent = ({ isSideBarVisible }: GraphComponentProps) => {
       {/* Graph container */}
       <div
         ref={containerRef}
-        className="h-screen w-screen"
+        className="w-screen h-screen"
         onContextMenu={(e) => e.preventDefault()} // Disable default context menu
       />
     </>
