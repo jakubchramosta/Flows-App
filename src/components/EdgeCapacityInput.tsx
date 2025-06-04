@@ -1,8 +1,9 @@
 import { useOnClickOutside } from "../hooks/useOnClickOutside";
-import { useContext, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import GraphContext from "../context/GraphContext";
+import { useGraph } from "../context/GraphContext";
+import { useEdges } from "../context/EdgesContext";
 import { toast } from "sonner";
 
 interface EdgeCapacityInputProps {
@@ -16,7 +17,8 @@ const EdgeCapacityInput = ({
   setIsOpen,
   id,
 }: EdgeCapacityInputProps) => {
-  const { graph, setEdgeCapacity } = useContext(GraphContext);
+  const { graph } = useGraph();
+  const { setEdgeCapacity } = useEdges();
   const [inputValue, setInputValue] = useState<number>(
     graph.getEdgeAttribute(id, "capacity") || 0,
   );

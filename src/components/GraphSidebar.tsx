@@ -1,4 +1,6 @@
-import GraphContext from "../context/GraphContext";
+import { useGraphManagement } from "../context/GraphManagementContext";
+import { useAlgorithm } from "../context/AlgorithmContext";
+import { useSnapshot } from "../context/SnapshotContext";
 import AlgProgressRow from "./AlgProgressRow";
 import {
   Select,
@@ -7,7 +9,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { useContext } from "react";
 import { Algorithms } from "./utils/consts";
 
 interface GraphSidebarProps {
@@ -15,8 +16,10 @@ interface GraphSidebarProps {
 }
 
 const GraphSidebar: React.FC<GraphSidebarProps> = ({ isVisible }) => {
-  const { graphs, activeGraph, setSelectedAlgorithm, currentSnapshotIndex } =
-    useContext(GraphContext);
+  const { graphs, activeGraph } = useGraphManagement();
+  const { setSelectedAlgorithm } = useAlgorithm();
+  const { currentSnapshotIndex } = useSnapshot();
+
   const currentMaxFlow = graphs[activeGraph].maxFlow;
   const discoveredPaths = graphs[activeGraph].paths;
 

@@ -1,5 +1,9 @@
-import { useContext, useRef, useState } from "react";
-import GraphContext from "../context/GraphContext.js";
+import { useContext, useRef } from "react";
+import { useGraphManagement } from "../context/GraphManagementContext";
+import { useSnapshot } from "../context/SnapshotContext";
+import { useTraining } from "../context/TrainingContext";
+import { useGraphOperations } from "../hooks/useGraphOperations";
+import { useGraphIO } from "../hooks/useGraphIO";
 import { useDrawDefaultGraph } from "../hooks/useDrawDefaultGraph";
 import { Button } from "./ui/button.js";
 import {
@@ -30,20 +34,14 @@ const BottomToolBar = ({
   handleInfoClick,
   openSidebar,
 }: BottomToolBarProps) => {
-  const {
-    graphs,
-    activeGraph,
-    clearGraph,
-    calculateMaxFlow,
-    resetGraph,
-    currentSnapshotIndex,
-    showPreviousSnapshot,
-    showNextSnapshot,
-    deleteCurrentGraph,
-    exportCurrentGraph,
-    importGraph,
-    editationMode,
-  } = useContext(GraphContext);
+  const { graphs, activeGraph, clearGraph, deleteCurrentGraph } =
+    useGraphManagement();
+  const { currentSnapshotIndex, showPreviousSnapshot, showNextSnapshot } =
+    useSnapshot();
+  const { editationMode } = useTraining();
+  const { calculateAndUpdateMaxFlow, resetGraph } = useGraphOperations();
+  const { exportCurrentGraph, importGraph } = useGraphIO();
+
   const snapshots = graphs[activeGraph].snapshots;
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -55,7 +53,7 @@ const BottomToolBar = ({
   return (
     <TooltipProvider>
       <div className="absolute bottom-3 left-0 right-0 mx-3 flex min-w-fit items-center justify-between rounded-md border border-input bg-background p-2.5 shadow-sm">
-        <div id="left" className="flex justify-start w-full">
+        <div id="left" className="flex w-full justify-start">
           <div className="flex items-center gap-4">
             <Button
               variant={ButtonVariants.OUTLINE}
@@ -96,7 +94,7 @@ const BottomToolBar = ({
             )}
           </div>
         </div>
-        <div id="middle" className="flex justify-center w-full">
+        <div id="middle" className="flex w-full justify-center">
           {editationMode ? (
             <div className="flex items-center gap-12">
               <BottomToolBarButton
@@ -105,7 +103,7 @@ const BottomToolBar = ({
                 icon={<PlayIcon />}
                 tooltipText="Spustit algoritmus"
                 onClick={() => {
-                  calculateMaxFlow(graphs[activeGraph]);
+                  calculateAndUpdateMaxFlow();
                   openSidebar();
                 }}
                 isDisabled={graphs[activeGraph].snapshots.length != 0}
@@ -146,7 +144,7 @@ const BottomToolBar = ({
             </Button>
           )}
         </div>
-        <div className="flex justify-end w-full">
+        <div className="flex w-full justify-end">
           {editationMode && (
             <div id="right" className="flex justify-end gap-4">
               <Button
