@@ -26,6 +26,7 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
   const addEdgeToUserPath = (edgeId: string, isReverse: boolean) => {
     if (!edgeId) return;
     setUserPath((prev) => [...prev, edgeId]);
+    console.log(editationMode);
     console.log(
       `Edge ${edgeId} ${isReverse ? "reversed" : "added"} to user path`,
       userPath,
