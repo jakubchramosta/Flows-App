@@ -38,9 +38,15 @@ const GraphSidebar: React.FC<GraphSidebarProps> = ({ isVisible }) => {
           <SelectItem value={Algorithms.EDMONDS_KARP}>Edmonds-Karp</SelectItem>
         </SelectContent>
       </Select>
-      <div className="rounded-md border border-input bg-background p-2.5 px-3 shadow-sm">
-        <h1>Maximální tok</h1>
-        <p className="my-1 text-center text-2xl font-bold">{currentMaxFlow}</p>
+      <div className="flex items-center justify-center rounded-md border border-input bg-background p-2.5 px-3 shadow-sm">
+        <div className="flex justify-start w-full gap-2">
+          <h1>Maximální tok</h1>
+        </div>
+        <div className="flex justify-center w-full">
+          <p className="my-1 text-2xl font-bold text-center">
+            {currentMaxFlow}
+          </p>
+        </div>
       </div>
       <div className="rounded-md border border-input bg-background p-2.5 shadow-sm">
         <h1 className="pb-2">Postup algoritmu</h1>
