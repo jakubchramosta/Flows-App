@@ -10,7 +10,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip.js";
-import { Switch } from "./ui/switch.js";
 
 const TabsSwitcher = () => {
   const { graphs, addGraph, setActiveGraphIndex, activeGraph } =
@@ -64,12 +63,10 @@ const TabsSwitcher = () => {
           </Tooltip>
         </TooltipProvider>
       </div>
-      <div className="flex items-center gap-2">
-        <Switch
-          checked={!editationMode}
-          onCheckedChange={handleSwitchEditMode}
-        />
-        <p>{editationMode ? "Editace" : "Trénink"}</p>
+      <div className="flex items-center">
+        <Button variant="outline" onClick={handleSwitchEditMode}>
+          <p>{editationMode ? "Trénink" : "Editace"}</p>
+        </Button>
       </div>
     </div>
   );

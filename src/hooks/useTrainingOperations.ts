@@ -1,22 +1,25 @@
 import { useGraph } from "../context/GraphContext";
 import { useGraphManagement } from "../context/GraphManagementContext";
-import { useTraining } from "../context/TrainingContext";
+import { UserPath, useTraining } from "../context/TrainingContext";
 import { useFordFulkerson } from "./useFordFulkerson";
-import { isValidAugmentingPath, calculatePathFlow } from "../lib/graphOperations";
+import {
+  isValidAugmentingPath,
+  calculatePathFlow,
+} from "../lib/graphOperations";
 
 export const useTrainingOperations = () => {
   const { graph } = useGraph();
   const { currentGraph } = useGraphManagement();
-  const { userPath, userTotalFlow } = useTraining();
+  const { userPath, setUserPath, userTotalFlow } = useTraining();
 
   const validateCurrentPath = (): boolean => {
     if (!graph || userPath.length < 2) return false;
-    return isValidAugmentingPath(userPath, graph);
+    return isValidAugmentingPath(userPath[userPath.length - 1].path, graph);
   };
 
   const calculateCurrentPathFlow = (): number => {
     if (!graph || !validateCurrentPath()) return 0;
-    return calculatePathFlow(userPath, graph);
+    return calculatePathFlow(userPath[userPath.length - 1].path, graph);
   };
 
   const calculateOptimalMaxFlow = (): number => {
@@ -24,9 +27,9 @@ export const useTrainingOperations = () => {
     const graphCopy = graph.copy();
     const graphInfoCopy = {
       ...currentGraph,
-      graph: graphCopy
+      graph: graphCopy,
     };
-    
+
     return useFordFulkerson(graphInfoCopy);
   };
 
@@ -35,10 +38,29 @@ export const useTrainingOperations = () => {
     return userTotalFlow >= optimalFlow;
   };
 
+  const addEdgeToUserPath = (edgeId: string, isReverse: boolean) => {
+    if (!edgeId) return;
+
+    const edgeToAdd: UserPath = {
+      path: [edgeId],
+      flow: 0,
+    };
+
+    const newPath = [...userPath, edgeToAdd];
+    console.log(
+      `Edge ${edgeId} ${isReverse ? "reversed" : "added"} to user path`,
+      newPath,
+    );
+    console.log("Current user path:", newPath);
+
+    setUserPath(newPath);
+  };
+
   return {
     validateCurrentPath,
     calculateCurrentPathFlow,
     calculateOptimalMaxFlow,
     isUserFlowOptimal,
+    addEdgeToUserPath,
   };
 };

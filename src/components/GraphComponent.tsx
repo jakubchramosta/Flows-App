@@ -14,6 +14,7 @@ import EdgeCapacityInput from "./EdgeCapacityInput";
 import { Colors, GraphTypes } from "./utils/consts";
 import { toast } from "sonner";
 import { EdgeCurvedArrowProgram } from "@sigma/edge-curve";
+import { useTrainingOperations } from "../hooks/useTrainingOperations";
 
 interface GraphComponentProps {
   isSideBarVisible: boolean;
@@ -26,10 +27,11 @@ const GraphComponent = ({ isSideBarVisible }: GraphComponentProps) => {
   // Use new context hooks
   const { graph } = useGraph();
   const { graphs, clearGraph } = useGraphManagement();
-  const { editationMode, addEdgeToUserPath } = useTraining();
+  const { editationMode } = useTraining();
   const { addNode } = useNodes();
   const { addEdge, firstNodeInEdge, setAddingEdgeMode, addingEdgeMode } =
     useEdges();
+  const { addEdgeToUserPath } = useTrainingOperations();
 
   // State variables for dragging, context menu, and rendering
   const [isDragging, setIsDragging] = useState(false);
