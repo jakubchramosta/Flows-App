@@ -10,6 +10,7 @@ import { Button } from "./components/ui/button";
 import { ButtonVariants } from "./components/utils/consts";
 import { ChevronRightIcon, Menu } from "lucide-react";
 import { useTraining } from "./context/TrainingContext";
+import TrainingSidebar from "./components/TrainingSidebar";
 
 const AppContent = () => {
   const [showInfo, setShowInfo] = useState(false);
@@ -45,14 +46,20 @@ const AppContent = () => {
     <>
       <GraphComponent isSideBarVisible={isSidebarVisible} />
       <TabsSwitcher />
-      <Button
-        onClick={toggleSidebar}
-        className="absolute right-5 top-5 z-50 h-9 w-[38px] rounded-md border border-input bg-white p-2 text-black shadow-md"
-        variant={ButtonVariants.OUTLINE}
-      >
-        {isSidebarVisible ? <ChevronRightIcon /> : <Menu />}
-      </Button>
-      <GraphSidebar isVisible={isSidebarVisible} />
+      {editationMode ? (
+        <>
+          <Button
+            onClick={toggleSidebar}
+            className="absolute right-5 top-5 z-50 h-9 w-[38px] rounded-md border border-input bg-white p-2 text-black shadow-md"
+            variant={ButtonVariants.OUTLINE}
+          >
+            {isSidebarVisible ? <ChevronRightIcon /> : <Menu />}
+          </Button>
+          <GraphSidebar isVisible={isSidebarVisible} />
+        </>
+      ) : (
+        <TrainingSidebar />
+      )}
       <BottomToolBar
         handleInfoClick={() => setShowInfo(true)}
         openSidebar={() => setIsSidebarVisible(true)}

@@ -26,16 +26,56 @@ export const isValidAugmentingPath = (
 export const updateFlowAlongPath = (
   path: string[],
   graph: Graph,
-  flow: number,
-) => {
+  pathFlow: number,
+): void => {
+  for (let i = 0; i < path.length - 1; i++) {
+    const u = path[i];
+    const v = path[i + 1];
+    const edge = graph.edge(u, v);
+
+    // Aktualizace toku na přímé hraně
+    const currentFlow = graph.getEdgeAttribute(edge, "flow");
+    graph.setEdgeAttribute(edge, "flow", currentFlow + pathFlow);
+
+    // Aktualizace zpětné hrany
+    const reverseEdge = graph.edge(v, u);
+    if (reverseEdge) {
+      const reverseFlow = graph.getEdgeAttribute(reverseEdge, "flow");
+      graph.setEdgeAttribute(reverseEdge, "flow", reverseFlow - pathFlow);
+    }
+  }
+};
+
+export const isPathComplete = (
+  path: string[],
+  source: string,
+  sink: string,
+): boolean => {
+  return (
+    path.length >= 2 && path[0] === source && path[path.length - 1] === sink
+  );
+};
+
+export const calculatePathFlow = (path: string[], graph: Graph): number => {
+  let minFlow = Infinity;
   for (let i = 0; i < path.length - 1; i++) {
     const source = path[i];
     const target = path[i + 1];
+
+    if (!graph.hasEdge(source, target)) {
+      return 0; // Nevalidní cesta
+    }
+
     const edge = graph.edge(source, target);
-    graph.setEdgeAttribute(
-      edge,
-      "flow",
-      graph.getEdgeAttribute(edge, "flow") + flow,
-    );
+    const capacity = graph.getEdgeAttribute(edge, "capacity");
+    const flow = graph.getEdgeAttribute(edge, "flow");
+    const residualCapacity = capacity - flow;
+
+    if (residualCapacity <= 0) {
+      return 0; // Žádná zbytková kapacita
+    }
+
+    minFlow = Math.min(minFlow, residualCapacity);
   }
+  return minFlow;
 };

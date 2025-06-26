@@ -6,6 +6,7 @@ interface TrainingContextType {
   addEdgeToUserPath: (edgeId: string, isReverse: boolean) => void;
   userPath: string[];
   clearUserPath: () => void;
+  userTotalFlow: number;
 }
 
 const TrainingContext = createContext<TrainingContextType>(
@@ -15,22 +16,27 @@ const TrainingContext = createContext<TrainingContextType>(
 export const TrainingProvider = ({ children }: { children: ReactNode }) => {
   const [editationMode, setEditationMode] = useState(true);
   const [userPath, setUserPath] = useState<string[]>([]);
+  const [userTotalFlow, setUserTotalFlow] = useState(0);
 
   const switchEditMode = () => {
     if (editationMode) {
-      setUserPath([]);
+      clearUserPath();
     }
     setEditationMode((prev) => !prev);
   };
 
   const addEdgeToUserPath = (edgeId: string, isReverse: boolean) => {
     if (!edgeId) return;
-    setUserPath((prev) => [...prev, edgeId]);
-    console.log(editationMode);
-    console.log(
-      `Edge ${edgeId} ${isReverse ? "reversed" : "added"} to user path`,
-      userPath,
-    );
+
+    setUserPath((prev) => {
+      const newPath = [...prev, edgeId];
+      console.log(
+        `Edge ${edgeId} ${isReverse ? "reversed" : "added"} to user path`,
+        newPath, // ✅ Správný nový stav
+      );
+      console.log("Current user path:", newPath); // ✅ Správný nový stav
+      return newPath;
+    });
   };
 
   const clearUserPath = () => {
@@ -45,6 +51,7 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
         addEdgeToUserPath,
         userPath,
         clearUserPath,
+        userTotalFlow,
       }}
     >
       {children}

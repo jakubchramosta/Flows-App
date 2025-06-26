@@ -78,7 +78,7 @@ const GraphComponent = ({ isSideBarVisible }: GraphComponentProps) => {
     if (sigma) {
       sigma.getCamera().setState({
         ratio: 1.45,
-        x: isSideBarVisible ? 0.7 : 0.5,
+        x: isSideBarVisible || !editationMode ? 0.7 : 0.5,
         y: 0.5,
       });
     }
@@ -182,7 +182,7 @@ const GraphComponent = ({ isSideBarVisible }: GraphComponentProps) => {
       // Handle right-click on a edge in training mode
       sigma.on("rightClickEdge", (e) => {
         e.event.original.preventDefault();
-        addEdgeToUserPath(e.edge, false);
+        addEdgeToUserPath(e.edge, true);
         graph.setEdgeAttribute(e.edge, "color", Colors.RED_EDGE);
       });
     }
