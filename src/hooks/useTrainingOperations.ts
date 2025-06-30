@@ -69,6 +69,7 @@ export const useTrainingOperations = () => {
 
     setUserPath(newPath);
     graph.setEdgeAttribute(edgeId, "color", Colors.GREEN_EDGE);
+    console.log("user path after adding edge:", userPath);
   };
 
   useEffect(() => {
@@ -76,6 +77,7 @@ export const useTrainingOperations = () => {
     if (editationMode === false) {
       setOptimalMaxFlow(calculateOptimalMaxFlow());
       setUserPath([currentGraph.source]);
+      console.log("user path set to start: ", userPath);
     }
   }, [editationMode]);
 
