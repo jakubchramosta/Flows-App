@@ -96,6 +96,7 @@ export const useEdmondsKarp = (
 
     // Přidání toku do celkového maximálního toku
     maxFlow += pathFlow;
+    console.log(`Path: ${path.join(" -> ")}, Flow: ${pathFlow}`);
 
     if (editMode) {
       // Uložení nalezené cesty a jejího toku do pole paths
@@ -123,5 +124,6 @@ export const useEdmondsKarp = (
   console.log(paths);
 
   // Vrácení maximálního toku
+  console.log("Final Max Flow:", maxFlow);
   return maxFlow;
 };
