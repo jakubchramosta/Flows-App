@@ -24,9 +24,6 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
   const [userTotalFlow, setUserTotalFlow] = useState(0);
 
   const switchEditMode = () => {
-    if (editationMode) {
-      clearUserPath();
-    }
     setEditationMode((prev) => !prev);
   };
 

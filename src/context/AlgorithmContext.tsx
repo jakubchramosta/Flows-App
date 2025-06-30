@@ -11,6 +11,7 @@ interface AlgorithmContextType {
   setSelectedAlgorithm: (alg: string) => void;
   calculateMaxFlow: (graphInfo: GraphInfo, editationMode: boolean) => number;
   bfsCheckPath: (graph: Graph, source: string, sink: string) => boolean;
+  checkForSourceAndSink: (graphInfo: GraphInfo) => boolean;
 }
 
 const AlgorithmContext = createContext<AlgorithmContextType>(
@@ -51,12 +52,7 @@ export const AlgorithmProvider = ({ children }: { children: ReactNode }) => {
     graphInfo: GraphInfo,
     editationMode: boolean,
   ): number => {
-    if (
-      !graphInfo.source ||
-      !graphInfo.sink ||
-      graphInfo.source === graphInfo.sink
-    ) {
-      toast.error("Nastavte ZDROJ a CÍL!");
+    if (!checkForSourceAndSink(graphInfo)) {
       return 0;
     }
 
@@ -88,6 +84,19 @@ export const AlgorithmProvider = ({ children }: { children: ReactNode }) => {
     return maxFlow;
   };
 
+  const checkForSourceAndSink = (graphInfo: GraphInfo): boolean => {
+    if (
+      !graphInfo.source ||
+      !graphInfo.sink ||
+      graphInfo.source === graphInfo.sink
+    ) {
+      toast.error("Nastavte ZDROJ a CÍL!");
+      return false;
+    }
+
+    return true;
+  };
+
   return (
     <AlgorithmContext.Provider
       value={{
@@ -95,6 +104,7 @@ export const AlgorithmProvider = ({ children }: { children: ReactNode }) => {
         setSelectedAlgorithm,
         calculateMaxFlow,
         bfsCheckPath,
+        checkForSourceAndSink,
       }}
     >
       {children}
