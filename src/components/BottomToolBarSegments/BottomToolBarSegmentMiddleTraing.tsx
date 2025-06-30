@@ -8,12 +8,16 @@ import BottomToolBarButton from "../BottomToolBarButton.js";
 import { ButtonSizes, ButtonVariants } from "../utils/consts.js";
 import { useGraphManagement } from "../../context/GraphManagementContext";
 import { useGraphOperations } from "../../hooks/useGraphOperations";
+import { useTraining } from "../../context/TrainingContext.js";
 
 const BottomToolBarSegmentMiddleTraining = () => {
   const { graphs, activeGraph } = useGraphManagement();
   const { calculateAndUpdateMaxFlow, resetGraph } = useGraphOperations();
+  const { removeLastFromPath, userPath } = useTraining();
 
-  const stepBack = () => {};
+  const stepBack = () => {
+    removeLastFromPath();
+  };
   const addToUsersPath = () => {};
   const resetTraining = () => {};
   const evaluate = () => {};
@@ -28,7 +32,7 @@ const BottomToolBarSegmentMiddleTraining = () => {
             icon={<ArrowLeftIcon />}
             tooltipText="Krok zpět"
             onClick={() => stepBack()}
-            isDisabled={false}
+            isDisabled={userPath.length < 2}
           />
           <BottomToolBarButton
             variant={ButtonVariants.OUTLINE}
