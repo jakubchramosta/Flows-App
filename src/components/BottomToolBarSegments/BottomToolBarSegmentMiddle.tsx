@@ -10,6 +10,7 @@ import { ButtonSizes, ButtonVariants } from "../utils/consts.js";
 import { useGraphManagement } from "../../context/GraphManagementContext";
 import { useSnapshot } from "../../context/SnapshotContext";
 import { useGraphOperations } from "../../hooks/useGraphOperations";
+import { useTraining } from "@/context/TrainingContext.js";
 
 interface BottomToolBarSegmentMiddleProps {
   openSidebar: () => void;
