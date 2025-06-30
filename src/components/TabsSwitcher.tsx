@@ -10,7 +10,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip.js";
-import { useAlgorithm } from "../context/AlgorithmContext.js";
 import { useTrainingOperations } from "../hooks/useTrainingOperations.js";
 
 const TabsSwitcher = () => {
@@ -22,14 +21,6 @@ const TabsSwitcher = () => {
   //resetne se graf, prob2hne kontrola jestli je graf validni a vypocita se max flow
 
   const handleSwitchEditMode = () => {
-    //kontrola jestli graf obsahuje start a cíl
-    // if (!checkForSourceAndSink(graphs[activeGraph])) {
-    //   return;
-    // }
-    // resetGraph();
-    // switchEditMode();
-    // // max flow se mus9 vzpo49tat a6 potom co se swichne editation mode
-    // calculateMaxFlow(graphs[activeGraph], editationMode);
     prepareTraining();
   };
 
@@ -46,6 +37,7 @@ const TabsSwitcher = () => {
                 key={index}
                 value={index.toString()}
                 onClick={() => setActiveGraphIndex(index)}
+                disabled={!editationMode}
               >
                 {`Graf ${index + 1}`}
               </TabsTrigger>
@@ -61,6 +53,7 @@ const TabsSwitcher = () => {
                 onClick={() => {
                   addGraph();
                 }}
+                disabled={!editationMode}
               >
                 <PlusIcon />
               </Button>
