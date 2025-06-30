@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Algorithms } from "./utils/consts";
+import { useGraphOperations } from "../hooks/useGraphOperations";
 
 interface GraphSidebarProps {
   isVisible: boolean;
@@ -19,6 +20,7 @@ const GraphSidebar: React.FC<GraphSidebarProps> = ({ isVisible }) => {
   const { graphs, activeGraph } = useGraphManagement();
   const { setSelectedAlgorithm } = useAlgorithm();
   const { currentSnapshotIndex } = useSnapshot();
+  const { resetGraph } = useGraphOperations();
 
   const currentMaxFlow = graphs[activeGraph].maxFlow;
   const discoveredPaths = graphs[activeGraph].paths;
@@ -27,7 +29,12 @@ const GraphSidebar: React.FC<GraphSidebarProps> = ({ isVisible }) => {
 
   return (
     <div className="absolute right-5 top-5 flex w-[340px] flex-col gap-3">
-      <Select onValueChange={(value) => setSelectedAlgorithm(value)}>
+      <Select
+        onValueChange={(value) => {
+          setSelectedAlgorithm(value);
+          resetGraph();
+        }}
+      >
         <SelectTrigger className="w-full max-w-[290px] bg-background">
           <SelectValue placeholder="Zvolit algoritmus" />
         </SelectTrigger>
