@@ -1,7 +1,6 @@
 import { useGraph } from "../context/GraphContext";
 import { useGraphManagement } from "../context/GraphManagementContext";
 import { UserPath, useTraining } from "../context/TrainingContext";
-import { useFordFulkerson } from "./useFordFulkerson";
 import {
   isValidAugmentingPath,
   calculatePathFlow,
@@ -31,7 +30,9 @@ export const useTrainingOperations = () => {
   };
 
   const calculateOptimalMaxFlow = (): number => {
-    return useEdmondsKarp(currentGraph, false);
+    const calculatedFlow = useEdmondsKarp(currentGraph, false);
+    console.log("Calculated optimal max flow:", calculatedFlow);
+    return calculatedFlow;
   };
 
   const isUserFlowOptimal = (): boolean => {
@@ -39,15 +40,17 @@ export const useTrainingOperations = () => {
     return userTotalFlow >= optimalFlow;
   };
 
+  //TODO: dodat logiku pridavani hran
   const addEdgeToUserPath = (edgeId: string, isReverse: boolean) => {
     if (!edgeId) return;
+    const edgeAttributes = currentGraph.graph.getEdgeAttributes(edgeId);
 
-    const edgeToAdd: UserPath = {
+    const pathToAdd: UserPath = {
       path: [edgeId],
       flow: 0,
     };
 
-    const newPath = [...userPath, edgeToAdd];
+    const newPath = [...userPath, pathToAdd];
     console.log(
       `Edge ${edgeId} ${isReverse ? "reversed" : "added"} to user path`,
       newPath,
@@ -67,9 +70,7 @@ export const useTrainingOperations = () => {
   useEffect(() => {
     resetGraph();
     if (editationMode === false) {
-      // max flow se musi vypocitat az potom co se switchne editation mode
       setOptimalMaxFlow(calculateOptimalMaxFlow());
-      console.log("Optimal max flow calculated:", optimalMaxFlow);
     }
   }, [editationMode]);
 
