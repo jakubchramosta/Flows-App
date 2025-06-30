@@ -1,32 +1,31 @@
 import { useGraph } from "../context/GraphContext";
 import { useGraphManagement } from "../context/GraphManagementContext";
-import { UserPath, useTraining } from "../context/TrainingContext";
+import { useTraining } from "../context/TrainingContext";
 import {
   isValidAugmentingPath,
   calculatePathFlow,
 } from "../lib/graphOperations";
-import { useAlgorithm } from "../context/AlgorithmContext";
 import { useGraphOperations } from "./useGraphOperations";
 import { useEdmondsKarp } from "./useEdmondsKarp";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
+import { toast } from "sonner";
+import { Colors } from "../components/utils/consts";
 
 export const useTrainingOperations = () => {
   const { graph } = useGraph();
   const { currentGraph } = useGraphManagement();
   const { userPath, setUserPath, userTotalFlow } = useTraining();
   const { resetGraph } = useGraphOperations();
-  const { checkForSourceAndSink } = useAlgorithm();
-  const { editationMode, switchEditMode, optimalMaxFlow, setOptimalMaxFlow } =
-    useTraining();
+  const { editationMode, setOptimalMaxFlow } = useTraining();
 
   const validateCurrentPath = (): boolean => {
     if (!graph || userPath.length < 2) return false;
-    return isValidAugmentingPath(userPath[userPath.length - 1].path, graph);
+    return isValidAugmentingPath(userPath, graph);
   };
 
   const calculateCurrentPathFlow = (): number => {
     if (!graph || !validateCurrentPath()) return 0;
-    return calculatePathFlow(userPath[userPath.length - 1].path, graph);
+    return calculatePathFlow(userPath, graph);
   };
 
   const calculateOptimalMaxFlow = (): number => {
@@ -40,37 +39,46 @@ export const useTrainingOperations = () => {
     return userTotalFlow >= optimalFlow;
   };
 
-  //TODO: dodat logiku pridavani hran
-  const addEdgeToUserPath = (edgeId: string, isReverse: boolean) => {
-    if (!edgeId) return;
-    const edgeAttributes = currentGraph.graph.getEdgeAttributes(edgeId);
+  const addEdgeToUserPath = useCallback(
+    (edgeId: string) => {
+      if (!edgeId) return;
 
-    const pathToAdd: UserPath = {
-      path: [edgeId],
-      flow: 0,
-    };
+      console.log("Adding edge to user path:", edgeId);
+      console.log("Current user path:", userPath); // ✅ Aktuální stav
 
-    const newPath = [...userPath, pathToAdd];
-    console.log(
-      `Edge ${edgeId} ${isReverse ? "reversed" : "added"} to user path`,
-      newPath,
-    );
-    console.log("Current user path:", newPath);
+      let source = currentGraph.graph.source(edgeId);
+      let target = currentGraph.graph.target(edgeId);
 
-    setUserPath(newPath);
-  };
+      console.log("source:", source);
+      console.log("zacatek", userPath[userPath.length - 1]); // ✅ Aktuální stav
 
-  const prepareTraining = () => {
-    if (!checkForSourceAndSink(currentGraph)) {
-      return;
-    }
-    switchEditMode();
-  };
+      if (source !== userPath[userPath.length - 1]) {
+        console.log(
+          source,
+          "is not the source node",
+          userPath[userPath.length - 1],
+        );
+        toast.error(
+          `Tata hrana nemůže být vzbrána, protože nezačíná od posledního uzlu v cestě (${userPath[userPath.length - 1]})`,
+        );
+        return;
+      }
+
+      const newPath = [...userPath, target]; // ✅ Aktuální stav
+      console.log(`Edge ${edgeId} added to user path`);
+      console.log("New user path:", newPath);
+
+      setUserPath(newPath);
+      graph.setEdgeAttribute(edgeId, "color", Colors.GREEN_EDGE);
+    },
+    [userPath, currentGraph.graph],
+  );
 
   useEffect(() => {
     resetGraph();
     if (editationMode === false) {
       setOptimalMaxFlow(calculateOptimalMaxFlow());
+      setUserPath([currentGraph.source]);
     }
   }, [editationMode]);
 
@@ -80,6 +88,5 @@ export const useTrainingOperations = () => {
     calculateOptimalMaxFlow,
     isUserFlowOptimal,
     addEdgeToUserPath,
-    prepareTraining,
   };
 };

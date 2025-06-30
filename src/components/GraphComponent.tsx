@@ -177,15 +177,13 @@ const GraphComponent = ({ isSideBarVisible }: GraphComponentProps) => {
       // Handle left-click on a edge in training mode
       sigma.on("clickEdge", (e) => {
         // přidávané hrany se musí shodovat
-        addEdgeToUserPath(e.edge, false);
-        graph.setEdgeAttribute(e.edge, "color", Colors.GREEN_EDGE);
+        addEdgeToUserPath(e.edge);
       });
 
       // Handle right-click on a edge in training mode
       sigma.on("rightClickEdge", (e) => {
         e.event.original.preventDefault();
-        addEdgeToUserPath(e.edge, true);
-        graph.setEdgeAttribute(e.edge, "color", Colors.RED_EDGE);
+        //asi nebude potřeba
       });
     }
 

@@ -3,25 +3,27 @@ import { PlusIcon } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger } from "./ui/tabs.js";
 import { useGraphManagement } from "../context/GraphManagementContext";
 import { useTraining } from "../context/TrainingContext";
-import { useGraphOperations } from "../hooks/useGraphOperations";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip.js";
-import { useTrainingOperations } from "../hooks/useTrainingOperations.js";
+import { useAlgorithm } from "../context/AlgorithmContext.js";
 
 const TabsSwitcher = () => {
-  const { graphs, addGraph, setActiveGraphIndex, activeGraph } =
+  const { graphs, addGraph, setActiveGraphIndex, activeGraph, currentGraph } =
     useGraphManagement();
-  const { editationMode } = useTraining();
-  const { prepareTraining } = useTrainingOperations();
+  const { editationMode, switchEditMode } = useTraining();
+  const { checkForSourceAndSink } = useAlgorithm();
 
   //resetne se graf, prob2hne kontrola jestli je graf validni a vypocita se max flow
 
   const handleSwitchEditMode = () => {
-    prepareTraining();
+    if (!checkForSourceAndSink(currentGraph)) {
+      return;
+    }
+    switchEditMode();
   };
 
   return (

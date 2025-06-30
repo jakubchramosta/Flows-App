@@ -3,17 +3,11 @@ import { createContext, ReactNode, useContext, useState } from "react";
 interface TrainingContextType {
   editationMode: boolean;
   switchEditMode: () => void;
-  userPath: UserPath[];
-  setUserPath: (path: UserPath[]) => void;
-  clearUserPath: () => void;
+  userPath: string[];
+  setUserPath: (path: string[]) => void;
   userTotalFlow: number;
   optimalMaxFlow: number;
   setOptimalMaxFlow: (flow: number) => void;
-}
-
-export interface UserPath {
-  path: string[];
-  flow: number;
 }
 
 const TrainingContext = createContext<TrainingContextType>(
@@ -22,16 +16,12 @@ const TrainingContext = createContext<TrainingContextType>(
 
 export const TrainingProvider = ({ children }: { children: ReactNode }) => {
   const [editationMode, setEditationMode] = useState(true);
-  const [userPath, setUserPath] = useState<UserPath[]>([]);
+  const [userPath, setUserPath] = useState<string[]>([]);
   const [userTotalFlow, setUserTotalFlow] = useState(0);
   const [optimalMaxFlow, setOptimalMaxFlow] = useState(0);
 
   const switchEditMode = () => {
     setEditationMode((prev) => !prev);
-  };
-
-  const clearUserPath = () => {
-    setUserPath([]);
   };
 
   return (
@@ -41,7 +31,6 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
         switchEditMode,
         userPath,
         setUserPath,
-        clearUserPath,
         userTotalFlow,
         optimalMaxFlow,
         setOptimalMaxFlow,
