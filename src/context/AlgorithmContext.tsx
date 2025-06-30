@@ -75,7 +75,7 @@ export const AlgorithmProvider = ({ children }: { children: ReactNode }) => {
         break;
       case Algorithms.EDMONDS_KARP:
         toast.success("Používá se Edmonds-Karp algoritmus.");
-        maxFlow = useEdmondsKarp(graphInfo, editationMode);
+        maxFlow = useEdmondsKarp(graphInfo, true);
         break;
       default:
         maxFlow = useFordFulkerson(graphInfo);

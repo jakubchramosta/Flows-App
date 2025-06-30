@@ -7,6 +7,8 @@ interface TrainingContextType {
   setUserPath: (path: UserPath[]) => void;
   clearUserPath: () => void;
   userTotalFlow: number;
+  optimalMaxFlow: number;
+  setOptimalMaxFlow: (flow: number) => void;
 }
 
 export interface UserPath {
@@ -22,6 +24,7 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
   const [editationMode, setEditationMode] = useState(true);
   const [userPath, setUserPath] = useState<UserPath[]>([]);
   const [userTotalFlow, setUserTotalFlow] = useState(0);
+  const [optimalMaxFlow, setOptimalMaxFlow] = useState(0);
 
   const switchEditMode = () => {
     setEditationMode((prev) => !prev);
@@ -40,6 +43,8 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
         setUserPath,
         clearUserPath,
         userTotalFlow,
+        optimalMaxFlow,
+        setOptimalMaxFlow,
       }}
     >
       {children}

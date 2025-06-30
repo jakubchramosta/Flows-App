@@ -97,7 +97,7 @@ export const useEdmondsKarp = (
     // Přidání toku do celkového maximálního toku
     maxFlow += pathFlow;
 
-    if (!editMode) {
+    if (editMode) {
       // Uložení nalezené cesty a jejího toku do pole paths
       paths.push({ path, flow: pathFlow });
 

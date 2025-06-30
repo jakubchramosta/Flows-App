@@ -8,6 +8,8 @@ import {
 } from "../lib/graphOperations";
 import { useAlgorithm } from "../context/AlgorithmContext";
 import { useGraphOperations } from "./useGraphOperations";
+import { useEdmondsKarp } from "./useEdmondsKarp";
+import { useEffect } from "react";
 
 export const useTrainingOperations = () => {
   const { graph } = useGraph();
@@ -15,9 +17,8 @@ export const useTrainingOperations = () => {
   const { userPath, setUserPath, userTotalFlow } = useTraining();
   const { resetGraph } = useGraphOperations();
   const { checkForSourceAndSink } = useAlgorithm();
-  const { calculateMaxFlow } = useAlgorithm();
-  const { editationMode, switchEditMode } = useTraining();
-  const { graphs, activeGraph } = useGraphManagement();
+  const { editationMode, switchEditMode, optimalMaxFlow, setOptimalMaxFlow } =
+    useTraining();
 
   const validateCurrentPath = (): boolean => {
     if (!graph || userPath.length < 2) return false;
@@ -30,14 +31,7 @@ export const useTrainingOperations = () => {
   };
 
   const calculateOptimalMaxFlow = (): number => {
-    // Vytvořit kopii grafu pro výpočet optimálního řešení
-    const graphCopy = graph.copy();
-    const graphInfoCopy = {
-      ...currentGraph,
-      graph: graphCopy,
-    };
-
-    return useFordFulkerson(graphInfoCopy);
+    return useEdmondsKarp(currentGraph, false);
   };
 
   const isUserFlowOptimal = (): boolean => {
@@ -64,14 +58,20 @@ export const useTrainingOperations = () => {
   };
 
   const prepareTraining = () => {
-    if (!checkForSourceAndSink(graphs[activeGraph])) {
+    if (!checkForSourceAndSink(currentGraph)) {
       return;
     }
-    resetGraph();
     switchEditMode();
-    // max flow se mus9 vzpo49tat a6 potom co se swichne editation mode
-    calculateMaxFlow(graphs[activeGraph], editationMode);
   };
+
+  useEffect(() => {
+    resetGraph();
+    if (editationMode === false) {
+      // max flow se musi vypocitat az potom co se switchne editation mode
+      setOptimalMaxFlow(calculateOptimalMaxFlow());
+      console.log("Optimal max flow calculated:", optimalMaxFlow);
+    }
+  }, [editationMode]);
 
   return {
     validateCurrentPath,
