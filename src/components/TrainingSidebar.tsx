@@ -1,9 +1,10 @@
+import { useTraining } from "../context/TrainingContext";
 import { useGraphManagement } from "../context/GraphManagementContext";
 import TrainingSidebarRow from "./TrainingSidebarRow";
 
 const TrainingSidebar = () => {
   const { currentGraph } = useGraphManagement();
-  const currentMaxFlow = currentGraph.maxFlow;
+  const { userTotalFlow } = useTraining();
   const discoveredPaths = currentGraph.paths;
 
   return (
@@ -13,9 +14,7 @@ const TrainingSidebar = () => {
           <h1>Maximální tok</h1>
         </div>
         <div className="flex justify-center w-full">
-          <p className="my-1 text-2xl font-bold text-center">
-            {currentMaxFlow}
-          </p>
+          <p className="my-1 text-2xl font-bold text-center">{userTotalFlow}</p>
         </div>
       </div>
       <div className="rounded-md border border-input bg-background p-2.5 shadow-sm">

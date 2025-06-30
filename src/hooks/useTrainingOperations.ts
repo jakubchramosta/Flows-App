@@ -6,11 +6,18 @@ import {
   isValidAugmentingPath,
   calculatePathFlow,
 } from "../lib/graphOperations";
+import { useAlgorithm } from "../context/AlgorithmContext";
+import { useGraphOperations } from "./useGraphOperations";
 
 export const useTrainingOperations = () => {
   const { graph } = useGraph();
   const { currentGraph } = useGraphManagement();
   const { userPath, setUserPath, userTotalFlow } = useTraining();
+  const { resetGraph } = useGraphOperations();
+  const { checkForSourceAndSink } = useAlgorithm();
+  const { calculateMaxFlow } = useAlgorithm();
+  const { editationMode, switchEditMode } = useTraining();
+  const { graphs, activeGraph } = useGraphManagement();
 
   const validateCurrentPath = (): boolean => {
     if (!graph || userPath.length < 2) return false;
@@ -56,11 +63,22 @@ export const useTrainingOperations = () => {
     setUserPath(newPath);
   };
 
+  const prepareTraining = () => {
+    if (!checkForSourceAndSink(graphs[activeGraph])) {
+      return;
+    }
+    resetGraph();
+    switchEditMode();
+    // max flow se mus9 vzpo49tat a6 potom co se swichne editation mode
+    calculateMaxFlow(graphs[activeGraph], editationMode);
+  };
+
   return {
     validateCurrentPath,
     calculateCurrentPathFlow,
     calculateOptimalMaxFlow,
     isUserFlowOptimal,
     addEdgeToUserPath,
+    prepareTraining,
   };
 };
