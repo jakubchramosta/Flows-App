@@ -39,40 +39,37 @@ export const useTrainingOperations = () => {
     return userTotalFlow >= optimalFlow;
   };
 
-  const addEdgeToUserPath = useCallback(
-    (edgeId: string) => {
-      if (!edgeId) return;
+  const addEdgeToUserPath = (edgeId: string) => {
+    if (!edgeId) return;
 
-      console.log("Adding edge to user path:", edgeId);
-      console.log("Current user path:", userPath); // ✅ Aktuální stav
+    console.log("Adding edge to user path:", edgeId);
+    console.log("Current user path:", userPath);
 
-      let source = currentGraph.graph.source(edgeId);
-      let target = currentGraph.graph.target(edgeId);
+    let source = currentGraph.graph.source(edgeId);
+    let target = currentGraph.graph.target(edgeId);
 
-      console.log("source:", source);
-      console.log("zacatek", userPath[userPath.length - 1]); // ✅ Aktuální stav
+    console.log("source:", source);
+    console.log("zacatek", userPath[userPath.length - 1]);
 
-      if (source !== userPath[userPath.length - 1]) {
-        console.log(
-          source,
-          "is not the source node",
-          userPath[userPath.length - 1],
-        );
-        toast.error(
-          `Tata hrana nemůže být vzbrána, protože nezačíná od posledního uzlu v cestě (${userPath[userPath.length - 1]})`,
-        );
-        return;
-      }
+    if (source !== userPath[userPath.length - 1]) {
+      console.log(
+        source,
+        "is not the source node",
+        userPath[userPath.length - 1],
+      );
+      toast.error(
+        `Tata hrana nemůže být vzbrána, protože nezačíná od posledního uzlu v cestě (${userPath[userPath.length - 1]})`,
+      );
+      return;
+    }
 
-      const newPath = [...userPath, target]; // ✅ Aktuální stav
-      console.log(`Edge ${edgeId} added to user path`);
-      console.log("New user path:", newPath);
+    const newPath = [...userPath, target];
+    console.log(`Edge ${edgeId} added to user path`);
+    console.log("New user path:", newPath);
 
-      setUserPath(newPath);
-      graph.setEdgeAttribute(edgeId, "color", Colors.GREEN_EDGE);
-    },
-    [userPath, currentGraph.graph],
-  );
+    setUserPath(newPath);
+    graph.setEdgeAttribute(edgeId, "color", Colors.GREEN_EDGE);
+  };
 
   useEffect(() => {
     resetGraph();
