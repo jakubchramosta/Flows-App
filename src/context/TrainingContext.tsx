@@ -8,6 +8,11 @@ import {
 } from "react";
 import { toast } from "sonner";
 import { useGraphManagement } from "./GraphManagementContext";
+import {
+  isValidAugmentingPath,
+  calculatePathFlow,
+} from "../lib/graphOperations";
+import { resetEdgeColors, updateEdgesFlow } from "../lib/graphEdgeOperations";
 
 interface TrainingContextType {
   editationMode: boolean;
@@ -19,6 +24,7 @@ interface TrainingContextType {
   setOptimalMaxFlow: (flow: number) => void;
   updateUserPath: (edgeId: string) => void;
   removeLastFromPath: () => void;
+  addToPaths: () => void;
 }
 
 const TrainingContext = createContext<TrainingContextType>(
@@ -80,6 +86,18 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
     });
   }, []);
 
+  const addToPaths = () => {
+    if (isValidAugmentingPath(userPath, currentGraph) === false) {
+      toast.error("Cesta není platná, zkontrolujte ji prosím.");
+      return;
+    }
+    const pathFlow = calculatePathFlow(userPath, currentGraph.graph);
+    currentGraph.paths.push({ path: userPath, flow: pathFlow });
+    updateEdgesFlow(currentGraph.graph, pathFlow, userPath);
+    resetEdgeColors(currentGraph.graph);
+    updateUserPath(currentGraph.source);
+  };
+
   return (
     <TrainingContext.Provider
       value={{
@@ -92,6 +110,7 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
         setOptimalMaxFlow,
         updateUserPath,
         removeLastFromPath,
+        addToPaths,
       }}
     >
       {children}

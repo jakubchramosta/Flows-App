@@ -31,3 +31,12 @@ export const updateEdgeLabels = (graph: Graph) => {
     graph.setEdgeAttribute(edge, "label", `${flow}/${capacity}`);
   });
 };
+
+export const updateEdgesFlow = (graph: Graph, flow: number, path: string[]) => {
+  for (let i = 0; i < path.length - 1; i++) {
+    const u = path[i];
+    const v = path[i + 1];
+    const edge = graph.edge(u, v);
+    graph.setEdgeAttribute(edge, "flow", flow);
+  }
+};
