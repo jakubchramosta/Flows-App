@@ -7,9 +7,7 @@ import {
 } from "../lib/graphOperations";
 import { useGraphOperations } from "./useGraphOperations";
 import { useEdmondsKarp } from "./useEdmondsKarp";
-import { useEffect, useCallback } from "react";
-import { toast } from "sonner";
-import { Colors } from "../components/utils/consts";
+import { useEffect } from "react";
 
 export const useTrainingOperations = () => {
   const { graph } = useGraph();
@@ -21,7 +19,7 @@ export const useTrainingOperations = () => {
 
   const validateCurrentPath = (): boolean => {
     if (!graph || userPath.length < 2) return false;
-    return isValidAugmentingPath(userPath, graph);
+    return isValidAugmentingPath(userPath, currentGraph);
   };
 
   const calculateCurrentPathFlow = (): number => {

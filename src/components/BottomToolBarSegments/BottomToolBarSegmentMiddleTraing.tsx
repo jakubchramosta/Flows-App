@@ -7,18 +7,19 @@ import {
 import BottomToolBarButton from "../BottomToolBarButton.js";
 import { ButtonSizes, ButtonVariants } from "../utils/consts.js";
 import { useGraphManagement } from "../../context/GraphManagementContext";
-import { useGraphOperations } from "../../hooks/useGraphOperations";
 import { useTraining } from "../../context/TrainingContext.js";
 
 const BottomToolBarSegmentMiddleTraining = () => {
   const { graphs, activeGraph } = useGraphManagement();
-  const { calculateAndUpdateMaxFlow, resetGraph } = useGraphOperations();
+  const { addToPaths } = useTraining();
   const { removeLastFromPath, userPath } = useTraining();
 
   const stepBack = () => {
     removeLastFromPath();
   };
-  const addToUsersPath = () => {};
+  const addToUsersPath = () => {
+    addToPaths();
+  };
   const resetTraining = () => {};
   const evaluate = () => {};
 
