@@ -47,8 +47,10 @@ export const useTrainingOperations = () => {
     resetGraph();
     if (editationMode === false) {
       setOptimalMaxFlow(calculateOptimalMaxFlow());
+      resetGraph();
       setUserPath([currentGraph.source]);
       console.log("user path set to start: ", userPath);
+      console.log(currentGraph);
     }
   }, [editationMode]);
 

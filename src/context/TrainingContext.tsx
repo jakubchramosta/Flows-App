@@ -12,7 +12,11 @@ import {
   isValidAugmentingPath,
   calculatePathFlow,
 } from "../lib/graphOperations";
-import { resetEdgeColors, updateEdgesFlow } from "../lib/graphEdgeOperations";
+import {
+  resetEdgeColors,
+  updateEdgeLabels,
+  updateEdgesFlow,
+} from "../lib/graphEdgeOperations";
 
 interface TrainingContextType {
   editationMode: boolean;
@@ -45,6 +49,7 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
   const updateUserPath = (edgeId: string) => {
     setUserPath((prevPath) => {
       console.log("Previous path:", prevPath);
+      console.log("Adding edge to path:", edgeId);
 
       const source = currentGraph.graph.source(edgeId);
       const target = currentGraph.graph.target(edgeId);
@@ -87,15 +92,27 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const addToPaths = () => {
-    if (isValidAugmentingPath(userPath, currentGraph) === false) {
+    if (!isValidAugmentingPath(userPath, currentGraph)) {
+      console.log("Invalid path:", userPath);
+      console.log("Used graph:", currentGraph);
       toast.error("Cesta není platná, zkontrolujte ji prosím.");
       return;
     }
+    console.log("Adding path to paths:", userPath);
+
     const pathFlow = calculatePathFlow(userPath, currentGraph.graph);
+    console.log("Calculated path flow:", pathFlow);
+    if (pathFlow <= 0) {
+      toast.error("Cesta nemá žádný tok, zkontrolujte ji prosím.");
+      return;
+    }
+
     currentGraph.paths.push({ path: userPath, flow: pathFlow });
     updateEdgesFlow(currentGraph.graph, pathFlow, userPath);
     resetEdgeColors(currentGraph.graph);
-    updateUserPath(currentGraph.source);
+    updateEdgeLabels(currentGraph.graph);
+    setUserPath([currentGraph.source]);
+    console.log("-------------Path added to paths-------------");
   };
 
   return (
