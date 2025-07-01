@@ -20,6 +20,7 @@ export const isValidAugmentingPath = (
     const source = path[i];
     const target = path[i + 1];
     if (!currentGraph.graph.hasEdge(source, target)) {
+      console.log("Edge does not exist", source, target);
       return false; // Hrana neexistuje
     }
 
@@ -31,7 +32,16 @@ export const isValidAugmentingPath = (
     if (capacity - flow <= 0) {
       return false; // Není zbytková kapacita
     }
-    console.log("Edge has residual capacity", source, target, capacity, flow);
+    console.log(
+      "Edge has residual capacity, source:",
+      source,
+      " target:",
+      target,
+      " capacity:",
+      capacity,
+      " flow:",
+      flow,
+    );
   }
   return true;
 };
@@ -65,12 +75,14 @@ export const isPathComplete = (
   source: string,
   sink: string,
 ): boolean => {
+  console.log("isPathComplete", path, source, sink);
   return (
     path.length >= 2 && path[0] === source && path[path.length - 1] === sink
   );
 };
 
 export const calculatePathFlow = (path: string[], graph: Graph): number => {
+  console.log("Calculating path flow for:", path);
   let minFlow = Infinity;
   for (let i = 0; i < path.length - 1; i++) {
     console.log(
@@ -83,19 +95,28 @@ export const calculatePathFlow = (path: string[], graph: Graph): number => {
     const target = path[i + 1];
 
     if (!graph.hasEdge(source, target)) {
+      console.log("Edge does not exist:", source, target);
       return 0; // Nevalidní cesta
     }
 
     const edge = graph.edge(source, target);
+    console.log("Edge found:", edge);
     const capacity = graph.getEdgeAttribute(edge, "capacity");
+    console.log("Edge capacity:", capacity);
     const flow = graph.getEdgeAttribute(edge, "flow");
+    console.log("Edge flow:", flow);
+    console.log(graph);
     const residualCapacity = capacity - flow;
+    console.log("Residual capacity:", residualCapacity);
 
     if (residualCapacity <= 0) {
+      console.log("No residual capacity for edge:", source, target);
+      console.log(graph);
       return 0; // Žádná zbytková kapacita
     }
 
     minFlow = Math.min(minFlow, residualCapacity);
+    console.log("Current min flow:", minFlow);
   }
   return minFlow;
 };
