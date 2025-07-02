@@ -39,4 +39,5 @@ export enum Colors {
   EDGE_LABEL = "#000",
   RED_EDGE = "red",
   GREEN_EDGE = "green",
+  RESIDUAL = "#ffcccc",
 }

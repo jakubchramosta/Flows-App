@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 import Graph from "graphology";
-import { EdgeTypes } from "../components/utils/consts";
+import { Colors, EdgeTypes } from "../components/utils/consts";
 
 interface EdgesContextType {
   firstNodeInEdge: string | null;
@@ -13,6 +13,9 @@ interface EdgesContextType {
   setEdgeFlow: (edgeId: string, flow: number) => void;
   setEdgeColor: (edgeId: string, color: string) => void;
   setEdgeType: (id: string, type: string) => void;
+  showResidualEdges: () => void;
+  hideResidualEdges: () => void;
+  generateResidualEdges: () => void;
 }
 
 const EdgesContext = createContext<EdgesContextType>({} as EdgesContextType);
@@ -81,6 +84,49 @@ export const EdgesProvider = ({
     graph.setEdgeAttribute(edgeId, "color", color);
   };
 
+  const showResidualEdges = () => {
+    graph.forEachEdge((edge) => {
+      if (graph.getEdgeAttribute(edge, "isReverse")) {
+        graph.setEdgeAttribute(edge, "hidden", false);
+        graph.setEdgeAttribute(edge, "type", EdgeTypes.CURVED);
+        graph.setEdgeAttribute(edge, "color", Colors.RESIDUAL);
+        graph.setEdgeAttribute(edge, "size", 10);
+      } else {
+        graph.setEdgeAttribute(edge, "type", EdgeTypes.CURVED);
+      }
+    });
+  };
+
+  const hideResidualEdges = () => {
+    graph.forEachEdge((edge) => {
+      if (graph.getEdgeAttribute(edge, "isReverse")) {
+        graph.setEdgeAttribute(edge, "hidden", true);
+        graph.setEdgeAttribute(edge, "color", Colors.DEFAULT_EDGE);
+        graph.setEdgeAttribute(edge, "size", 0);
+      } else {
+        graph.setEdgeAttribute(edge, "type", EdgeTypes.STRAIGHT);
+      }
+    });
+  };
+
+  const generateResidualEdges = () => {
+    graph.forEachEdge((edge) => {
+      const source = graph.source(edge);
+      const target = graph.target(edge);
+      const edgeAtts = graph.getEdgeAttributes(edge);
+      const reverseEdge = graph.edge(target, source);
+
+      if (!reverseEdge) {
+        graph.addEdge(target, source, {
+          flow: -edgeAtts.flow,
+          capacity: 0,
+          isReverse: true,
+          hidden: true,
+        });
+      }
+    });
+  };
+
   return (
     <EdgesContext.Provider
       value={{
@@ -94,6 +140,9 @@ export const EdgesProvider = ({
         setEdgeFlow,
         setEdgeColor,
         setEdgeType,
+        showResidualEdges,
+        hideResidualEdges,
+        generateResidualEdges,
       }}
     >
       {children}
