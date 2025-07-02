@@ -6,11 +6,13 @@ import { ButtonSizes, ButtonVariants } from "../utils/consts.js";
 import { useGraphManagement } from "../../context/GraphManagementContext";
 import { useTraining } from "../../context/TrainingContext";
 import { useGraphIO } from "../../hooks/useGraphIO";
+import { useEdges } from "../../context/EdgesContext.js";
 
 const BottomToolBarSegmentRight = () => {
   const { deleteCurrentGraph } = useGraphManagement();
   const { editationMode } = useTraining();
   const { exportCurrentGraph, importGraph } = useGraphIO();
+  const { showResidualEdges, hideResidualEdges } = useEdges();
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -20,7 +22,7 @@ const BottomToolBarSegmentRight = () => {
 
   return (
     <div id="right" className="flex w-full justify-end gap-4">
-      {editationMode && (
+      {editationMode ? (
         <>
           <Button
             variant={ButtonVariants.OUTLINE}
@@ -54,6 +56,15 @@ const BottomToolBarSegmentRight = () => {
             onClick={deleteCurrentGraph}
             isDisabled={false}
           />
+        </>
+      ) : (
+        <>
+          <Button variant="outline" onClick={showResidualEdges}>
+            Zobrazit reziduální hrany
+          </Button>
+          <Button variant="outline" onClick={hideResidualEdges}>
+            Skrýt reziduální hrany
+          </Button>
         </>
       )}
     </div>

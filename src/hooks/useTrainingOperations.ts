@@ -8,6 +8,7 @@ import {
 import { useGraphOperations } from "./useGraphOperations";
 import { useEdmondsKarp } from "./useEdmondsKarp";
 import { useEffect } from "react";
+import { useEdges } from "../context/EdgesContext";
 
 export const useTrainingOperations = () => {
   const { graph } = useGraph();
@@ -16,6 +17,7 @@ export const useTrainingOperations = () => {
     useTraining();
   const { resetGraph } = useGraphOperations();
   const { editationMode, setOptimalMaxFlow } = useTraining();
+  const { generateResidualEdges } = useEdges();
 
   const validateCurrentPath = (): boolean => {
     if (!graph || userPath.length < 2) return false;
@@ -48,6 +50,7 @@ export const useTrainingOperations = () => {
     if (editationMode === false) {
       setOptimalMaxFlow(calculateOptimalMaxFlow());
       resetGraph();
+      generateResidualEdges();
       setUserPath([currentGraph.source]);
       console.log("user path set to start: ", userPath);
       console.log(currentGraph);

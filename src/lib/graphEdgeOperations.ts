@@ -1,4 +1,4 @@
-import { Colors } from "../components/utils/consts";
+import { Colors, EdgeTypes } from "../components/utils/consts";
 import Graph from "graphology";
 
 // Funkce pro zvýraznění aktuální cesty v grafu
