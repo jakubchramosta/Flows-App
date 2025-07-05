@@ -97,7 +97,8 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
     if (!isValidAugmentingPath(userPath, currentGraph)) {
       console.log("Invalid path:", userPath);
       console.log("Used graph:", currentGraph);
-      toast.error("Cesta není platná, zkontrolujte ji prosím.");
+      resetEdgeColors(currentGraph.graph);
+      setUserPath([currentGraph.source]);
       return;
     }
     console.log("Adding path to paths:", userPath);

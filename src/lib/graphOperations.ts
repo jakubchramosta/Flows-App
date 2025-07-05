@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { GraphInfo } from "../context/GraphManagementContext";
 import Graph from "graphology";
 
@@ -6,21 +7,25 @@ export const isValidAugmentingPath = (
   path: string[],
   currentGraph: GraphInfo,
 ): boolean => {
-  console.log("isValidAugmentingPath", path, currentGraph.graph);
-
-  if (path.length < 2) return false;
-  console.log("Path is longer than 2", path);
-
-  console.log(path, currentGraph.source, currentGraph.sink);
-  if (isPathComplete(path, currentGraph.source, currentGraph.sink) === false)
-    return false; // Cesta není kompletní
-  console.log("Path is complete", path);
+  if (isPathComplete(path, currentGraph.source, currentGraph.sink) === false) {
+    toast.error("Cesta není kompletní. Musí začínat u zdroje a končit u cíle.");
+    return false;
+  }
+  console.log(
+    "Path is complete. Path: ",
+    path,
+    " Source: ",
+    currentGraph.source,
+    " Sink: ",
+    currentGraph.sink,
+  );
 
   for (let i = 0; i < path.length - 1; i++) {
     const source = path[i];
     const target = path[i + 1];
     if (!currentGraph.graph.hasEdge(source, target)) {
       console.log("Edge does not exist", source, target);
+      toast.error(`Hrana mezi uzly ${source} a ${target} neexistuje.`);
       return false; // Hrana neexistuje
     }
 
@@ -30,7 +35,10 @@ export const isValidAugmentingPath = (
     const capacity = currentGraph.graph.getEdgeAttribute(edge, "capacity");
     const flow = currentGraph.graph.getEdgeAttribute(edge, "flow");
     if (capacity - flow <= 0) {
-      return false; // Není zbytková kapacita
+      toast.error(
+        `Hrana mezi uzly ${source} a ${target} nemá zbytkovou kapacitu.`,
+      );
+      return false;
     }
     console.log(
       "Edge has residual capacity, source:",

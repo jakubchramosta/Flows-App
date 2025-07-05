@@ -57,7 +57,7 @@ export const useTrainingOperations = () => {
       setUserTotalFlow(0);
     }
     console.log("Graph reset in training mode");
-    console.log("Current graph:", currentGraph);
+    // console.log("Current graph:", currentGraph);
   };
 
   useEffect(() => {
