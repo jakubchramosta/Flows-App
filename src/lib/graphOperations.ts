@@ -126,7 +126,7 @@ export const calculatePathFlow = (path: string[], graph: Graph): number => {
     }
 
     minFlow = Math.min(minFlow, residualCapacity);
-    console.log("Min flow of user path:", minFlow);
   }
+  console.log("Min flow of user path:", minFlow);
   return minFlow;
 };

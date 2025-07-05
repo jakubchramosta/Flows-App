@@ -47,7 +47,7 @@ const GraphComponent = ({ isSideBarVisible }: GraphComponentProps) => {
   // Clear the graph and draw the default graph on the first render
   if (firstRender) {
     graph.clear();
-    useDrawDefaultGraph(graphs[0], GraphTypes.CYCLE);
+    useDrawDefaultGraph(graphs[0], GraphTypes.EXAMPLE);
     console.log(graphs[0]);
   }
 

@@ -1,4 +1,4 @@
-import { Colors, EdgeTypes } from "../components/utils/consts";
+import { Colors } from "../components/utils/consts";
 import Graph from "graphology";
 
 // Funkce pro zvýraznění aktuální cesty v grafu
@@ -19,7 +19,11 @@ export const highlightCurrentPath = (graph: Graph, path: string[]) => {
 // Funkce pro resetování barev hran v grafu
 export const resetEdgeColors = (graph: Graph) => {
   graph.forEachEdge((edge) => {
-    graph.setEdgeAttribute(edge, "color", Colors.DEFAULT_EDGE); // Reset all edges to black
+    if (graph.getEdgeAttribute(edge, "isReverse")) {
+      graph.setEdgeAttribute(edge, "color", Colors.RESIDUAL);
+    } else {
+      graph.setEdgeAttribute(edge, "color", Colors.DEFAULT_EDGE);
+    }
   });
 };
 
@@ -37,6 +41,12 @@ export const updateEdgesFlow = (graph: Graph, flow: number, path: string[]) => {
     const u = path[i];
     const v = path[i + 1];
     const edge = graph.edge(u, v);
-    graph.setEdgeAttribute(edge, "flow", flow);
+    const attrs = graph.getEdgeAttributes(edge);
+    graph.setEdgeAttribute(edge, "flow", flow + attrs.flow);
+
+    // Update reverse edge flow
+    const reverseEdge = graph.edge(v, u);
+    const reverseAttrs = graph.getEdgeAttributes(reverseEdge);
+    graph.setEdgeAttribute(reverseEdge, "flow", reverseAttrs.flow - flow);
   }
 };

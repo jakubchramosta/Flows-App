@@ -30,6 +30,7 @@ interface TrainingContextType {
   updateUserPath: (edgeId: string) => void;
   removeLastFromPath: () => void;
   addToPaths: () => void;
+  evaluateUserMaxFlow: () => void;
 }
 
 const TrainingContext = createContext<TrainingContextType>(
@@ -116,6 +117,16 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
     console.log("----Path added to paths----");
   };
 
+  const evaluateUserMaxFlow = () => {
+    if (userTotalFlow === optimalMaxFlow) {
+      toast.success("Gratulujeme! Vaše cesta je optimální.");
+    } else {
+      toast.error(
+        `Vaše cesta není optimální. Aktuální tok: ${userTotalFlow}, optimální tok: ${optimalMaxFlow}.`,
+      );
+    }
+  };
+
   return (
     <TrainingContext.Provider
       value={{
@@ -130,6 +141,7 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
         updateUserPath,
         removeLastFromPath,
         addToPaths,
+        evaluateUserMaxFlow,
       }}
     >
       {children}

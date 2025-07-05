@@ -1,6 +1,6 @@
 import Graph from "graphology";
 import { GraphInfo } from "../context/GraphManagementContext";
-import { GraphTypes } from "../components/utils/consts";
+import { Colors, GraphTypes } from "../components/utils/consts";
 
 export const useDrawDefaultGraph = (
   graphInfo: GraphInfo,
@@ -19,7 +19,7 @@ export const useDrawDefaultGraph = (
       x: -2,
       y: 0,
       size: nodeSize,
-      color: "#0f0",
+      color: Colors.SOURCE,
     });
     graph.addNode("b", { label: "B", x: -1, y: 1, size: nodeSize });
     graph.addNode("c", { label: "C", x: -1, y: -1, size: nodeSize });
@@ -30,7 +30,7 @@ export const useDrawDefaultGraph = (
       x: 2,
       y: 0,
       size: nodeSize,
-      color: "#f00",
+      color: Colors.SINK,
     });
 
     // Definice hran
@@ -40,6 +40,7 @@ export const useDrawDefaultGraph = (
       flow: 0,
       capacity: 3,
       isReverse: false,
+      color: Colors.GREEN_EDGE,
     });
     graph.addEdge("a", "c", {
       label: "0/7",
@@ -47,6 +48,7 @@ export const useDrawDefaultGraph = (
       flow: 0,
       capacity: 7,
       isReverse: false,
+      color: Colors.RED_EDGE,
     });
     graph.addEdge("c", "b", {
       label: "0/5",
@@ -54,6 +56,7 @@ export const useDrawDefaultGraph = (
       flow: 0,
       capacity: 5,
       isReverse: false,
+      color: Colors.RESIDUAL,
     });
     graph.addEdge("c", "e", {
       label: "0/3",
@@ -111,7 +114,7 @@ export const useDrawDefaultGraph = (
       x: -3,
       y: 0,
       size: nodeSize,
-      color: "#0f0",
+      color: Colors.SOURCE,
     });
     graph.addNode("b", { label: "B", x: -1, y: 1, size: nodeSize });
     graph.addNode("c", { label: "C", x: -1, y: -1, size: nodeSize });
@@ -120,7 +123,7 @@ export const useDrawDefaultGraph = (
       x: 1,
       y: 0,
       size: nodeSize,
-      color: "#f00",
+      color: Colors.SINK,
     });
 
     // Definice hran
@@ -166,7 +169,7 @@ export const useDrawDefaultGraph = (
       x: -2,
       y: 0,
       size: nodeSize,
-      color: "#0f0",
+      color: Colors.SOURCE,
     });
     graph.addNode("u", { label: "U", x: -1, y: 1, size: nodeSize });
     graph.addNode("v", { label: "V", x: -1, y: -1, size: nodeSize });
@@ -177,7 +180,7 @@ export const useDrawDefaultGraph = (
       x: 2,
       y: 0,
       size: nodeSize,
-      color: "#f00",
+      color: Colors.SINK,
     });
 
     // Definice hran
@@ -244,7 +247,7 @@ export const useDrawDefaultGraph = (
       x: -2,
       y: 0,
       size: nodeSize,
-      color: "#0f0",
+      color: Colors.SOURCE,
     });
     graph.addNode("a", { label: "A", x: -1, y: 1, size: nodeSize });
     graph.addNode("b", { label: "B", x: -1, y: -1, size: nodeSize });
@@ -256,7 +259,7 @@ export const useDrawDefaultGraph = (
       x: 2,
       y: 0,
       size: nodeSize,
-      color: "#f00",
+      color: Colors.SINK,
     });
 
     // Definice hran
@@ -366,7 +369,7 @@ export const useDrawDefaultGraph = (
       x: -2,
       y: 0,
       size: nodeSize,
-      color: "#0f0",
+      color: Colors.SOURCE,
     });
     graph.addNode("a", { label: "A", x: -1, y: 1, size: nodeSize });
     graph.addNode("b", { label: "B", x: -1, y: 0, size: nodeSize });
@@ -379,7 +382,7 @@ export const useDrawDefaultGraph = (
       x: 2,
       y: 0,
       size: nodeSize,
-      color: "#f00",
+      color: Colors.SINK,
     });
 
     // Definice hran

@@ -37,7 +37,7 @@ export enum Colors {
   DEFAULT_NODE = "#0091ff",
   DEFAULT_EDGE = "#ccc",
   EDGE_LABEL = "#000",
-  RED_EDGE = "red",
-  GREEN_EDGE = "green",
+  RED_EDGE = "#b85151",
+  GREEN_EDGE = "#66a372",
   RESIDUAL = "#ffcccc",
 }
