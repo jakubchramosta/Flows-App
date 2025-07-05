@@ -90,7 +90,7 @@ export const EdgesProvider = ({
         graph.setEdgeAttribute(edge, "hidden", false);
         graph.setEdgeAttribute(edge, "type", EdgeTypes.CURVED);
         graph.setEdgeAttribute(edge, "color", Colors.RESIDUAL);
-        graph.setEdgeAttribute(edge, "size", 5);
+        graph.setEdgeAttribute(edge, "size", 3);
       } else {
         graph.setEdgeAttribute(edge, "type", EdgeTypes.CURVED);
       }
@@ -104,8 +104,12 @@ export const EdgesProvider = ({
         graph.setEdgeAttribute(edge, "color", Colors.DEFAULT_EDGE);
         graph.setEdgeAttribute(edge, "size", 0);
       } else {
-        //TODO: Osetrit pripad kdz jsou dve protichudne hranza obe jsou viditelne
-        graph.setEdgeAttribute(edge, "type", EdgeTypes.STRAIGHT);
+        const source = graph.source(edge);
+        const target = graph.target(edge);
+        const reverseEdge = graph.edge(target, source);
+        if (graph.getEdgeAttribute(reverseEdge, "isReverse")) {
+          graph.setEdgeAttribute(edge, "type", EdgeTypes.STRAIGHT);
+        }
       }
     });
   };
