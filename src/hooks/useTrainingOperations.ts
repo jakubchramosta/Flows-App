@@ -16,7 +16,7 @@ export const useTrainingOperations = () => {
   const { userPath, setUserPath, updateUserPath, userTotalFlow } =
     useTraining();
   const { resetGraph } = useGraphOperations();
-  const { editationMode, setOptimalMaxFlow } = useTraining();
+  const { editationMode, setOptimalMaxFlow, setUserTotalFlow } = useTraining();
   const { generateResidualEdges } = useEdges();
 
   const validateCurrentPath = (): boolean => {
@@ -45,16 +45,19 @@ export const useTrainingOperations = () => {
     updateUserPath(edgeId);
   };
 
-  useEffect(() => {
+  const resetGraphInTraining = () => {
     resetGraph();
     if (editationMode === false) {
       setOptimalMaxFlow(calculateOptimalMaxFlow());
       resetGraph();
       generateResidualEdges();
       setUserPath([currentGraph.source]);
-      console.log("user path set to start: ", userPath);
-      console.log(currentGraph);
+      setUserTotalFlow(0);
     }
+  };
+
+  useEffect(() => {
+    resetGraphInTraining();
   }, [editationMode]);
 
   return {
@@ -63,5 +66,6 @@ export const useTrainingOperations = () => {
     calculateOptimalMaxFlow,
     isUserFlowOptimal,
     addEdgeToUserPath,
+    resetGraphInTraining,
   };
 };

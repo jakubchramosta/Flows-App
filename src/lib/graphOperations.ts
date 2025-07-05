@@ -95,28 +95,38 @@ export const calculatePathFlow = (path: string[], graph: Graph): number => {
     const target = path[i + 1];
 
     if (!graph.hasEdge(source, target)) {
-      console.log("Edge does not exist:", source, target);
+      console.log("Edge does not exist source and target:", source, target);
       return 0; // Nevalidní cesta
     }
 
     const edge = graph.edge(source, target);
-    console.log("Edge found:", edge);
     const capacity = graph.getEdgeAttribute(edge, "capacity");
-    console.log("Edge capacity:", capacity);
     const flow = graph.getEdgeAttribute(edge, "flow");
-    console.log("Edge flow:", flow);
-    console.log(graph);
     const residualCapacity = capacity - flow;
-    console.log("Residual capacity:", residualCapacity);
+    console.log(
+      "Edge attributes:",
+      edge,
+      "Capacity:",
+      capacity,
+      "Flow:",
+      flow,
+      "Residual Capacity:",
+      residualCapacity,
+    );
 
     if (residualCapacity <= 0) {
-      console.log("No residual capacity for edge:", source, target);
+      console.log(
+        "No residual capacity for edge with source: ",
+        source,
+        " and target: ",
+        target,
+      );
       console.log(graph);
       return 0; // Žádná zbytková kapacita
     }
 
     minFlow = Math.min(minFlow, residualCapacity);
-    console.log("Current min flow:", minFlow);
+    console.log("Min flow of user path:", minFlow);
   }
   return minFlow;
 };
