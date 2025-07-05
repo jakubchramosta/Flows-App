@@ -8,19 +8,26 @@ import BottomToolBarButton from "../BottomToolBarButton.js";
 import { ButtonSizes, ButtonVariants } from "../utils/consts.js";
 import { useGraphManagement } from "../../context/GraphManagementContext";
 import { useTraining } from "../../context/TrainingContext.js";
+import { useTrainingOperations } from "../../hooks/useTrainingOperations.js";
 
 const BottomToolBarSegmentMiddleTraining = () => {
   const { graphs, activeGraph } = useGraphManagement();
   const { addToPaths } = useTraining();
   const { removeLastFromPath, userPath } = useTraining();
+  const { resetGraphInTraining } = useTrainingOperations();
 
   const stepBack = () => {
     removeLastFromPath();
   };
+
   const addToUsersPath = () => {
     addToPaths();
   };
-  const resetTraining = () => {};
+
+  const resetTraining = () => {
+    resetGraphInTraining();
+  };
+
   const evaluate = () => {};
 
   return (

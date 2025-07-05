@@ -24,6 +24,7 @@ interface TrainingContextType {
   userPath: string[];
   setUserPath: (path: string[]) => void;
   userTotalFlow: number;
+  setUserTotalFlow: (flow: number) => void;
   optimalMaxFlow: number;
   setOptimalMaxFlow: (flow: number) => void;
   updateUserPath: (edgeId: string) => void;
@@ -101,9 +102,8 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
     console.log("Adding path to paths:", userPath);
 
     const pathFlow = calculatePathFlow(userPath, currentGraph.graph);
-    console.log("Calculated path flow:", pathFlow);
     if (pathFlow <= 0) {
-      toast.error("Cesta nemá žádný tok, zkontrolujte ji prosím.");
+      toast.error("Cesta nemá žádný tok, vuberte jinou cestu.");
       return;
     }
 
@@ -112,7 +112,8 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
     resetEdgeColors(currentGraph.graph);
     updateEdgeLabels(currentGraph.graph);
     setUserPath([currentGraph.source]);
-    console.log("-------------Path added to paths-------------");
+    setUserTotalFlow((prev) => prev + pathFlow);
+    console.log("----Path added to paths----");
   };
 
   return (
@@ -123,6 +124,7 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
         userPath,
         setUserPath,
         userTotalFlow,
+        setUserTotalFlow,
         optimalMaxFlow,
         setOptimalMaxFlow,
         updateUserPath,
