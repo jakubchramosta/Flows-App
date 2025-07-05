@@ -13,7 +13,7 @@ import { useTrainingOperations } from "../../hooks/useTrainingOperations.js";
 const BottomToolBarSegmentMiddleTraining = () => {
   const { graphs, activeGraph } = useGraphManagement();
   const { addToPaths } = useTraining();
-  const { removeLastFromPath, userPath } = useTraining();
+  const { removeLastFromPath, userPath, evaluateUserMaxFlow } = useTraining();
   const { resetGraphInTraining } = useTrainingOperations();
 
   const stepBack = () => {
@@ -28,7 +28,9 @@ const BottomToolBarSegmentMiddleTraining = () => {
     resetGraphInTraining();
   };
 
-  const evaluate = () => {};
+  const evaluate = () => {
+    evaluateUserMaxFlow();
+  };
 
   return (
     <div id="middle" className="flex justify-center w-full">

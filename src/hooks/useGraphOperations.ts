@@ -16,7 +16,7 @@ export const useGraphOperations = () => {
   const resetGraph = () => {
     currentGraph.graph.forEachEdge((edge) => {
       currentGraph.graph.setEdgeAttribute(edge, "flow", 0);
-      if (!currentGraph.graph.getEdgeAttribute(edge, "isResidual")) {
+      if (!currentGraph.graph.getEdgeAttribute(edge, "isReverse")) {
         currentGraph.graph.setEdgeAttribute(edge, "color", Colors.DEFAULT_EDGE);
       }
     });

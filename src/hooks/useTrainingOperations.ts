@@ -9,6 +9,7 @@ import { useGraphOperations } from "./useGraphOperations";
 import { useEdmondsKarp } from "./useEdmondsKarp";
 import { useEffect } from "react";
 import { useEdges } from "../context/EdgesContext";
+import { updateEdgeLabels } from "../lib/graphEdgeOperations";
 
 export const useTrainingOperations = () => {
   const { graph } = useGraph();
@@ -51,9 +52,12 @@ export const useTrainingOperations = () => {
       setOptimalMaxFlow(calculateOptimalMaxFlow());
       resetGraph();
       generateResidualEdges();
+      updateEdgeLabels(currentGraph.graph);
       setUserPath([currentGraph.source]);
       setUserTotalFlow(0);
     }
+    console.log("Graph reset in training mode");
+    console.log("Current graph:", currentGraph);
   };
 
   useEffect(() => {
