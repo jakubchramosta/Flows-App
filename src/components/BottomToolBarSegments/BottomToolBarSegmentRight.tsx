@@ -12,7 +12,7 @@ const BottomToolBarSegmentRight = () => {
   const { deleteCurrentGraph } = useGraphManagement();
   const { editationMode } = useTraining();
   const { exportCurrentGraph, importGraph } = useGraphIO();
-  const { showResidualEdges, hideResidualEdges } = useEdges();
+  const { residualEdgesMode, toggleResidualEdges } = useEdges();
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -21,7 +21,7 @@ const BottomToolBarSegmentRight = () => {
   };
 
   return (
-    <div id="right" className="flex w-full justify-end gap-4">
+    <div id="right" className="flex justify-end w-full gap-4">
       {editationMode ? (
         <>
           <Button
@@ -59,11 +59,10 @@ const BottomToolBarSegmentRight = () => {
         </>
       ) : (
         <>
-          <Button variant="outline" onClick={showResidualEdges}>
-            Zobrazit reziduální hrany
-          </Button>
-          <Button variant="outline" onClick={hideResidualEdges}>
-            Skrýt reziduální hrany
+          <Button variant="outline" onClick={toggleResidualEdges}>
+            {residualEdgesMode
+              ? "Skrýt reziduální hrany"
+              : "Zobrazit reziduální hrany"}
           </Button>
         </>
       )}

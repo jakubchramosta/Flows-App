@@ -1,4 +1,10 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import Graph from "graphology";
 import { Colors, EdgeTypes } from "../components/utils/consts";
 
@@ -16,6 +22,8 @@ interface EdgesContextType {
   showResidualEdges: () => void;
   hideResidualEdges: () => void;
   generateResidualEdges: () => void;
+  residualEdgesMode: boolean;
+  toggleResidualEdges: () => void;
 }
 
 const EdgesContext = createContext<EdgesContextType>({} as EdgesContextType);
@@ -29,6 +37,18 @@ export const EdgesProvider = ({
 }) => {
   const [firstNodeInEdge, setFirstNodeInEdge] = useState<string | null>(null);
   const [addingEdgeMode, setAddingEdgeMode] = useState(false);
+  const [residualEdgesMode, setResidualEdgesMode] = useState(false);
+
+  const toggleResidualEdges = () => {
+    setResidualEdgesMode((prev) => {
+      if (prev) {
+        hideResidualEdges();
+      } else {
+        showResidualEdges();
+      }
+      return !prev;
+    });
+  };
 
   const addEdge = (source: string, target: string) => {
     const oppositeEdge = graph.edge(target, source);
@@ -150,6 +170,8 @@ export const EdgesProvider = ({
         showResidualEdges,
         hideResidualEdges,
         generateResidualEdges,
+        residualEdgesMode,
+        toggleResidualEdges,
       }}
     >
       {children}
