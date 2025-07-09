@@ -1,7 +1,7 @@
 import { useDrawDefaultGraph } from "../../hooks/useDrawDefaultGraph";
 import { ButtonSizes, ButtonVariants, GraphTypes } from "../utils/consts.js";
 import { Button } from "../ui/button.js";
-import { InfoIcon } from "lucide-react";
+import { InfoIcon, XIcon } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -14,10 +14,12 @@ import { useTraining } from "../../context/TrainingContext";
 
 interface BottomToolBarSegmentLeftProps {
   handleInfoClick: (e: any) => void;
+  showInfo: boolean;
 }
 
 const BottomToolBarSegmentLeft = ({
   handleInfoClick,
+  showInfo,
 }: BottomToolBarSegmentLeftProps) => {
   const { graphs, activeGraph, clearGraph } = useGraphManagement();
   const { editationMode } = useTraining();
@@ -31,7 +33,7 @@ const BottomToolBarSegmentLeft = ({
           onClick={handleInfoClick}
           className="min-w-10"
         >
-          <InfoIcon />
+          {showInfo ? <XIcon /> : <InfoIcon />}
         </Button>
         {editationMode && (
           <Select

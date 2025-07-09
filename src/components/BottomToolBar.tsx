@@ -8,18 +8,23 @@ import BottomToolBarSegmentMiddleTraining from "./BottomToolBarSegments/BottomTo
 interface BottomToolBarProps {
   handleInfoClick: (e: any) => void;
   openSidebar: () => void;
+  showInfo: boolean;
 }
 
 const BottomToolBar = ({
   handleInfoClick,
   openSidebar,
+  showInfo,
 }: BottomToolBarProps) => {
   const { editationMode } = useTraining();
 
   return (
     <TooltipProvider>
       <div className="absolute bottom-3 left-0 right-0 mx-3 flex min-w-fit items-center justify-between rounded-md border border-input bg-background p-2.5 shadow-sm">
-        <BottomToolBarSegmentLeft handleInfoClick={handleInfoClick} />
+        <BottomToolBarSegmentLeft
+          handleInfoClick={handleInfoClick}
+          showInfo={showInfo}
+        />
         {editationMode ? (
           <BottomToolBarSegmentMiddle openSidebar={openSidebar} />
         ) : (

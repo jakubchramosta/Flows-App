@@ -21,26 +21,9 @@ const AppContent = () => {
     setIsSidebarVisible((prev) => !prev);
   };
 
-  /* TODO: 
-  hodit Button do GrafInfo nobo spíš udělat komponentu co obsahuje ten 
-  Button a GraphInfo 
-
-  udělat novou komponentu skoro stejnou jako graphInfo a bude vidět jen v 
-  trenovacim modu a bude permanentně otevřená
-
-  jednotlivé části bottomToolBaru rozsekat na vlastní komponenty (budou 3)
-  prostřední se upraví, pravá bude prázdá, levá bude obsahovat jen info button
-
-  udělat přidávání hran na kliknutí (LMB dopředná hrana, RMB zpětná hrana)
-
-  tlačítko co odstranívšechny hrany z cesty uživatele
-
-  tlačítko co odstraní poslení přidanou hranu
-  
-  tlačítko přidání cesty uživatele do toku
-
-  tlačítko vyhodnocení toku
-  */
+  const toggleInfo = () => {
+    setShowInfo((prev) => !prev);
+  };
 
   return (
     <>
@@ -61,10 +44,11 @@ const AppContent = () => {
         <TrainingSidebar />
       )}
       <BottomToolBar
-        handleInfoClick={() => setShowInfo(true)}
+        handleInfoClick={toggleInfo}
         openSidebar={() => setIsSidebarVisible(true)}
+        showInfo={showInfo}
       />
-      {showInfo && <InfoTab setShowInfo={setShowInfo} />}
+      {showInfo && <InfoTab />}
     </>
   );
 };
