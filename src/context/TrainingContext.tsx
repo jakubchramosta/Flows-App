@@ -120,7 +120,7 @@ export const TrainingProvider = ({ children }: { children: ReactNode }) => {
 
   const evaluateUserMaxFlow = () => {
     if (userTotalFlow === optimalMaxFlow) {
-      toast.success("Gratulujeme! Vaše cesta je optimální.");
+      toast.success("Gratulujeme! Našli jste maximální tok.");
     } else {
       toast.error(
         `Vaše cesta není optimální. Aktuální tok: ${userTotalFlow}, optimální tok: ${optimalMaxFlow}.`,

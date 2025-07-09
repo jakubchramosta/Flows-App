@@ -5,10 +5,11 @@ import {
   RotateCcwIcon,
   Trash2Icon,
 } from "lucide-react";
+import { ScrollArea } from "../ui/scroll-area";
 
 const InfoTabContentEditationMode = () => {
   return (
-    <>
+    <ScrollArea className="h-[calc(100vh/1.95)]">
       <ul className="pl-5 space-y-2 list-disc">
         <h1 className="text-lg underline">
           <strong>Režim editace grafu</strong>
@@ -68,6 +69,23 @@ const InfoTabContentEditationMode = () => {
             <li className="flex items-center">
               <RotateCcwIcon className="mr-2" /> Restartuje aktuální graf.
             </li>
+          </ul>
+        </li>
+        <li>
+          <strong>Ostatní ovládací prvky:</strong>
+          <ul className="pl-5 list-inside">
+            <li>
+              <span className="inline-flex items-center justify-center h-10 px-4 py-2 text-sm font-medium border rounded-md w-fit border-input bg-background ring-offset-background">
+                Export
+              </span>{" "}
+              vyexportuje aktuálně zobrazený graf
+            </li>
+            <li>
+              <span className="inline-flex items-center justify-center h-10 px-4 py-2 my-2 text-sm font-medium border rounded-md w-fit border-input bg-background ring-offset-background">
+                Import
+              </span>{" "}
+              naimportuje graf ze souboru .json
+            </li>
             <li className="flex items-center">
               <Trash2Icon className="mr-2" /> Odstraní aktuální graf.
             </li>
@@ -75,11 +93,14 @@ const InfoTabContentEditationMode = () => {
         </li>
       </ul>
       <p className="mt-4">
-        Pro začátek stačí kliknout na tlačítko
-        <strong> Play</strong>. A provede se v základu nastavený alforitmus
-        Ford-Fulkerson na aktuálním grafu.
+        Pro rychlý start klikněte na tlačítko
+        <PlayIcon className="inline-block mx-1 align-middle" size={16} />
+        <strong>Play</strong> a spustí se výchozí algoritmus Ford-Fulkerson na
+        aktuálním grafu. Alternativně se můžete přepnout do režimu tréninku
+        tlačítkem <strong>Trénink</strong> v levém horním rohu a vyzkoušet si
+        vlastní řešení.
       </p>
-    </>
+    </ScrollArea>
   );
 };
 
