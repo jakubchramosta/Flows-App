@@ -1,5 +1,6 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 import Graph from "graphology";
+import { Colors } from "../components/utils/consts";
 
 interface NodesContextType {
   addNode: (id: string, attributes: object) => void;
@@ -30,19 +31,13 @@ export const NodesProvider = ({
   };
 
   const setSource = (source: string) => {
-    if (graphInfo.source !== "") {
-      graph.setNodeAttribute(graphInfo.source, "color", "#666");
-    }
     updateGraphInfo({ source });
-    graph.setNodeAttribute(source, "color", "#4CAF50");
+    graph.setNodeAttribute(source, "color", Colors.SOURCE);
   };
 
   const setSink = (sink: string) => {
-    if (graphInfo.sink !== "") {
-      graph.setNodeAttribute(graphInfo.sink, "color", "#666");
-    }
     updateGraphInfo({ sink });
-    graph.setNodeAttribute(sink, "color", "#F44336");
+    graph.setNodeAttribute(sink, "color", Colors.SINK);
   };
 
   return (

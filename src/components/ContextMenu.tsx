@@ -71,7 +71,7 @@ const ContextMenu = ({
     toast.info("Klikněte na jiný BOD kam hrana povede.");
   };
 
-  const handleMakrAsSource = (id: string | null) => {
+  const handleMarkAsSource = (id: string | null) => {
     if (!id) return;
     setSource(id);
     setIsOpen(false);
@@ -120,7 +120,7 @@ const ContextMenu = ({
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="flex w-44 justify-between"
-                onClick={() => handleMakrAsSource(id)}
+                onClick={() => handleMarkAsSource(id)}
               >
                 Označit jako ZDROJ
               </DropdownMenuItem>
