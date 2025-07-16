@@ -21,7 +21,7 @@ const BottomToolBarSegmentRight = () => {
   };
 
   return (
-    <div id="right" className="flex justify-end w-full gap-4">
+    <div id="right" className="flex w-full justify-end gap-4">
       {editationMode ? (
         <>
           <Button
@@ -60,9 +60,7 @@ const BottomToolBarSegmentRight = () => {
       ) : (
         <>
           <Button variant="outline" onClick={toggleResidualEdges}>
-            {residualEdgesMode
-              ? "Skrýt reziduální hrany"
-              : "Zobrazit reziduální hrany"}
+            {residualEdgesMode ? "Skrýt zpětné hrany" : "Zobrazit zpětné hrany"}
           </Button>
         </>
       )}

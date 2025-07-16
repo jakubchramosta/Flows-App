@@ -14,6 +14,7 @@ export const useHandleClicks = () => {
       y: e.event.y,
     });
 
+    //TODO: Při smazání B z A->B->C začne vyhazovat error že bod C již existuje
     const node = {
       label: String.fromCharCode(97 + graph.nodes().length).toUpperCase(),
       ...coordForGraph,
