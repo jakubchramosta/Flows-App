@@ -38,7 +38,7 @@ export const AlgorithmProvider = ({ children }: { children: ReactNode }) => {
 
       visited.add(currentNode);
 
-      graph.forEachNeighbor(currentNode, (neighbor) => {
+      graph.forEachOutNeighbor(currentNode, (neighbor) => {
         if (!visited.has(neighbor)) {
           queue.push(neighbor);
         }

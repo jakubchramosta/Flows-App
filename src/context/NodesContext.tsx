@@ -31,13 +31,25 @@ export const NodesProvider = ({
   };
 
   const setSource = (source: string) => {
+    if (graphInfo.sink === source) graphInfo.sink = "";
+    if (graphInfo.source) {
+      graph.setNodeAttribute(graphInfo.source, "color", Colors.DEFAULT_NODE);
+    }
     updateGraphInfo({ source });
     graph.setNodeAttribute(source, "color", Colors.SOURCE);
   };
 
   const setSink = (sink: string) => {
+    if (graphInfo.source === sink) graphInfo.source = "";
+    if (graphInfo.sink) {
+      graph.setNodeAttribute(graphInfo.sink, "color", Colors.DEFAULT_NODE);
+    }
     updateGraphInfo({ sink });
     graph.setNodeAttribute(sink, "color", Colors.SINK);
+  };
+
+  const updateNodeColors = () => {
+    graph.forEachNode((node) => {});
   };
 
   return (
