@@ -14,20 +14,20 @@ export const useEdmondsKarp = (
   let maxFlow = 0;
 
   // Pomocná funkce pro provedení BFS a nalezení augmentační cesty
-  function bfs(): { path: string[]; pathFlow: number } | null {
+  function bfs(): string[] | null {
     // Množina navštívených uzlů
     const visited = new Set<string>();
-    // Fronta pro BFS
-    const queue: { node: string; path: string[]; pathFlow: number }[] = [
-      { node: source, path: [source], pathFlow: Infinity },
+    // Fronta pro BFS - nyní obsahuje pouze node a path
+    const queue: { node: string; path: string[] }[] = [
+      { node: source, path: [source] },
     ];
 
     while (queue.length > 0) {
-      const { node, path, pathFlow } = queue.shift()!; // Odebrání prvku z fronty
+      const { node, path } = queue.shift()!; // Odebrání prvku z fronty
 
-      // Pokud jsme dosáhli cílového uzlu, vrátíme cestu a její průtok
+      // Pokud jsme dosáhli cílového uzlu, vrátíme cestu
       if (node === sink) {
-        return { path, pathFlow };
+        return path;
       }
 
       // Označení uzlu jako navštíveného
@@ -43,12 +43,9 @@ export const useEdmondsKarp = (
 
           // Pokud má hrana zbývající kapacitu, přidáme ji do fronty
           if (capacity - flow > 0) {
-            // Výpočet minimálního toku
-            const newPathFlow = Math.min(pathFlow, capacity - flow);
             queue.push({
               node: neighbor,
               path: [...path, neighbor],
-              pathFlow: newPathFlow,
             });
           }
         }
@@ -59,10 +56,27 @@ export const useEdmondsKarp = (
     return null;
   }
 
+  // Pomocná funkce pro výpočet minimálního toku cesty
+  function calculatePathFlow(path: string[]): number {
+    let pathFlow = Infinity;
+
+    for (let i = 0; i < path.length - 1; i++) {
+      const u = path[i];
+      const v = path[i + 1];
+      const edge = graph.edge(u, v);
+      const { capacity, flow } = graph.getEdgeAttributes(edge);
+      const availableCapacity = capacity - flow;
+
+      pathFlow = Math.min(pathFlow, availableCapacity);
+    }
+
+    return pathFlow;
+  }
+
   // Hlavní smyčka pro nalezení augmentačních cest a aktualizaci toku
-  let result;
-  while ((result = bfs()) !== null) {
-    const { path, pathFlow } = result;
+  let path: string[] | null;
+  while ((path = bfs()) !== null) {
+    const pathFlow = calculatePathFlow(path);
 
     // Aktualizace reziduálních kapacit hran a zpětných hran
     for (let i = 0; i < path.length - 1; i++) {

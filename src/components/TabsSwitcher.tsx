@@ -17,8 +17,6 @@ const TabsSwitcher = () => {
   const { editationMode, switchEditMode } = useTraining();
   const { checkForSourceAndSink, bfsCheckPath } = useAlgorithm();
 
-  //resetne se graf, prob2hne kontrola jestli je graf validni a vypocita se max flow
-
   const handleSwitchEditMode = () => {
     if (
       !checkForSourceAndSink(currentGraph) ||
