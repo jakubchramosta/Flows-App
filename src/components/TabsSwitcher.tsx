@@ -21,7 +21,7 @@ const TabsSwitcher = () => {
 
   const handleSwitchEditMode = () => {
     if (
-      !checkForSourceAndSink(currentGraph) &&
+      !checkForSourceAndSink(currentGraph) ||
       !bfsCheckPath(currentGraph.graph, currentGraph.source, currentGraph.sink)
     ) {
       return;
