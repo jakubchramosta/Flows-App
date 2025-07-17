@@ -45,6 +45,7 @@ export const AlgorithmProvider = ({ children }: { children: ReactNode }) => {
       });
     }
 
+    toast.error("Neexistuje žádná cesta mezi ZDROJEM a CÍLEM!");
     return false;
   };
 
@@ -62,7 +63,6 @@ export const AlgorithmProvider = ({ children }: { children: ReactNode }) => {
       graphInfo.sink,
     );
     if (!hasPath) {
-      toast.error("Neexistuje žádná cesta mezi ZDROJEM a CÍLEM!");
       return 0;
     }
 
@@ -75,7 +75,7 @@ export const AlgorithmProvider = ({ children }: { children: ReactNode }) => {
         break;
       case Algorithms.EDMONDS_KARP:
         toast.success("Používá se Edmonds-Karp algoritmus.");
-        maxFlow = useEdmondsKarp(graphInfo, true);
+        maxFlow = useEdmondsKarp(graphInfo, !editationMode);
         break;
       default:
         maxFlow = useFordFulkerson(graphInfo);

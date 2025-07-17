@@ -15,12 +15,15 @@ const TabsSwitcher = () => {
   const { graphs, addGraph, setActiveGraphIndex, activeGraph, currentGraph } =
     useGraphManagement();
   const { editationMode, switchEditMode } = useTraining();
-  const { checkForSourceAndSink } = useAlgorithm();
+  const { checkForSourceAndSink, bfsCheckPath } = useAlgorithm();
 
   //resetne se graf, prob2hne kontrola jestli je graf validni a vypocita se max flow
 
   const handleSwitchEditMode = () => {
-    if (!checkForSourceAndSink(currentGraph)) {
+    if (
+      !checkForSourceAndSink(currentGraph) &&
+      !bfsCheckPath(currentGraph.graph, currentGraph.source, currentGraph.sink)
+    ) {
       return;
     }
     switchEditMode();
