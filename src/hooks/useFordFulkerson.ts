@@ -24,10 +24,8 @@ export const useFordFulkerson = ({
     sink: string,
     visited: Set<string>,
   ): string[] | null {
-    // Pokud jsme dosáhli cílového uzlu, vrátíme cestu
-    if (current === sink) {
-      return [current];
-    }
+    // Pokud se dosáhlo cílového uzlu, vrať cestu
+    if (current === sink) return [current];
 
     // Označení uzlu jako navštíveného
     visited.add(current);
@@ -40,7 +38,7 @@ export const useFordFulkerson = ({
         // Získání atributů hrany
         const { capacity, flow } = graph.getEdgeAttributes(edge);
 
-        // Pokud má hrana zbývající kapacitu, pokračujeme v DFS
+        // Pokud má hrana zbývající kapacitu, pokračuj v DFS
         if (capacity - flow > 0) {
           const subPath = dfs(neighbor, sink, visited);
           if (subPath) {
@@ -52,7 +50,7 @@ export const useFordFulkerson = ({
       }
     }
 
-    // Pokud neexistuje augmentační cesta, vrátíme null
+    // Pokud neexistuje augmentační cesta, vrať null
     return null;
   }
 

@@ -17,18 +17,17 @@ export const useEdmondsKarp = (
   function bfs(): string[] | null {
     // Množina navštívených uzlů
     const visited = new Set<string>();
-    // Fronta pro BFS - nyní obsahuje pouze node a path
+    // Fronta pro BFS
     const queue: { node: string; path: string[] }[] = [
       { node: source, path: [source] },
     ];
 
     while (queue.length > 0) {
-      const { node, path } = queue.shift()!; // Odebrání prvku z fronty
+      // Odebrání prvku z fronty
+      const { node, path } = queue.shift()!;
 
-      // Pokud jsme dosáhli cílového uzlu, vrátíme cestu
-      if (node === sink) {
-        return path;
-      }
+      // Pokud se dosáhlo cílového uzlu, vrať cestu
+      if (node === sink) return path;
 
       // Označení uzlu jako navštíveného
       visited.add(node);
@@ -41,7 +40,7 @@ export const useEdmondsKarp = (
           // Získání atributů hrany
           const { capacity, flow } = graph.getEdgeAttributes(edge);
 
-          // Pokud má hrana zbývající kapacitu, přidáme ji do fronty
+          // Pokud má hrana zbývající kapacitu, přidej ji do fronty
           if (capacity - flow > 0) {
             queue.push({
               node: neighbor,
@@ -52,7 +51,7 @@ export const useEdmondsKarp = (
       }
     }
 
-    // Pokud neexistuje augmentační cesta, vrátíme null
+    // Pokud neexistuje augmentační cesta, vrať null
     return null;
   }
 

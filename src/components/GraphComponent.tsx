@@ -226,7 +226,8 @@ const GraphComponent = ({ isSideBarVisible }: GraphComponentProps) => {
       <div
         ref={containerRef}
         className="w-screen h-screen"
-        onContextMenu={(e) => e.preventDefault()} // Disable default context menu
+        // Vypnutí základního kontextového menu
+        onContextMenu={(e) => e.preventDefault()}
       />
     </>
   );
