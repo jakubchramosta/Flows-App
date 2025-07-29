@@ -11,6 +11,7 @@ import { SigmaStageEventPayload } from "sigma/dist/declarations/src/types";
 import ContextMenu from "./ContextMenu";
 import { edgeReducer } from "./utils/edgeReducer";
 import EdgeCapacityInput from "./EdgeCapacityInput";
+import EdgeLabelInput from "./EdgeLabelInput";
 import { Colors, GraphTypes } from "./utils/consts";
 import { toast } from "sonner";
 import { EdgeCurvedArrowProgram } from "@sigma/edge-curve";
@@ -42,6 +43,7 @@ const GraphComponent = ({ isSideBarVisible }: GraphComponentProps) => {
   const [id, setId] = useState<string | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [inputIsOpen, setInputIsOpen] = useState(false);
+  const [labelInputIsOpen, setLabelInputIsOpen] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
 
   // Clear the graph and draw the default graph on the first render
@@ -211,6 +213,7 @@ const GraphComponent = ({ isSideBarVisible }: GraphComponentProps) => {
         position={menuPosition}
         setIsOpen={setIsMenuOpen}
         setInputMenuOpen={setInputIsOpen}
+        setLabelInputMenuOpen={setLabelInputIsOpen}
         isNode={isNode}
         id={id}
       />
@@ -222,10 +225,18 @@ const GraphComponent = ({ isSideBarVisible }: GraphComponentProps) => {
           id={id}
         />
       )}
+      {/* Edge label input */}
+      {labelInputIsOpen && (
+        <EdgeLabelInput
+          position={menuPosition}
+          setIsOpen={setLabelInputIsOpen}
+          id={id}
+        />
+      )}
       {/* Graph container */}
       <div
         ref={containerRef}
-        className="w-screen h-screen"
+        className="h-screen w-screen"
         // Vypnutí základního kontextového menu
         onContextMenu={(e) => e.preventDefault()}
       />

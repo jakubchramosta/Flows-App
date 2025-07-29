@@ -24,6 +24,7 @@ interface ContextMenuProps {
   position: { x: number; y: number };
   setIsOpen: (val: boolean) => void;
   setInputMenuOpen: (val: boolean) => void;
+  setLabelInputMenuOpen: (val: boolean) => void;
   isNode: boolean;
   id: string | null;
 }
@@ -33,6 +34,7 @@ const ContextMenu = ({
   position,
   setIsOpen,
   setInputMenuOpen,
+  setLabelInputMenuOpen,
   isNode,
   id,
 }: ContextMenuProps) => {
@@ -85,6 +87,11 @@ const ContextMenu = ({
 
   const handleCapacityChangeOnClick = () => {
     setInputMenuOpen(true);
+    setIsOpen(false);
+  };
+
+  const handleLabelChangeOnClick = () => {
+    setLabelInputMenuOpen(true);
     setIsOpen(false);
   };
 
@@ -144,6 +151,12 @@ const ContextMenu = ({
                 onClick={() => handleCapacityChangeOnClick()}
               >
                 Změnit kapacitu <PencilIcon />
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="flex w-36 justify-between"
+                onClick={() => handleLabelChangeOnClick()}
+              >
+                Editovat label <PencilIcon />
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="flex w-36 justify-between"

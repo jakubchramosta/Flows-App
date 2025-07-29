@@ -19,6 +19,7 @@ interface EdgesContextType {
   setEdgeFlow: (edgeId: string, flow: number) => void;
   setEdgeColor: (edgeId: string, color: string) => void;
   setEdgeType: (id: string, type: string) => void;
+  setEdgeLabel: (edgeId: string, label: string) => void;
   showResidualEdges: () => void;
   hideResidualEdges: () => void;
   generateResidualEdges: () => void;
@@ -104,6 +105,11 @@ export const EdgesProvider = ({
     graph.setEdgeAttribute(edgeId, "color", color);
   };
 
+  const setEdgeLabel = (edgeId: string, label: string) => {
+    if (!edgeId) return;
+    graph.setEdgeAttribute(edgeId, "label", label);
+  };
+
   const showResidualEdges = () => {
     graph.forEachEdge((edge) => {
       if (graph.getEdgeAttribute(edge, "isReverse")) {
@@ -167,6 +173,7 @@ export const EdgesProvider = ({
         setEdgeFlow,
         setEdgeColor,
         setEdgeType,
+        setEdgeLabel,
         showResidualEdges,
         hideResidualEdges,
         generateResidualEdges,
