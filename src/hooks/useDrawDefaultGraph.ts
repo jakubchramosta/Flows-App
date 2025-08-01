@@ -40,7 +40,6 @@ export const useDrawDefaultGraph = (
       flow: 0,
       capacity: 3,
       isReverse: false,
-      color: Colors.GREEN_EDGE,
     });
     graph.addEdge("a", "c", {
       label: "0/7",
@@ -48,7 +47,6 @@ export const useDrawDefaultGraph = (
       flow: 0,
       capacity: 7,
       isReverse: false,
-      color: Colors.RED_EDGE,
     });
     graph.addEdge("c", "b", {
       label: "0/5",
@@ -56,7 +54,6 @@ export const useDrawDefaultGraph = (
       flow: 0,
       capacity: 5,
       isReverse: false,
-      color: Colors.RESIDUAL,
     });
     graph.addEdge("c", "e", {
       label: "0/3",
